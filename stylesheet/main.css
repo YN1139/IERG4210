@@ -1,0 +1,196 @@
+* {
+  box-sizing: border-box; /*ensure the elements' box models are constrainted within the parent element*/
+  font-family: Helvetica;
+}
+
+a {
+  color: #337ab7;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+p {
+  color: #337ab7;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer {
+  overflow: hidden;
+  font-size: smaller;
+  text-align: center;
+  bottom: 0px;
+  margin: 10px 0 0 0;
+  width: 100%;
+  color: #337ab7;
+}
+/* Header */
+.pages {
+  border-bottom: #337ab7 3px solid;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pages ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pages li {
+  display: inline;
+  padding: 0 10px 0 0;
+}
+
+/* Hireachy nav menu
+Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
+.breadcrumb ol {
+  padding: 0 10px;
+}
+
+.crumb {
+  list-style: none;
+  display: inline-block;
+}
+
+.crumb a::after {
+  display: inline-block;
+  content: ">";
+  padding: 0 5px;
+}
+
+.crumb:last-child a {
+  cursor: default;
+  color: #adadad;
+}
+
+.crumb:last-child a::after {
+  display: none;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  margin: 0 0;
+  padding: 10px 5px;
+}
+
+.categoryMenu {
+  background-color: antiquewhite;
+  border-radius: 8px;
+  max-width: fit-content;
+  min-width: fit-content;
+  height: fit-content;
+  margin-right: 60px;
+}
+.categoryMenu h3 {
+  padding: 10px 10px;
+  margin: 0;
+}
+
+.categoryMenu li {
+  list-style: none;
+  padding: 3px 10px;
+}
+
+.categoryMenu li:hover {
+  background-color: #e6e6e6;
+}
+
+.productList {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  padding: 0;
+  flex-grow: 1;
+}
+
+.product {
+  text-align: center;
+  padding: 0 12px 0;
+  margin: 0 0 16px;
+  flex-basis: 25%; /* 4 items per row */
+}
+
+.product img {
+  width: 200px;
+  height: 200px;
+}
+
+.productInfo {
+  font-weight: 300;
+  overflow-wrap: break-word;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  margin: 0 0 4px;
+  max-height: none;
+  color: #3f3f3f;
+}
+
+.productInfo:hover {
+  color: #f17132;
+}
+
+#productNA {
+  color: #adadad;
+  font-weight: bold;
+  align-self: center;
+  padding-left: 20%;
+  flex-basis: 100%;
+}
+
+/*Shopping Cart*/
+.shoppingCart {
+  display: inline-block;
+}
+
+.shoppingCartContent {
+  /* display: none; */
+  position: absolute;
+  right: 0px;
+  background-color: #fdffcdf6;
+  width: 300px;
+  box-shadow: 2px 5px 5px #adadad;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 400ms;
+  transition-delay: 200ms;
+  padding: 5px;
+}
+
+.shoppingCartContent ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 0 0 0;
+}
+
+.shoppingCartContent li {
+  padding: 0 0 0 0;
+}
+
+/* Set shoppingCartContent as visible*/
+/*Animation reference from https://www.joshwcomeau.com/animation/css-transitions/*/
+.shoppingCart:hover .shoppingCartContent {
+  /* display: block; */
+  opacity: 1;
+  transition: opacity 200ms;
+  transition-delay: 50ms;
+}
+
+input[type="number"] {
+  width: 40px;
+}
+
+.checkout {
+  width: fit-content;
+  background-color: #dfdfdf;
+  border-radius: 10%;
+  box-shadow: 1px 5px 10px #adadad;
+  border: none;
+  margin: 10px 0 0 0;
+}
