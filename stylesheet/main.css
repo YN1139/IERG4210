@@ -101,6 +101,11 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
   background-color: #e6e6e6;
 }
 
+.categoryMenu li:last-child:hover {
+  background-color: #e6e6e6;
+  border-radius: 0 0 8px 8px;
+}
+
 .productList {
   display: flex;
   flex-flow: row wrap;
