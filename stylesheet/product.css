@@ -1,0 +1,23 @@
+.item Img {
+  width: 500px;
+  margin-left: 60px;
+}
+
+.itemInfo {
+  width: 435px;
+  float: none;
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
+.itemDescription {
+  color: gray;
+  line-height: 1.35;
+}
+
+.itemDescription ol {
+  color: gray;
+}
