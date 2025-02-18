@@ -162,8 +162,8 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
   box-shadow: 2px 5px 5px #adadad;
   border-radius: 5px;
   opacity: 0;
-  transition: opacity 400ms;
-  transition-delay: 200ms;
+  transition: opacity 200ms;
+  transition-delay: 10ms;
   padding: 5px;
 }
 
@@ -183,8 +183,8 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
 .shoppingCart:hover .shoppingCartContent {
   /* display: block; */
   opacity: 1;
-  transition: opacity 200ms;
-  transition-delay: 50ms;
+  transition: opacity 50ms;
+  transition-delay: 20ms;
 }
 
 input[type="number"] {
