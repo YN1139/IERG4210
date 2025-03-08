@@ -12,7 +12,7 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 const db = mysql.createConnection({
-  host: "localhost",
+  host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
   port: "3306",
   user: "shop27-admin",
   password: "mypass",
