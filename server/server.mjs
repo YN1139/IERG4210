@@ -11,13 +11,6 @@ const corsOptions = {
   credentials: true, // access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
-const db = mysql.createConnection({
-  host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
-  port: "3306",
-  user: "shop27-admin",
-  password: "mypass",
-  database: "shop27",
-});
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -47,36 +40,50 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//Update the database after receriving the form submission from the client
-app.post("/admin/add-product", upload.single("image"), async (req, res) => {
+//use async function to wait for the database connection to be established due to the promise
+async function init() {
   try {
-    const { catid, name, price, description } = req.body;
-    const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
+    const db = mysql.createConnection({
+      host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
+      port: "3306",
+      user: "shop27-admin",
+      password: "mypass",
+      database: "shop27",
+    });
+    //Update the database after receriving the form submission from the client
+    app.post("/admin/add-product", upload.single("image"), async (req, res) => {
+      try {
+        const { catid, name, price, description } = req.body;
+        const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
 
-    const sql =
-      "INSERT INTO products (catid, name, price, description, image) VALUES (?, ?, ?, ?, ?)";
-    const [result] = await db.query(sql, [
-      catid,
-      name,
-      price,
-      description,
-      imagePath,
-    ]);
-    const pid = result.insertId;
+        const sql =
+          "INSERT INTO products (catid, name, price, description, image) VALUES (?, ?, ?, ?, ?)";
+        const [result] = await db.query(sql, [
+          catid,
+          name,
+          price,
+          description,
+          imagePath,
+        ]);
+        const pid = result.insertId;
+        if (imagePath) {
+          const newImagePath = `uploads/${pid}${path.extname(imagePath)}`;
+          fs.renameSync(imagePath, newImagePath);
+          const updateSql = "UPDATE products SET image = ? WHERE pid = ?";
+          await db.query(updateSql, [newImagePath, pid]);
+        }
 
-    if (imagePath) {
-      const newImagePath = `uploads/${pid}${path.extname(imagePath)}`;
-      fs.renameSync(imagePath, newImagePath);
-      const updateSql = "UPDATE products SET image = ? WHERE pid = ?";
-      await db.query(updateSql, [newImagePath, pid]);
-    }
-
-    res.status(200).send({ message: "Product added successfully!" });
+        res.status(200).send({ message: "Product added successfully!" });
+      } catch (error) {
+        res.status(400).send(error);
+      }
+    });
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000");
+    });
   } catch (error) {
-    res.status(400).send(error);
+    console.error("Error connecting to the database: ", error);
   }
-});
+}
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
+init();
