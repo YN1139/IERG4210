@@ -67,8 +67,12 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
       const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
       await db.promise().query(updateSql, [newImagePath, pid]);
     }
-    res.redirect("/admin.html");
-    res.status(200).send({ message: "Product added successfully!" });
+    res
+      .status(200)
+      .send({
+        message: "Product added successfully!",
+        URL: "http://13.238.18.138/admin.html",
+      });
   } catch (error) {
     res.status(400).send(error);
   }
