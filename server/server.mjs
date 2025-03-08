@@ -69,10 +69,8 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
     }
     res
       .status(200)
-      .send({
-        message: "Product added successfully!",
-        URL: "http://13.238.18.138/admin.html",
-      });
+      .redirect("/admin.html")
+      .send({ message: "Product added successfully" });
   } catch (error) {
     res.status(400).send(error);
   }
