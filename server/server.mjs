@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
-    cb(null, `${Date.now()}${ext}`);
+    cb(null, `${Date.now()}${ext}`); //store the image
   },
 });
 const upload = multer({
@@ -35,7 +35,7 @@ const upload = multer({
       file.mimetype !== "image/png" &&
       file.mimetype !== "image/gif"
     ) {
-      return cb(new Error("Only jpg, png and gif are allowed"));
+      return cb(new Error("Only jpeg, png and gif are allowed"));
     }
     if (file.size > 10000000) {
       return cb(new Error("File size must be less than or is equal to 10MB"));
@@ -60,13 +60,14 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
       .query(sql, [catid, name, price, description, imagePath]);
     const pid = result.insertId;
 
+    //update the image with pid if image path exist in database
     if (imagePath) {
-      const newImagePath = `uploads/${pid}${path.extname(imagePath)}`;
-      fs.renameSync(imagePath, newImagePath);
-      const updateSql = "UPDATE products SET image = ? WHERE pid = ?";
+      const newImagePath = `uploads/${pid}${path.extname(imagePath)}`; //rename the image file with the pid
+      fs.renameSync(imagePath, newImagePath); //rename the image file
+      const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
       await db.promise().query(updateSql, [newImagePath, pid]);
     }
-
+    res.direct("http://13.238.18.138/admin.html");
     res.status(200).send({ message: "Product added successfully!" });
   } catch (error) {
     res.status(400).send(error);
