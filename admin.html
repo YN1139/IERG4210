@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="stylesheet/main.css" />
+    <title>IERG4210 Admin</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>CD Shop</h1>
+      <nav class="pages">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="admin.html">Login</a></li>
+        </ul>
+        </div>
+      </nav>
+    </header>
+
+    <!--!handle the CSS later-->
+    <form action="/admin/add-product" method="post" enctype="multipart/form-data">
+        <label for="category">Category:</label>
+            <select name="catid">
+                <option value="1">J-Pop</option>
+                <option value="2">K-Pop</option>
+                <option value="3">Canton-Pop</option>
+                <option value="4">Movie Soundtrack</option>
+            </select>
+        <br>
+        <label for="name">CD Name:</label>
+            <input type="text" name="name" required>
+        <br>
+        <label for="price">Price:</label>
+            <input type="number" name="price" required>
+        <br>
+        <label for="description">Description:</label>
+            <textarea name="description" required></textarea>
+        <br>
+        <label for="image">Image: Please upload either in files or links</label>
+            <input type="file" name="image" accept="image/*">
+            <input type="link" name="image">
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+
+  </body>
