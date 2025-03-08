@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import mysql from "mysql2/promise";
+import mysql from "mysql2";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -11,6 +11,13 @@ const corsOptions = {
   credentials: true, // access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
+const db = mysql.createConnection({
+  host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
+  port: "3306",
+  user: "shop27-admin",
+  password: "mypass",
+  database: "shop27",
+});
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -24,7 +31,7 @@ const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
     if (
-      file.mimetype !== "image/jpeg" &&
+      file.mimetype !== "image/jpg" &&
       file.mimetype !== "image/png" &&
       file.mimetype !== "image/gif"
     ) {
@@ -40,50 +47,36 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//use async function to wait for the database connection to be established due to the promise
-async function init() {
+//Update the database after receriving the form submission from the client
+app.post("/admin/add-product", upload.single("image"), async (req, res) => {
   try {
-    const db = mysql.createConnection({
-      host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
-      port: "3306",
-      user: "shop27-admin",
-      password: "mypass",
-      database: "shop27",
-    });
-    //Update the database after receriving the form submission from the client
-    app.post("/admin/add-product", upload.single("image"), async (req, res) => {
-      try {
-        const { catid, name, price, description } = req.body;
-        const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
+    const { catid, name, price, description } = req.body;
+    const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
 
-        const sql =
-          "INSERT INTO products (catid, name, price, description, image) VALUES (?, ?, ?, ?, ?)";
-        const [result] = await db.query(sql, [
-          catid,
-          name,
-          price,
-          description,
-          imagePath,
-        ]);
-        const pid = result.insertId;
-        if (imagePath) {
-          const newImagePath = `uploads/${pid}${path.extname(imagePath)}`;
-          fs.renameSync(imagePath, newImagePath);
-          const updateSql = "UPDATE products SET image = ? WHERE pid = ?";
-          await db.query(updateSql, [newImagePath, pid]);
-        }
+    const sql =
+      "INSERT INTO products (catid, name, price, description, image) VALUES (?, ?, ?, ?, ?)";
+    const [result] = await db.promise.query(sql, [
+      catid,
+      name,
+      price,
+      description,
+      imagePath,
+    ]);
+    const pid = result.insertId;
 
-        res.status(200).send({ message: "Product added successfully!" });
-      } catch (error) {
-        res.status(400).send(error);
-      }
-    });
-    app.listen(3000, () => {
-      console.log("Server is running on port 3000");
-    });
+    if (imagePath) {
+      const newImagePath = `uploads/${pid}${path.extname(imagePath)}`;
+      fs.renameSync(imagePath, newImagePath);
+      const updateSql = "UPDATE products SET image = ? WHERE pid = ?";
+      await db.promise.query(updateSql, [newImagePath, pid]);
+    }
+
+    res.status(200).send({ message: "Product added successfully!" });
   } catch (error) {
-    console.error("Error connecting to the database: ", error);
+    res.status(400).send(error);
   }
-}
+});
 
-init();
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
