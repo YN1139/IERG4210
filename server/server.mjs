@@ -76,3 +76,7 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
