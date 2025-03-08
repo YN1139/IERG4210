@@ -55,20 +55,16 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
 
     const sql =
       "INSERT INTO products (catid, name, price, description, image) VALUES (?, ?, ?, ?, ?)";
-    const [result] = await db.promise.query(sql, [
-      catid,
-      name,
-      price,
-      description,
-      imagePath,
-    ]);
+    const [result] = await db
+      .promise()
+      .query(sql, [catid, name, price, description, imagePath]);
     const pid = result.insertId;
 
     if (imagePath) {
       const newImagePath = `uploads/${pid}${path.extname(imagePath)}`;
       fs.renameSync(imagePath, newImagePath);
       const updateSql = "UPDATE products SET image = ? WHERE pid = ?";
-      await db.promise.query(updateSql, [newImagePath, pid]);
+      await db.promise().query(updateSql, [newImagePath, pid]);
     }
 
     res.status(200).send({ message: "Product added successfully!" });
