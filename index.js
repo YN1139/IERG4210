@@ -36,7 +36,7 @@ async function fetchAllProducts() {
         const productDiv = document.createElement("div");
         productDiv.className = "product";
         productDiv.innerHTML = `
-          <a href="product/${product.pid}">
+          <a href="product.html?pid=${product.pid}">
               <img
                 src="server/${product.image}"
                 alt="${product.name}"
@@ -61,7 +61,7 @@ async function fetchProducts(catid = null) {
         const productDiv = document.createElement("div");
         productDiv.className = "product";
         productDiv.innerHTML = `
-        <a href="product/${product.pid}">
+        <a href="product.html?pid=${product.pid}">
             <img
               src="server/${product.image}"
               alt="${product.name}"
