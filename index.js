@@ -64,7 +64,7 @@ async function fetchProducts(catid = null) {
         productDiv.innerHTML = `
         <a href="product/${product.pid}">
             <img
-              src="${product.image}"
+              src="server/${product.image}"
               alt="${product.name}"
             />
             <div class="productInfo">${product.name}<br>HKD $${product.price}</div>
