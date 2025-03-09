@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchAllProducts();
 
   window.cart = new ShoppingCart();
+  window.cart.updateUI();
 });
 
 async function fetchCategories() {
