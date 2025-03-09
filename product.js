@@ -25,7 +25,7 @@ async function fetchProduct(pid) {
             ${product.description}
           </div>
           <p>HKD $${product.price}</p>
-          <button data-pid="${product.pid}">Add to Cart</button>
+          <button class="add-to-cart" data-pid="${product.pid}">Add to Cart</button>
         </section>
       `;
     });
