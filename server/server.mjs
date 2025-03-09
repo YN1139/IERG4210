@@ -76,7 +76,7 @@ app.get("/api/products/:catid", async (req, res) => {
 });
 
 //Load the specific products
-app.get("/api/products/:pid", async (req, res) => {
+app.get("/api/product/:pid", async (req, res) => {
   const pid = req.params.pid;
   db.query(
     "SELECT * FROM products WHERE pid = ?",
