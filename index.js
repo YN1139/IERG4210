@@ -80,7 +80,6 @@ class ShoppingCart {
     this.items = new Map();
     this.loadFromStorage();
     this.bindEvents();
-    this.updateUI();
   }
   bindEvents() {
     // Add to cart button clicks
@@ -92,7 +91,7 @@ class ShoppingCart {
     });
     // Quantity controls
     document
-      .getElementsByClassName("cart-item")
+      .getElementsByClassName("cart-items")
       .addEventListener("click", (e) => {
         const item = e.target.closest(".cart-item");
         if (!item) return;
