@@ -19,15 +19,13 @@
         <div class="shoppingCart">
           <button>Shopping Cart</button>
           <div class="shoppingCartContent">
-            <ul>
-              <li>One Ok Rock - Ambitions (HKD $250):</li>
-              <li><input type="number" min="1" value="1" /></li>
-              <li>
-                milet - I still/Nobody Knows ＜初回生産限定盤＞ (HKD $140):
-              </li>
-              <li><input type="number" min="1" value="1" /></li>
-            </ul>
-            <button class="checkout"><a href="#">Checkout</a></button>
+            <ul id="cart-item"></ul>
+            <div id="cart-total">
+              Total: $<span id="total-amount">0.0</span>
+            </div>
+            <button id="checkout">
+              <a href="#">Checkout</a>
+            </button>
           </div>
         </div>
       </nav>
@@ -77,5 +75,17 @@
     <footer>
       <p>1155191923 NG Hoi Yan &copy; 2025 IERG4210 Project</p>
     </footer>
+    <template id="cart-item-template">
+      <li class="cart-item" data-pid="">
+        <span class="item-name"></span>
+        <div class="quantity-controls">
+          <button class="decrement">-</button>
+          <input type="number" class="quantity" min="1" value="1" />
+          <button class="increment">+</button>
+        </div>
+        <span class="item-price"></span>
+      </li>
+    </template>
+    <script type="text/javascript" src="index.js"></script>
   </body>
 </html>
