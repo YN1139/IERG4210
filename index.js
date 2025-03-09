@@ -114,11 +114,6 @@ class ShoppingCart {
 
       const data = await response.json();
 
-      // Get the first product from array
-      if (!data || !data[0]) {
-        throw new Error("Invalid product data");
-      }
-
       const product = data[0]; // Access the first element in the array
       const item = this.items.get(pid);
 
@@ -186,32 +181,17 @@ class ShoppingCart {
       itemElement.dataset.pid = pid;
       itemElement.querySelector(".item-name").textContent = item.name;
       itemElement.querySelector(".quantity").value = item.quantity;
+
+      const remove = document.createElement("button");
+      remove.textContent = "Remove";
+      remove.className = "remove-item";
+      itemElement.appendChild(remove);
       itemElement.querySelector(".item-price").textContent = `$${(
         item.price * item.quantity
-      ).toFixed(2)}`;
+      ).toFixed(1)}`;
       total += item.price * item.quantity;
       container.appendChild(clone);
     });
-    /*  // Create cart item
-      const li = document.createElement("li");
-      li.className = "cart-item";
-      li.dataset.pid = pid;
-
-      li.innerHTML = `
-      <span class="item-name">${item.name}</span>
-      <div class="quantity-controls">
-        <button class="decrement">-</button>
-        <input type="number" class="quantity" min="1" value="${item.quantity}">
-        <button class="increment">+</button>
-      </div>
-      <span class="item-price">$${(item.price * item.quantity).toFixed(
-        1
-      )}</span>
-    `;
-
-      total += item.price * item.quantity;
-      container.appendChild(li);
-    }); */
     document.getElementById("total-amount").textContent = total.toFixed(1);
   }
 
