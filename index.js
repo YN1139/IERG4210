@@ -3,6 +3,9 @@ const API = "http://13.238.18.138:3000";
 document.addEventListener("DOMContentLoaded", function () {
   fetchCategories();
   fetchAllProducts();
+
+  window.cart = new ShoppingCart();
+  window.cart.updateUI();
 });
 
 async function fetchCategories() {
