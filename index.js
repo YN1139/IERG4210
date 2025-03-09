@@ -85,27 +85,27 @@ class ShoppingCart {
   }
   bindEvents() {
     // Add to cart button clicks
-    document.querySelectorAll(".add-to-cart").forEach((button) => {
-      button.addEventListener("click", (e) => {
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("add-to-cart")) {
         const pid = e.target.dataset.pid;
-        this.addItem(pid);
-      });
+        if (pid) {
+          this.addItem(pid);
+        }
+      }
     });
     // Quantity controls
-    document
-      .getElementsByClassName("cart-items")
-      .addEventListener("click", (e) => {
-        const item = e.target.closest(".cart-item");
-        if (!item) return;
-        const pid = item.dataset.pid;
-        if (e.target.classList.contains("increment")) {
-          this.updateQuantity(pid, 1);
-        } else if (e.target.classList.contains("decrement")) {
-          this.updateQuantity(pid, -1);
-        } else if (e.target.classList.contains("remove-item")) {
-          this.removeItem(pid);
-        }
-      });
+    document.getElementsById("cart-item").addEventListener("click", (e) => {
+      const item = e.target.closest(".cart-item");
+      if (!item) return;
+      const pid = item.dataset.pid;
+      if (e.target.classList.contains("increment")) {
+        this.updateQuantity(pid, 1);
+      } else if (e.target.classList.contains("decrement")) {
+        this.updateQuantity(pid, -1);
+      } else if (e.target.classList.contains("remove-item")) {
+        this.removeItem(pid);
+      }
+    });
   }
   async fetchProductDetails(pid) {
     try {
