@@ -3,29 +3,8 @@ const API = "http://13.238.18.138:3000";
 document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const pid = urlParams.get("pid");
-  fetchCategories();
   fetchProduct(pid);
 });
-
-async function fetchCategories() {
-  fetch(API + "/api/cat")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      const categoryList = document.querySelector(".categoryMenu ul");
-      data.forEach((category) => {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = "#";
-        a.textContent = category.name;
-        a.addEventListener("click", function () {
-          fetchProducts(category.catid);
-        });
-        li.appendChild(a);
-        categoryList.appendChild(li);
-      });
-    });
-}
 
 async function fetchProduct(pid) {
   fetch(API + "/api/products/" + pid)
@@ -34,24 +13,36 @@ async function fetchProduct(pid) {
       console.log(data);
       const product = data[0];
 
-      document.getElementById("product-crumb").querySelector("a").textContent =
-        product.name;
+      // Update the product name in the breadcrumb (3rd item)
+      const breadcrumbItems = document.querySelectorAll(
+        ".breadcrumb ol li.crumb"
+      );
+      if (breadcrumbItems && breadcrumbItems.length >= 3) {
+        const productCrumb = breadcrumbItems[2]; // Third li element (0-indexed)
+        if (productCrumb && productCrumb.querySelector("a")) {
+          productCrumb.querySelector("a").textContent = product.name;
+        }
+      }
 
-      // Get category name for breadcrumb
-      fetch(API + "/api/cat/" + product.catid)
+      // Get category name for the breadcrumb (2nd item)
+      fetch(API + "/api/cat")
         .then((response) => response.json())
-        .then((catData) => {
-          if (catData && catData[0]) {
-            const catLink = document
-              .getElementById("category-crumb")
-              .querySelector("a");
-            catLink.textContent = catData[0].name;
-            catLink.href = `index.html?category=${product.catid}`;
-          }
-        });
+        .then((categories) => {
+          // Find the category matching product.catid
+          const category = categories.find((cat) => cat.catid == product.catid);
 
-      // Populate product container
-      const productContainer = document.getElementsByClassName(".item");
+          if (category && breadcrumbItems && breadcrumbItems.length >= 2) {
+            const categoryCrumb = breadcrumbItems[1]; // Second li element
+            if (categoryCrumb && categoryCrumb.querySelector("a")) {
+              const catLink = categoryCrumb.querySelector("a");
+              catLink.textContent = category.name;
+              catLink.href = `index.html?category=${category.catid}`;
+            }
+          }
+        })
+        .catch((error) => console.error("Error fetching categories:", error));
+
+      const productContainer = document.querySelector(".item");
       productContainer.innerHTML = `
         <img 
           src="${API}/${product.image}"
