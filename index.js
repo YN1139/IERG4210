@@ -3,6 +3,31 @@ const API = "http://13.238.18.138:3000";
 document.addEventListener("DOMContentLoaded", function () {
   fetchCategories();
   fetchAllProducts();
+  // Get the shopping cart button and content
+  const cartButton = document.querySelector("#shoppingCart > button");
+  const cartContent = document.querySelector(".shoppingCartContent");
+
+  // Toggle cart visibility when clicking the button
+  if (cartButton && cartContent) {
+    cartButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (cartContent.style.display === "block") {
+        cartContent.style.display = "none";
+      } else {
+        cartContent.style.display = "block";
+      }
+    });
+
+    // Close cart when clicking outside
+    document.addEventListener("click", function (e) {
+      if (
+        !e.target.closest("#shoppingCart") &&
+        cartContent.style.display === "block"
+      ) {
+        cartContent.style.display = "none";
+      }
+    });
+  }
 });
 
 async function fetchCategories() {
