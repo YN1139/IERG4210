@@ -109,7 +109,7 @@ class ShoppingCart {
   }
   async fetchProductDetails(pid) {
     try {
-      const response = await fetch(`/api/product/${pid}`);
+      const response = await fetch(API + "/api/product/" + pid);
       if (!response.ok) throw new Error("Product not found");
       const product = await response.json();
       const item = this.items.get(pid);
@@ -185,6 +185,7 @@ class ShoppingCart {
 
   loadFromStorage() {
     const saved = localStorage.getItem("shopping-cart");
+    if (!saved) return;
     const data = JSON.parse(saved);
     data.forEach((item) => {
       this.items.set(item.pid, { item });
