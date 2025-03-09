@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const pid = urlParams.get("pid");
   fetchProduct(pid);
+
+  window.cart = new ShoppingCart();
+  window.cart.updateUI();
 });
 
 async function fetchProduct(pid) {
