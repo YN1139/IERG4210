@@ -94,7 +94,7 @@ class ShoppingCart {
       }
     });
     // Quantity controls
-    document.getElementsById("cart-item").addEventListener("click", (e) => {
+    document.getElementById("cart-item").addEventListener("click", (e) => {
       const item = e.target.closest(".cart-item");
       if (!item) return;
       const pid = item.dataset.pid;
