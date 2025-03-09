@@ -84,7 +84,7 @@ class ShoppingCart {
     this.bindEvents();
   }
   bindEvents() {
-    // Add to cart button clicks
+    // Add to cart button clicks, using event delegation
     document.addEventListener("click", (e) => {
       if (e.target.classList.contains("add-to-cart")) {
         const pid = e.target.dataset.pid;
@@ -180,7 +180,7 @@ class ShoppingCart {
     container.innerHTML = "";
     let total = 0;
     this.items.forEach((item, pid) => {
-      /* const template = document.getElementById("cart-item-template");
+      const template = document.getElementById("cart-item-template");
       const clone = template.content.cloneNode(true);
       const itemElement = clone.querySelector(".cart-item");
       itemElement.dataset.pid = pid;
@@ -191,8 +191,8 @@ class ShoppingCart {
       ).toFixed(2)}`;
       total += item.price * item.quantity;
       container.appendChild(clone);
-    }); */
-      // Create cart item
+    });
+    /*  // Create cart item
       const li = document.createElement("li");
       li.className = "cart-item";
       li.dataset.pid = pid;
@@ -211,7 +211,7 @@ class ShoppingCart {
 
       total += item.price * item.quantity;
       container.appendChild(li);
-    });
+    }); */
     document.getElementById("total-amount").textContent = total.toFixed(1);
   }
 
