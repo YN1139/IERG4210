@@ -150,6 +150,7 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
 
 /*Shopping Cart*/
 #shoppingCart {
+  position: relative;
   display: inline-block;
 }
 
