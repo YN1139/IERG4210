@@ -16,7 +16,7 @@ async function fetchProduct(pid) {
       const productContainer = document.querySelector(".item");
       productContainer.innerHTML = `
         <img 
-          src="server/${product.image}"
+          src="${product.image}"
           alt="${product.name}"
         >
         <section class="itemInfo">
