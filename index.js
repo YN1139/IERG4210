@@ -68,7 +68,7 @@ async function fetchProducts(catid = null) {
             />
             <div class="productInfo">${product.name}<br>HKD $${product.price}</div>
           </a>
-          <button data-pid="${product.pid}">Add to cart</button>
+          <button class=add-to-cart data-pid="${product.pid}">Add to cart</button>
         `;
         productList.appendChild(productDiv);
       });

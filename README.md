@@ -54,5 +54,6 @@ TODO: [Update, delect]-product \
 
 ## Phase 3:
 
-Reference from tutorial, updated the codes for shopping cart \
-\*\*! Not yet tested as not at home currently (edited 17:16 09032025)
+Reference from tutorial, updated the codes for shopping cart. \
+
+- ! Not yet tested as not at home currently (edited 17:16 09032025)
