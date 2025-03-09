@@ -149,7 +149,7 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
 }
 
 /*Shopping Cart*/
-#shoppingCart {
+.shoppingCart {
   position: relative;
   display: inline-block;
 }
@@ -181,7 +181,7 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
 
 /* Set shoppingCartContent as visible*/
 /*Animation reference from https://www.joshwcomeau.com/animation/css-transitions/*/
-#shoppingCart:hover .shoppingCartContent {
+.shoppingCart:hover .shoppingCartContent {
   /* display: block; */
   opacity: 1;
   transition: opacity 50ms;
