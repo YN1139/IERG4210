@@ -51,7 +51,7 @@ async function fetchProduct(pid) {
         });
 
       // Populate product container
-      const productContainer = document.querySelector(".item");
+      const productContainer = document.getElementsByClassName(".item");
       productContainer.innerHTML = `
         <img 
           src="${API}/${product.image}"
