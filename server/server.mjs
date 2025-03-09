@@ -47,6 +47,47 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//Load the categories and products to homepage
+app.get("/api/cat", async (req, res) => {
+  db.query("SELECT * FROM categories", async (err, categories) => {
+    if (err) throw err;
+    res.json(categories);
+  });
+});
+
+app.get("/api/prod", async (req, res) => {
+  db.query("SELECT * FROM products", async (err, products) => {
+    if (err) throw err;
+    res.json(products);
+  });
+});
+
+//Load the specific products based on the category
+app.get("/api/products/:catid", async (req, res) => {
+  const catid = req.params.catid;
+  db.query(
+    "SELECT * FROM products WHERE catid = ?",
+    [catid],
+    async (err, products) => {
+      if (err) throw err;
+      res.json(products);
+    }
+  );
+});
+
+//Load the specific products
+app.get("/api/products/:pid", async (req, res) => {
+  const pid = req.params.pid;
+  db.query(
+    "SELECT * FROM products WHERE pid = ?",
+    [pid],
+    async (err, products) => {
+      if (err) throw err;
+      res.render(products);
+    }
+  );
+});
+
 //Update the database after receriving the form submission from the client
 app.post("/admin/add-product", upload.single("image"), async (req, res) => {
   try {
