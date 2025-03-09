@@ -1,6 +1,6 @@
 # IERG4210
 
-**Static webpage:  https://yn1139.github.io/IERG4210/** \
+**Static webpage: https://yn1139.github.io/IERG4210/** \
 This is for storing the files of the project for IERG4210.  
 The project, at the end, is aimed to build up a secure e-commerce website.
 
@@ -46,3 +46,13 @@ Album cover art source: https://covers.musichoarders.xyz/
 
 **! The shopping cart function is not working at this moment.**\
 **! The layout is subjected to change.**
+
+## Phase 2B:
+
+Implemented add-product admin pannel, auto-resize also implemented through frontend (CSS) \
+TODO: [Update, delect]-product \
+
+## Phase 3:
+
+Reference from tutorial, updated the codes for shopping cart \
+\*\*! Not yet tested as not at home currently (edited 17:16 09032025)
