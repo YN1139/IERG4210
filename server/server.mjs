@@ -81,9 +81,9 @@ app.get("/api/products/:pid", async (req, res) => {
   db.query(
     "SELECT * FROM products WHERE pid = ?",
     [pid],
-    async (err, products) => {
+    async (err, product) => {
       if (err) throw err;
-      res.render(products);
+      res.json(product);
     }
   );
 });
