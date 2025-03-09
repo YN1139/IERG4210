@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function fetchProduct(pid) {
-  fetch(API + "/api/products/" + pid)
+  fetch(API + `/api/products/${pid}`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
