@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   //fetchProducts();
 });
 
-function fetchCategories() {
-  fetch(API + "/api/categories")
+async function fetchCategories() {
+  fetch(API + "/api/cat")
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
