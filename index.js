@@ -176,7 +176,7 @@ class ShoppingCart {
   }
 
   updateUI() {
-    const container = document.getElementById("cart-items");
+    const container = document.getElementById("cart-item");
     container.innerHTML = "";
     let total = 0;
     this.items.forEach((item, pid) => {
@@ -205,7 +205,7 @@ class ShoppingCart {
         <button class="increment">+</button>
       </div>
       <span class="item-price">$${(item.price * item.quantity).toFixed(
-        2
+        1
       )}</span>
     `;
 
