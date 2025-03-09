@@ -38,7 +38,7 @@ async function fetchProduct(pid) {
         product.name;
 
       // Get category name for breadcrumb
-      fetch(API + "/api/category/" + product.catid)
+      fetch(API + "/api/cat/" + product.catid)
         .then((response) => response.json())
         .then((catData) => {
           if (catData && catData[0]) {
