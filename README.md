@@ -44,8 +44,13 @@ Reference:
 
 Album cover art source: https://covers.musichoarders.xyz/
 
-**! The shopping cart function is not working at this moment.**\
+~~**! The shopping cart function is not working at this moment.**~~\
 **! The layout is subjected to change.**
+
+## Phase 2A:
+
+16/2: submitted the IP address with secure firewall settings (allowing CUHK and local IP to access) \
+8/3: updated the nginx configuration file for the assigned domain name \
 
 ## Phase 2B:
 
@@ -54,4 +59,7 @@ TODO: [Update, delect]-product \
 
 ## Phase 3:
 
-Reference from tutorial and debug with copilot (with reference), updated the codes for shopping cart. \
+Shopping cart function implemented all over the web (updated at 0158 10/3 for fixing bugs) \
+
+- Reference mainly from tutorial 5 and debug with copilot (in UseOfAI.md) \
+- Event delegation reference: https://typeofnan.dev/how-to-bind-event-listeners-on-dynamically-created-elements-in-javascript/ \
