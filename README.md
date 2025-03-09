@@ -50,16 +50,16 @@ Album cover art source: https://covers.musichoarders.xyz/
 ## Phase 2A:
 
 16/2: submitted the IP address with secure firewall settings (allowing CUHK and local IP to access) \
-8/3: updated the nginx configuration file for the assigned domain name \
+8/3: updated the nginx configuration file for the assigned domain name
 
 ## Phase 2B:
 
 Implemented add-product admin pannel, auto-resize also implemented through frontend (CSS) \
-TODO: [Update, delect]-product \
+TODO: [Update, delect]-product 
 
 ## Phase 3:
 
-Shopping cart function implemented all over the web (updated at 0158 10/3 for fixing bugs) \
+Shopping cart function implemented all over the web (updated at 0158 10/3 for fixing bugs)
 
-- Reference mainly from tutorial 5 and debug with copilot (in UseOfAI.md) \
-- Event delegation reference: https://typeofnan.dev/how-to-bind-event-listeners-on-dynamically-created-elements-in-javascript/ \
+- Reference mainly from tutorial 5 and debug with copilot (in UseOfAI.md)
+- Event delegation reference: https://typeofnan.dev/how-to-bind-event-listeners-on-dynamically-created-elements-in-javascript/
