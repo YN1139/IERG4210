@@ -3,21 +3,21 @@ const API = "http://13.238.18.138:3000";
 document.addEventListener("DOMContentLoaded", function () {
   fetchCategories();
   fetchAllProducts();
+  fetchBreadcrumb();
 });
 
 async function fetchBreadcrumb() {
-  fetch(API + "/api/product/" + pid)
+  fetch(API + "/api/cat")
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       const breadcrumb = document.querySelector(".breadcrumb li");
-      data.forEach((product) => {
+      data.forEach((category) => {
         const li = document.createElement("li");
         const a = document.createElement("a");
-        a.href = "#";
-        a.textContent = product.name;
+        a.textContent = category.name;
         a.addEventListener("click", function () {
-          fetchProduct(product.pid);
+          a.href = fetchCategories();
         });
         li.appendChild(a);
         breadcrumb.appendChild(li);
