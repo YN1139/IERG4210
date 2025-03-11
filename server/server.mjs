@@ -24,7 +24,7 @@ const db = mysql.createConnection({
 });
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads");
+    cb(null, "../public/uploads");
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
@@ -115,8 +115,8 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
     if (imagePath) {
       const newImagePath = `public/uploads/${pid}${path.extname(imagePath)}`; //rename the image file with the pid
       console.log(imagePath, newImagePath);
-      fs.renameSync(imagePath, newImagePath); //rename the image file
-      const dbImagePath = newImagePath.replace("public/", ""); //remove public from the path
+      fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
+      const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
       const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
       await db.promise().query(updateSql, [dbImagePath, pid]);
     }
