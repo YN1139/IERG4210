@@ -34,8 +34,8 @@ async function fetchProduct(pid) {
 async function fetchBreadcrumb(catid = null) {
   const response = await fetch(API + "/api/category/" + catid);
   const data = response.json();
-  const category = data[0];
-  console.log(data);
+  const category = data;
+  console.log(category.name);
   const breadcrumb = document.querySelector(".breadcrumb ol");
   const crumb = breadcrumb.querySelectorAll("li:not(:first-child)"); //selecr all li except the first one
   //crumb.forEach((li) => li.remove()); //remove them
