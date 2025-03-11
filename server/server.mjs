@@ -113,8 +113,13 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
 
     //update the image with pid if image path exist in database
     if (imagePath) {
-      const newImagePath = `uploads/${pid}${path.extname(imagePath)}`; //rename the image file with the pid
-      console.log(imagePath, newImagePath);
+      const fileExt = path.extname(imagePath);
+      const directory = path.dirname(imagePath);
+      const newImagePath = path.join(directory, `${pid}${fileExt}`);
+
+      console.log("Original path:", imagePath);
+      console.log("New path:", newImagePath);
+
       fs.renameSync(imagePath, newImagePath); //rename the image file
       const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
       await db.promise().query(updateSql, [newImagePath, pid]);
