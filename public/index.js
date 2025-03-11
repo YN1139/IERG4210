@@ -3,7 +3,6 @@ const API = "http://13.238.18.138:3000";
 document.addEventListener("DOMContentLoaded", function () {
   fetchCategories();
   fetchAllProducts();
-  fetchBreadcrumb();
 });
 
 async function fetchBreadcrumb() {
