@@ -53,6 +53,9 @@ app.use(express.urlencoded({ extended: true }));
 //app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/", express.static(path.join(__dirname, "../")));
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
