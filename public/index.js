@@ -3,6 +3,11 @@ const API = "http://13.238.18.138:3000";
 document.addEventListener("DOMContentLoaded", function () {
   fetchCategories();
   fetchAllProducts();
+
+  if (window.localStorage.getItem("category")) {
+    fetchProducts(window.localStorage.getItem("category"));
+    window.localStorage.removeItem("category");
+  }
 });
 
 async function fetchBreadcrumb(catid = null) {
