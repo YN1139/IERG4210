@@ -55,13 +55,14 @@ async function fetchBreadcrumbProduct(pid) {
   fetch(API + "/api/product/" + pid)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      //fetchBreadcrumb(data.catid);
+      const product = data[0];
+      console.log(product.name);
+      fetchBreadcrumb(product.catid);
       const breadcrumb = document.querySelector(".breadcrumb ol");
       const li = document.createElement("li");
       li.className = "crumb";
       li.innerHTML = `
-        <a href="#">${data.name}</a>
+        <a href="#">${product.name}</a>
       `;
       breadcrumb.appendChild(li);
     });
