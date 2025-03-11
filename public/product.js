@@ -7,13 +7,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function fetchProduct(pid) {
-  fetchBreadcrumbProduct(pid);
   fetch(API + "/api/product/" + pid)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       const product = data[0];
-
+      fetchBreadcrumbProduct(product.pid);
       const productContainer = document.querySelector(".item");
       productContainer.innerHTML = `
         <img 
@@ -32,7 +31,7 @@ async function fetchProduct(pid) {
     });
 }
 
-async function fetchBreadcrumb(catid = null) {
+function fetchBreadcrumb(catid = null) {
   fetch(API + "/api/category/" + catid)
     .then((response) => response.json())
     .then((data) => {
