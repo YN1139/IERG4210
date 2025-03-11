@@ -55,7 +55,7 @@ Album cover art source: https://covers.musichoarders.xyz/
 ## Phase 2B:
 
 Implemented add-product admin pannel, auto-resize also implemented through frontend (CSS) \
-TODO: [Update, delect]-product 
+TODO: [Update, delect]-product
 
 ## Phase 3:
 
@@ -63,3 +63,7 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 
 - Reference mainly from tutorial 5 and debug with copilot (in UseOfAI.md)
 - Event delegation reference: https://typeofnan.dev/how-to-bind-event-listeners-on-dynamically-created-elements-in-javascript/
+
+11/3: updated breadcrumb for categories and product pages by using window local storage
+
+- Reference: https://stackoverflow.com/questions/63215969/executing-a-click-function-after-redirecting-the-person-to-another-page
