@@ -5,20 +5,18 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchAllProducts();
 });
 
-async function fetchBreadcrumb() {
-  fetch(API + "/api/cat")
+async function fetchBreadcrumb(catid = null) {
+  fetch(API + "/api/category/" + catid)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      const breadcrumb = document.querySelector(".breadcrumb ul");
+      const breadcrumb = document.querySelector(".breadcrumb ol");
       data.forEach((category) => {
         const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.textContent = category.name;
-        a.addEventListener("click", function () {
-          a.href = fetchCategories();
-        });
-        li.appendChild(a);
+        li.className = "crumb";
+        li.innerHTML = `
+        <a href="#">${category.name}</a>
+      `;
         breadcrumb.appendChild(li);
       });
     });
@@ -70,20 +68,14 @@ async function fetchAllProducts() {
 }
 
 async function fetchProducts(catid = null) {
+  fetchBreadcrumb();
   fetch(API + "/api/products/" + catid)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       const productList = document.querySelector(".productList");
       productList.innerHTML = "";
-      const breadcrumb = document.querySelector(".breadcrumb ol");
       data.forEach((product) => {
-        const li = document.createElement("li");
-        li.className = "crumb";
-        li.innerHTML = `
-        <a href="#">${product.catid}</a>
-      `;
-        breadcrumb.appendChild(li);
         const productDiv = document.createElement("div");
         productDiv.className = "product";
         productDiv.innerHTML = `

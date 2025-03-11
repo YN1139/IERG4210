@@ -72,6 +72,19 @@ app.get("/api/prod", async (req, res) => {
   });
 });
 
+//Load the specific category
+app.get("/api/category/:catid", async (req, res) => {
+  const catid = req.params.catid;
+  db.query(
+    "SELECT * FROM categories WHERE catid = ?",
+    [catid],
+    async (err, category) => {
+      if (err) throw err;
+      res.json(category);
+    }
+  );
+});
+
 //Load the specific products based on the category
 app.get("/api/products/:catid", async (req, res) => {
   const catid = req.params.catid;
