@@ -7,14 +7,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function fetchProduct(pid) {
-  fetch(API + "/api/product/" + pid)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      const product = data[0];
-      fetchBreadcrumbProduct(product.pid);
-      const productContainer = document.querySelector(".item");
-      productContainer.innerHTML = `
+  const response = await fetch(API + "/api/product/" + pid);
+  const data = await response.json();
+  const product = data[0];
+  await fetchBreadcrumbProduct(product.pid);
+  const productContainer = document.querySelector(".item");
+  productContainer.innerHTML = `
         <img 
           src="${product.image}"
           alt="${product.name}"
@@ -28,7 +26,6 @@ async function fetchProduct(pid) {
           <button class="add-to-cart" data-pid="${product.pid}">Add to Cart</button>
         </section>
       `;
-    });
 }
 
 async function fetchBreadcrumb(catid = null) {
