@@ -50,7 +50,7 @@ async function fetchAllProducts() {
     .then((data) => {
       console.log(data);
       const productList = document.querySelector(".productList");
-      //productList.innerHTML = "";
+      productList.innerHTML = "";
       data.forEach((product) => {
         const productDiv = document.createElement("div");
         productDiv.className = "product";
@@ -75,13 +75,15 @@ async function fetchProducts(catid = null) {
     .then((data) => {
       console.log(data);
       const productList = document.querySelector(".productList");
+      productList.innerHTML = "";
       const breadcrumb = document.querySelector(".breadcrumb ol");
       data.forEach((product) => {
-        breadcrumb.innerHTML = `
-      <li class="crumb">
+        const li = document.createElement("li");
+        li.className = "crumb";
+        li.innerHTML = `
         <a href="#">${product.catid}</a>
-      </li>
       `;
+        breadcrumb.appendChild(li);
         const productDiv = document.createElement("div");
         productDiv.className = "product";
         productDiv.innerHTML = `
