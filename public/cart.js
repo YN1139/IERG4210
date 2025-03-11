@@ -132,14 +132,13 @@ class ShoppingCart {
     try {
       const data = JSON.parse(saved);
       data.forEach((item) => {
-        // Store properties directly, not nested in an item object
         this.items.set(item.pid, {
           quantity: item.quantity || 1,
           price: parseFloat(item.price) || 0,
           name: item.name || "",
         });
 
-        // Only fetch if we don't have name or price
+        // Fetch product details if missing
         if (!item.name || !item.price) {
           this.fetchProductDetails(item.pid);
         }
