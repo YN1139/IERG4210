@@ -11,6 +11,7 @@ async function fetchBreadcrumb(catid = null) {
     .then((data) => {
       console.log(data);
       const breadcrumb = document.querySelector(".breadcrumb ol");
+      breadcrumb.innerHTML = "";
       data.forEach((category) => {
         const li = document.createElement("li");
         li.className = "crumb";
