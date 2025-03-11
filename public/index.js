@@ -68,7 +68,7 @@ async function fetchAllProducts() {
 }
 
 async function fetchProducts(catid = null) {
-  fetchBreadcrumb();
+  fetchBreadcrumb(catid);
   fetch(API + "/api/products/" + catid)
     .then((response) => response.json())
     .then((data) => {
