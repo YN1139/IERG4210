@@ -11,7 +11,8 @@ async function fetchBreadcrumb(catid = null) {
     .then((data) => {
       console.log(data);
       const breadcrumb = document.querySelector(".breadcrumb ol");
-      breadcrumb.innerHTML = "";
+      const crumb = breadcrumb.querySelector("li:not(:first-child)");
+      crumb.remove();
       data.forEach((category) => {
         const li = document.createElement("li");
         li.className = "crumb";
