@@ -83,7 +83,7 @@ async function fetchProducts(catid = null) {
         crumba.addEventListener("click", function () {
           a.href = fetchProducts(catid);
         });
-        breadcrumb.appendChild(a);
+        breadcrumb.appendChild(crumba);
         const productDiv = document.createElement("div");
         productDiv.className = "product";
         productDiv.innerHTML = `
