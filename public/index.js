@@ -10,7 +10,7 @@ async function fetchBreadcrumb() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      const breadcrumb = document.querySelector(".breadcrumb li");
+      const breadcrumb = document.querySelector(".breadcrumb ul");
       data.forEach((category) => {
         const li = document.createElement("li");
         const a = document.createElement("a");
@@ -75,15 +75,14 @@ async function fetchProducts(catid = null) {
     .then((data) => {
       console.log(data);
       const productList = document.querySelector(".productList");
-      const breadcrumb = document.querySelector(".crumb");
+      const breadcrumb = document.querySelector(".breadcrumb ul");
+      breadcrumb.innerHTML = `
+      <li class="crumb">
+        <a href="#">${product.catid}</a>
+      </li>
+      `;
       productList.innerHTML = "";
       data.forEach((product) => {
-        const crumba = document.createElement("a");
-        crumba.textContent = product.category;
-        crumba.addEventListener("click", function () {
-          a.href = fetchProducts(catid);
-        });
-        breadcrumb.appendChild(crumba);
         const productDiv = document.createElement("div");
         productDiv.className = "product";
         productDiv.innerHTML = `
