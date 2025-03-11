@@ -39,7 +39,7 @@ async function fetchBreadcrumb(catid = null) {
       console.log(data);
       const breadcrumb = document.querySelector(".breadcrumb ol");
       const crumb = breadcrumb.querySelectorAll("li:not(:first-child)"); //selecr all li except the first one
-      crumb.forEach((li) => li.remove()); //remove them
+      //crumb.forEach((li) => li.remove()); //remove them
       data.forEach((category) => {
         const li = document.createElement("li");
         li.className = "crumb";
@@ -52,11 +52,11 @@ async function fetchBreadcrumb(catid = null) {
 }
 
 async function fetchBreadcrumbProduct(pid) {
-  fetchBreadcrumb(product.catid);
   fetch(API + "/api/product/" + pid)
     .then((response) => response.json())
     .then((data) => {
       const product = data[0];
+      fetchBreadcrumb(product.catid);
       console.log(product.name);
       const breadcrumb = document.querySelector(".breadcrumb ol");
       const li = document.createElement("li");
