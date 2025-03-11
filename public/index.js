@@ -5,6 +5,26 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchAllProducts();
 });
 
+async function fetchBreadcrumb() {
+  fetch(API + "/api/product/" + pid)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const breadcrumb = document.querySelector(".breadcrumb li");
+      data.forEach((product) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = "#";
+        a.textContent = product.name;
+        a.addEventListener("click", function () {
+          fetchProduct(product.pid);
+        });
+        li.appendChild(a);
+        breadcrumb.appendChild(li);
+      });
+    });
+}
+
 async function fetchCategories() {
   fetch(API + "/api/cat")
     .then((response) => response.json())
