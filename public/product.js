@@ -31,14 +31,14 @@ async function fetchProduct(pid) {
     });
 }
 
-function fetchBreadcrumb(catid = null) {
+async function fetchBreadcrumb(catid = null) {
   fetch(API + "/api/category/" + catid)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       const breadcrumb = document.querySelector(".breadcrumb ol");
       const crumb = breadcrumb.querySelectorAll("li:not(:first-child)"); //selecr all li except the first one
-      //crumb.forEach((li) => li.remove()); //remove them
+      crumb.forEach((li) => li.remove()); //remove them
       data.forEach((category) => {
         const li = document.createElement("li");
         li.className = "crumb";
@@ -51,20 +51,17 @@ function fetchBreadcrumb(catid = null) {
 }
 
 async function fetchBreadcrumbProduct(pid) {
-  fetch(API + "/api/product/" + pid)
-    .then((response) => response.json())
-    .then((data) => {
-      const product = data[0];
-      console.log(product.name);
-      if (product.catid) {
-        fetchBreadcrumb(product.catid);
-      }
-      const breadcrumb = document.querySelector(".breadcrumb ol");
-      const li = document.createElement("li");
-      li.className = "crumb";
-      li.innerHTML = `
+  const response = await fetch(API + "/api/product/" + pid);
+  const data = await response.json();
+  const product = data[0];
+  console.log(product.name);
+  if (product.catid) {
+    await fetchBreadcrumb(product.catid);
+  }
+  const li = document.createElement("li");
+  li.className = "crumb";
+  li.innerHTML = `
         <a href="#">${product.name}</a>
       `;
-      breadcrumb.appendChild(li);
-    });
+  breadcrumb.appendChild(li);
 }
