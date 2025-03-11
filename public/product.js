@@ -67,7 +67,7 @@ async function fetchBreadcrumb(catid = null) {
   const li = document.createElement("li");
   li.className = "crumb";
   const a = document.createElement("a");
-  a.href = "#";
+  a.href = "/";
   a.textContent = category.name;
   a.addEventListener("click", function () {
     fetchProducts(category.catid);
