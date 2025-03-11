@@ -69,8 +69,7 @@ async function fetchBreadcrumb(catid = null) {
   const a = document.createElement("a");
   a.textContent = category.name;
   a.addEventListener("click", function () {
-    fetchProducts(category.catid);
-    a.href = "/";
+    redirectToCategories(category.catid);
   });
   li.appendChild(a);
   breadcrumb.appendChild(li);
@@ -91,4 +90,9 @@ async function fetchBreadcrumbProduct(pid) {
         <a href="#">${product.name}</a>
   `;
   breadcrumb.appendChild(li);
+}
+
+function redirectToCategories(pid) {
+  window.location.href = "/";
+  window.localStorage.setItem("category", pid);
 }
