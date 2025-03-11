@@ -52,6 +52,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/", express.static(path.join(__dirname, "../")));
+app.use("/public", express.static(path.join(__dirname, "../public")));
 
 app.get("/", (req, res) => {
   res.send("Hello World");
@@ -112,6 +113,8 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
 
     //update the image with pid if image path exist in database
     if (imagePath) {
+      const fullPath = path.dirname(imagePath);
+      console.log(fullPath);
       const newImagePath = `uploads/${pid}${path.extname(imagePath)}`; //rename the image file with the pid
       fs.renameSync(imagePath, newImagePath); //rename the image file
       const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
