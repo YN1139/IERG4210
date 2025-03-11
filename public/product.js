@@ -39,14 +39,12 @@ async function fetchBreadcrumb(catid = null) {
   const breadcrumb = document.querySelector(".breadcrumb ol");
   const crumb = breadcrumb.querySelectorAll("li:not(:first-child)"); //selecr all li except the first one
   //crumb.forEach((li) => li.remove()); //remove them
-  data.forEach((category) => {
-    const li = document.createElement("li");
-    li.className = "crumb";
-    li.innerHTML = `
+  const li = document.createElement("li");
+  li.className = "crumb";
+  li.innerHTML = `
         <a href="#">${category.name}</a>
       `;
-    breadcrumb.appendChild(li);
-  });
+  breadcrumb.appendChild(li);
 }
 
 async function fetchBreadcrumbProduct(pid) {
