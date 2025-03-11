@@ -56,8 +56,10 @@ async function fetchBreadcrumbProduct(pid) {
     .then((response) => response.json())
     .then((data) => {
       const product = data[0];
-      fetchBreadcrumb(product.catid);
       console.log(product.name);
+      if (product.catid) {
+        fetchBreadcrumb(product.catid);
+      }
       const breadcrumb = document.querySelector(".breadcrumb ol");
       const li = document.createElement("li");
       li.className = "crumb";
