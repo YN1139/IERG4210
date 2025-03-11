@@ -76,8 +76,15 @@ async function fetchProducts(catid = null) {
     .then((data) => {
       console.log(data);
       const productList = document.querySelector(".productList");
+      const breadcrumb = document.querySelector(".crumb");
       productList.innerHTML = "";
       data.forEach((product) => {
+        const crumba = document.createElement("a");
+        crumba.textContent = product.category;
+        crumba.addEventListener("click", function () {
+          a.href = fetchProducts(catid);
+        });
+        breadcrumb.appendChild(a);
         const productDiv = document.createElement("div");
         productDiv.className = "product";
         productDiv.innerHTML = `
