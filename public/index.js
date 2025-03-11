@@ -76,13 +76,12 @@ async function fetchProducts(catid = null) {
       console.log(data);
       const productList = document.querySelector(".productList");
       const breadcrumb = document.querySelector(".breadcrumb ul");
-      breadcrumb.innerHTML = `
+      data.forEach((product) => {
+        breadcrumb.innerHTML = `
       <li class="crumb">
         <a href="#">${product.catid}</a>
       </li>
       `;
-      productList.innerHTML = "";
-      data.forEach((product) => {
         const productDiv = document.createElement("div");
         productDiv.className = "product";
         productDiv.innerHTML = `
