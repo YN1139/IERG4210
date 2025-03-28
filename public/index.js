@@ -111,7 +111,7 @@ async function fetchProducts(catid = null) {
 
         const productInfo = document.createElement("div");
         productInfo.className = "productInfo";
-        productInfo.textContent = product.name + "\nHKD $" + product.price;
+        productInfo.textContent = "${product.name}\nHKD $${product.price}";
 
         const addToCart = document.createElement("button");
         addToCart.className = "add-to-cart";
