@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="stylesheet/main.css" />
+    <title>IERG4210 Login</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>CD Shop</h1>
+      <nav class="pages">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="/admin">Admin</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+        </div>
+      </nav>
+    </header>
+
+    <h2>Login</h2>
+    <form id="login" name="login" action="/login" method="post">
+      <label for="username">Username:</label>
+      <input type="text" name="username" required pattern="[A-Za-z0-9\s\-']">
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" name="password" required minlength="8">
+      <br>
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="forgorPassword">
+      <a href="/forgot-password">Forgot Password?</a>
+    </div>
+    <script src="login.js"></script>
+  </body>
+</html>

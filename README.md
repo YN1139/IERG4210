@@ -71,4 +71,8 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 ## Phase 4:
 
 - Client-side form validation applied.
-- Removing innerHTML
+- Removed innerHTML and change all to .textcontetnt so all content is encoded with HTML encoding
+- Added encodeURIComponent()
+- Implemented CORS and Helmet for CSP
+- CSRF and express-session applied
+- Updated HTTPS, reference to IERG3800 settings

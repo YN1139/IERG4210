@@ -35,7 +35,7 @@ async function fetchProduct(pid) {
 
   const addToCart = document.createElement("button");
   addToCart.className = "add-to-cart";
-  addToCart.dataset.pid = product.pid;
+  addToCart.dataset.pid = encodeURIComponent(product.pid);
   addToCart.textContent = "Add to Cart";
   section.appendChild(addToCart);
 }
