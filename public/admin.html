@@ -38,7 +38,7 @@
             </select>
         <br>
         <label for="name">CD Name:</label>
-            <input type="text" name="name" required pattern="[A-Za-z0-9\s\-'!」「]+"> <!--Regex: only letter, numbers, whitespace,-->
+            <input type="text" name="name" required pattern="[A-Za-z0-9\s\-'!\u300C\u300D\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+"> <!--Regex: only letter, numbers, whitespace, and chinese-->
         <br>
         <label for="price">Price:</label>
             <input type="number" name="price" required min="0">
