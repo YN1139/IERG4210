@@ -183,19 +183,21 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
   }
 });
 
+//Login the user
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const sql = "SELECT * FROM users WHERE email = ?";
     const [users] = await userDb.promise().query(sql, [email]);
 
+    //if the user does not exist, return an error
     if (users.length === 0) {
       return res
         .status(401)
         .json({ loginError: "Invalid email or password" })
         .end();
     }
-
+    //if the user exists, check the password
     const salt = users[0].salt;
     const storedPassword = users[0].password;
 
@@ -204,6 +206,7 @@ app.post("/login", async (req, res) => {
       console.log(derivedKey.toString("hex"));
       const derivedPassword = derivedKey.toString("hex");
       if (derivedPassword !== password) {
+        //if the password is not matched, return an error
         return res
           .status(401)
           .json({ loginError: "Invalid email or password" })
