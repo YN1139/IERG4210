@@ -70,9 +70,15 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 
 ## Phase 4:
 
-- Client-side form validation applied.
+- Client-side form validation applied
+  - Not yet implement server-side (thinking to vailidate all from the frontend first)
 - Removed innerHTML and change all to .textcontetnt so all content is encoded with HTML encoding
 - Added encodeURIComponent()
 - Implemented CORS and Helmet for CSP
-- CSRF and express-session applied
+  - can further customize for Helmet
+- CSRF package and express-session applying
+  - not yet applied the middleware and validation
+- Login panel building, currently done for checking the users
+  - Hashed password with scypt
+    - ref: https://nodejs.org/api/crypto.html#crypto_crypto_scrypt_password_salt_keylen_options_callback, https://www.reddit.com/r/node/comments/fcgkvg/bcrypt_vs_crypto/
 - Updated to HTTPS, reference to IERG3800 settings and certbot

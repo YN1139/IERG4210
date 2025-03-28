@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="stylesheet/main.css" />
-    <title>IERG4210 Login</title>
+    <title>IERG4210 Create Account</title>
   </head>
 
   <body>
@@ -19,15 +19,15 @@
       </nav>
     </header>
 
-    <h2>Forgot Password</h2>
-    <form id="resetPassword" name="reset" action="/resetPassword" method="post">
+    <h2>Create Account</h2>
+    <form id="create" name="create" action="/create-account" method="post">
       <label for="username">Email:</label>
       <input type="text" name="username" required pattern="[A-Za-z0-9\s\-@.]+">
       <br>
-      <label for="New-password">New Password:</label>
-      <input type="New-password" name="New-password" required required minlength="8">
+      <label for="New-password">Password:</label>
+      <input type="New-password" name="password" required required minlength="8">
       <br>
-      <label for="confirm-password">Confirm New Password:</label>
+      <label for="confirm-password">Confirm Password:</label>
       <input type="password" id="confirm-password" name="confirmPassword" required minlength="8">
       <button type="submit">Submit</button>
     </form>
