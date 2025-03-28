@@ -1,4 +1,4 @@
-const API = "http://13.238.18.138:3000";
+const API = "//13.238.18.138:3000";
 
 document.addEventListener("DOMContentLoaded", function () {
   fetchCategories();
@@ -66,7 +66,7 @@ async function fetchAllProducts() {
         a.href = "product.html?pid=" + encodeURIComponent(product.pid);
 
         const img = document.createElement("img");
-        img.src = encodeURIComponent(product.image);
+        img.src = product.image;
         img.alt = product.name;
 
         const productInfo = document.createElement("div");
@@ -80,7 +80,7 @@ async function fetchAllProducts() {
 
         const addToCart = document.createElement("button");
         addToCart.className = "add-to-cart";
-        addToCart.dataset.pid = product.pid;
+        addToCart.dataset.pid = encodeURIComponent(product.pid);
         addToCart.textContent = "Add to cart";
 
         a.appendChild(img);
@@ -122,7 +122,7 @@ async function fetchProducts(catid = null) {
 
         const addToCart = document.createElement("button");
         addToCart.className = "add-to-cart";
-        addToCart.dataset.pid = product.pid;
+        addToCart.dataset.pid = encodeURIComponent(product.pid);
         addToCart.textContent = "Add to cart";
 
         a.appendChild(img);
