@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import session from "express-session";
+import tokens from "csrf";
 import mysql from "mysql2";
 import multer from "multer";
 import path from "path";
@@ -131,7 +133,7 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
       const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
       await db.promise().query(updateSql, [dbImagePath, pid]);
     }
-    res.status(200).redirect("/admin.html");
+    res.status(200).redirect("/admin");
   } catch (error) {
     res.status(400).send(error);
   }
