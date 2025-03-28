@@ -25,9 +25,6 @@ async function fetchBreadcrumb(catid = null) {
         const a = document.createElement("a");
         a.href = "#";
         a.textContent = category.name;
-        /* li.innerHTML = `
-        <a href="#">${category.name}</a>
-      `; */
         li.appendChild(a);
         breadcrumb.appendChild(li);
       });
@@ -66,7 +63,7 @@ async function fetchAllProducts() {
         productDiv.className = "product";
 
         const a = document.createElement("a");
-        a.href = "product.html?pid=" + product.pid;
+        a.href = "product.html?pid=" + encodeURIComponent(product.pid);
 
         const img = document.createElement("img");
         img.src = product.image;
@@ -108,7 +105,7 @@ async function fetchProducts(catid = null) {
         productDiv.className = "product";
 
         const a = document.createElement("a");
-        a.href = "product.html?pid=" + product.pid;
+        a.href = "product.html?pid=" + encodeURIComponent(product.pid);
 
         const img = document.createElement("img");
         img.src = product.image;
