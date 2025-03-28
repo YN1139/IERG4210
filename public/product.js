@@ -38,6 +38,8 @@ async function fetchProduct(pid) {
   addToCart.dataset.pid = encodeURIComponent(product.pid);
   addToCart.textContent = "Add to Cart";
   section.appendChild(addToCart);
+
+  productContainer.appendChild(section);
 }
 
 async function fetchBreadcrumb(catid = null) {
