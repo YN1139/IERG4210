@@ -22,9 +22,13 @@ async function fetchBreadcrumb(catid = null) {
       data.forEach((category) => {
         const li = document.createElement("li");
         li.className = "crumb";
-        li.innerHTML = `
+        const a = document.createElement("a");
+        a.href = "#";
+        a.textContent = category.name;
+        /* li.innerHTML = `
         <a href="#">${category.name}</a>
-      `;
+      `; */
+        li.appendChild(a);
         breadcrumb.appendChild(li);
       });
     });
