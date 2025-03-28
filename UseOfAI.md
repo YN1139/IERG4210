@@ -2,9 +2,9 @@
 
 **Student ID**: 1155191923
 
-**Project Phase**: 2B & 3
+**Project Phase**: 4
 
-**Date**: 9 Mar, 2025
+**Date**: 28 Mar, 2025
 
 ## Acknowledgement
 
@@ -260,3 +260,223 @@ updateUI() {
 ```
 
 These changes should fix the fetch error and ensure your shopping cart works correctly.
+
+### Transcript
+
+**Prompt**:
+how can I generate the secret for sessionID?
+
+### Response
+
+# Session Secret Generation in Express
+
+You're using `session` middleware with an empty secret and an undefined `genuuid()` function, which is a security risk. Here's how to properly secure your session:
+
+## Option 1: Using Crypto (Built-in)
+
+```javascript
+import crypto from "crypto";
+
+// Generate a secure random secret
+const generateSecret = () => {
+  return crypto.randomBytes(32).toString("hex");
+};
+
+// Session configuration
+app.use(
+  session({
+    secret: generateSecret(),
+    name: "sessionId", // Custom name instead of default connect.sid
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Use secure in production
+      maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
+    },
+  })
+);
+```
+
+## Option 2: Using UUID (Recommended)
+
+```javascript
+import { v4 as uuidv4 } from "uuid"; // You'll need to install: npm install uuid
+
+// Session configuration
+app.use(
+  session({
+    genid: function (req) {
+      return uuidv4(); // Generate a unique session ID
+    },
+    secret: "your-long-random-secret-key-change-this-in-production",
+    name: "sessionId", // Custom name instead of default connect.sid
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Use secure in production
+      maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
+    },
+  })
+);
+```
+
+## Best Practices for Production
+
+For production environments, you should:
+
+1. **Store the secret in environment variables**:
+
+   ```javascript
+   secret: process.env.SESSION_SECRET || 'fallback-secret-only-for-development',
+   ```
+
+2. **Set up session storage** (not in memory for production):
+
+   ```javascript
+   // Add this import
+   import MySQLStore from 'express-mysql-session';
+
+   const sessionStore = new MySQLStore({
+     host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
+     port: "3306",
+     user: "shop27-admin",
+     password: "mypass",
+     database: "shop27",
+     // Add table options if needed
+     schema: {
+       tableName: 'sessions'
+     }
+   });
+
+   app.use(session({
+     store: sessionStore,
+     secret: /* your secret here */,
+     // Other options...
+   }));
+   ```
+
+This approach gives you persistent sessions, proper security, and protection against session fixation attacks by using proper session ID generation.
+
+### Transcript
+
+**Promt:**
+Mitigate CSRF Vulnerabilities in the whole website / 2' o Apply and validate secret nonces for every form o Apply an extra measure to prevent CSRF other than the nonce in form data o ALL forms must defend against Traditional and Login CSRF is my website doing this correctly?
+
+### Response
+
+# CSRF Protection Analysis: Your Implementation is Incomplete
+
+Your current code does NOT properly implement CSRF protections according to the requirements. Here's what's missing:
+
+## Missing CSRF Components
+
+1. ❌ **No Token Generation**: You've imported the csrf package but aren't using it to create tokens
+
+   ```javascript
+   // This is imported but not used
+   import csrf from "csrf";
+   ```
+
+2. ❌ **No Form Nonces**: Your forms don't include CSRF tokens/nonces
+
+   ```html
+   <!-- Example of what's missing in your forms -->
+   <input type="hidden" name="_csrf" value="[token-here]" />
+   ```
+
+3. ❌ **No Token Validation**: Your POST routes don't verify CSRF tokens
+   ```javascript
+   app.post("/admin/add-product", upload.single("image"), async (req, res) => {
+     // No CSRF validation here
+   });
+   ```
+
+## Only Partial Protection
+
+Your only CSRF protection is:
+
+```javascript
+cookie: {
+  httpOnly: true,
+  secure: true,
+  sameSite: "strict", // This helps but isn't sufficient alone
+  maxAge: 24 * 60 * 60 * 1000,
+}
+```
+
+The `sameSite: "strict"` setting helps but doesn't meet the requirement for "secret nonces for every form" and doesn't provide comprehensive protection.
+
+## Implementation Steps Needed
+
+1. **Initialize CSRF Protection**:
+
+   ```javascript
+   import Tokens from "csrf";
+   const tokens = new Tokens();
+
+   // Generate secret on session creation
+   app.use((req, res, next) => {
+     if (!req.session.csrfSecret) {
+       req.session.csrfSecret = tokens.secretSync();
+     }
+     next();
+   });
+   ```
+
+2. **Add Middleware for Form Pages**:
+
+   ```javascript
+   // Middleware to add CSRF token to res.locals for templates
+   const csrfMiddleware = (req, res, next) => {
+     res.locals.csrfToken = tokens.create(req.session.csrfSecret);
+     next();
+   };
+
+   // Apply to routes that serve forms
+   app.get("/admin", csrfMiddleware, (req, res) => {
+     // Your code
+   });
+   ```
+
+3. **Add Validation Middleware**:
+
+   ```javascript
+   const validateCsrf = (req, res, next) => {
+     const token = req.body._csrf || req.headers["csrf-token"];
+
+     if (!token || !tokens.verify(req.session.csrfSecret, token)) {
+       return res.status(403).send("Invalid CSRF token");
+     }
+
+     next();
+   };
+
+   // Apply to all routes modifying data
+   app.post(
+     "/admin/add-product",
+     validateCsrf,
+     upload.single("image"),
+     (req, res) => {
+       // Your existing code
+     }
+   );
+   ```
+
+4. **Add Tokens to Every Form** (client-side example):
+   ```javascript
+   fetch("/api/csrf-token")
+     .then((response) => response.json())
+     .then((data) => {
+       document.querySelectorAll("form").forEach((form) => {
+         const tokenInput = document.createElement("input");
+         tokenInput.type = "hidden";
+         tokenInput.name = "_csrf";
+         tokenInput.value = data.csrfToken;
+         form.appendChild(tokenInput);
+       });
+     });
+   ```
+
+These changes would satisfy the requirements for applying and validating nonces on all forms and protecting against both traditional and login CSRF attacks.

@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import session from "express-session";
-import tokens from "csrf";
+import session from "cookie-session";
+import csrf from "csrf";
+import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 import mysql from "mysql2";
 import multer from "multer";
 import path from "path";
@@ -13,11 +15,14 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
+
 const corsOptions = {
   origin: "*",
   credentials: true, // access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
+
+//loading the database
 const db = mysql.createConnection({
   host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
   port: "3306",
@@ -25,6 +30,15 @@ const db = mysql.createConnection({
   password: "mypass",
   database: "shop27",
 });
+const userDb = mysql.createConnection({
+  host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
+  port: "3306",
+  user: "shop27-admin",
+  password: "mypass",
+  database: "shop27account",
+});
+
+//loading the configuration for multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "../public/uploads");
@@ -50,8 +64,38 @@ const upload = multer({
     cb(null, true);
   },
 });
+
+//cors and helmet middleware
 app.use(cors(corsOptions));
 app.use(helmet());
+
+app.use(
+  session({
+    genid: function (req) {
+      return uuidv4();
+    },
+    secret: "testingSessionGeneration", //process.env.SESSION_SECRET ,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, //1 day
+    },
+  })
+);
+
+const tokens = new csrf();
+
+app.use((req, res, next) => {
+  var secret = tokens.secretSync();
+  var token = tokens.create(secret);
+  req.csrfToken = token;
+  res.locals.csrfToken = token;
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", express.static(path.join(__dirname, "../public")));
@@ -134,6 +178,91 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
       await db.promise().query(updateSql, [dbImagePath, pid]);
     }
     res.status(200).redirect("/admin");
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const sql = "SELECT * FROM users WHERE email = ?";
+    const [users] = await userDb.promise().query(sql, [email]);
+
+    if (users.length === 0) {
+      return res
+        .status(401)
+        .json({ loginError: "Invalid email or password" })
+        .end();
+    }
+
+    const salt = users[0].salt;
+    const storedPassword = users[0].password;
+
+    crypto.scrypt(storedPassword, salt, 64, { N: 1024 }, (err, derivedKey) => {
+      if (err) throw err;
+      console.log(derivedKey.toString("hex"));
+      const derivedPassword = derivedKey.toString("hex");
+      if (derivedPassword !== password) {
+        return res
+          .status(401)
+          .json({ loginError: "Invalid email or password" })
+          .end();
+      } else {
+        req.session.regenerate(function (err) {
+          req.session.email = req.body.email;
+          req.session.userId = users[0].userid;
+          req.session.admin = users[0].admin;
+
+          if (req.session.admin === true) {
+            res.redirect("/admin");
+          } else {
+            res.redirect("/");
+          }
+          res.status(200).json({ loginOK: 1 }).end();
+        });
+      }
+    });
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+app.post("/create-account", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const [existingUsers] = await userDb
+      .promise()
+      .query("SELECT * FROM users WHERE email = ?", [email]);
+
+    if (existingUsers.length > 0) {
+      return res.status(400).json({ error: "Email already registered" });
+    }
+    const passwordSalt = crypto.randomBytes(64); //generate a random salt
+    crypto.scrypt(
+      password,
+      passwordSalt,
+      64,
+      { N: 1024 },
+      (err, derivedKey) => {
+        if (err) throw err;
+        console.log(derivedKey.toString("hex"));
+      }
+    ); //hash the password with the salt
+    const hashedPassword = derivedKey.toString("hex");
+    const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
+    await userDb
+      .promise()
+      .query(sql, [email, hashedPassword, passwordSalt])
+      .then(() => {
+        console.log("User created successfully");
+        res.status(200).json({ createOK: 1 }).end();
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).send(err);
+      });
   } catch (error) {
     res.status(400).send(error);
   }
