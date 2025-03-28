@@ -75,4 +75,4 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 - Added encodeURIComponent()
 - Implemented CORS and Helmet for CSP
 - CSRF and express-session applied
-- Updated HTTPS, reference to IERG3800 settings
+- Updated to HTTPS, reference to IERG3800 settings and certbot
