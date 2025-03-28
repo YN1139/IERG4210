@@ -67,3 +67,8 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 11/3: updated breadcrumb for categories and product pages by using window local storage
 
 - Reference: https://stackoverflow.com/questions/63215969/executing-a-click-function-after-redirecting-the-person-to-another-page
+
+## Phase 4:
+
+- Client-side form validation applied.
+- Removing innerHTML
