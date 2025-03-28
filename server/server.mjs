@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import mysql from "mysql2";
 import multer from "multer";
 import path from "path";
@@ -48,9 +49,10 @@ const upload = multer({
   },
 });
 app.use(cors(corsOptions));
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/", express.static(path.join(__dirname, "../")));
+app.use("/", express.static(path.join(__dirname, "../public")));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 
 //Load the categories and products to homepage
