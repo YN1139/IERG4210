@@ -1,3 +1,5 @@
+import { profile } from "console";
+
 const API = "http://13.238.18.138:3000";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -74,8 +76,7 @@ async function fetchAllProducts() {
 
         const productInfo = document.createElement("div");
         productInfo.className = "productInfo";
-        productInfo.textContent =
-          product.name + "\r\n" + "HKD $" + product.price;
+        productInfo.textContent = product.name + "\n" + "HKD $" + product.price;
 
         const addToCart = document.createElement("button");
         addToCart.className = "add-to-cart";
@@ -112,10 +113,15 @@ async function fetchProducts(catid = null) {
 
         const productInfo = document.createElement("div");
         productInfo.className = "productInfo";
-        productInfo.textContent =
-          product.name + "\r\n" + "HKD $" + product.price;
-        const space = document.createElement("br");
-        productInfo.appendChild(space);
+
+        const name = document.createElement("div");
+        name.textContent = product.name;
+        const price = document.createElement("div");
+        price.textContent = "HKD $" + product.price;
+
+        productInfo.appendChild(name);
+        productInfo.appendChild(price);
+
         const addToCart = document.createElement("button");
         addToCart.className = "add-to-cart";
         addToCart.dataset.pid = product.pid;
