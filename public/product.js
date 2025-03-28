@@ -12,20 +12,32 @@ async function fetchProduct(pid) {
   const product = data[0];
   await fetchBreadcrumbProduct(product.pid);
   const productContainer = document.querySelector(".item");
-  productContainer.innerHTML = `
-        <img 
-          src="${product.image}"
-          alt="${product.name}"
-        >
-        <section class="itemInfo">
-          <h2>${product.name}</h2>
-          <div class="itemDescription">
-            ${product.description}
-          </div>
-          <p>HKD $${product.price}</p>
-          <button class="add-to-cart" data-pid="${product.pid}">Add to Cart</button>
-        </section>
-      `;
+
+  const img = document.createElement("img");
+  img.src = product.image;
+  img.alt = product.name;
+  productContainer.appendChild(img);
+
+  const section = document.createElement("section");
+  section.className = "itemInfo";
+  const productHeader = document.createElement("h2");
+  productHeader.textContent = product.name;
+  section.appendChild(productHeader);
+
+  const descriptionDiv = document.createElement("div");
+  descriptionDiv.className = "itemDescription";
+  descriptionDiv.textContent = product.description;
+  section.appendChild(descriptionDiv);
+
+  const price = document.createElement("p");
+  price.textContent = "HKD $" + product.price;
+  section.appendChild(price);
+
+  const addToCart = document.createElement("button");
+  addToCart.className = "add-to-cart";
+  addToCart.dataset.pid = product.pid;
+  addToCart.textContent = "Add to Cart";
+  section.appendChild(addToCart);
 }
 
 async function fetchBreadcrumb(catid = null) {
@@ -57,9 +69,10 @@ async function fetchBreadcrumbProduct(pid) {
   }
   const li = document.createElement("li");
   li.className = "crumb";
-  li.innerHTML = `
-        <a href="#">${product.name}</a>
-  `;
+  const a = document.createElement("a");
+  a.textContent = product.name;
+  a.href = "#";
+  li.appendChild(a);
   breadcrumb.appendChild(li);
 }
 
