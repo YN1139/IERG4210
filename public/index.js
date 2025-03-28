@@ -60,16 +60,27 @@ async function fetchAllProducts() {
       data.forEach((product) => {
         const productDiv = document.createElement("div");
         productDiv.className = "product";
-        productDiv.innerHTML = `
-          <a href="product.html?pid=${product.pid}">
-              <img
-                src="${product.image}"
-                alt="${product.name}"
-              />
-              <div class="productInfo">${product.name}<br>HKD $${product.price}</div>
-            </a>
-            <button class="add-to-cart" data-pid="${product.pid}">Add to cart</button>
-          `;
+
+        const a = document.createElement("a");
+        a.href = "product.html?pid=" + product.pid;
+
+        const img = document.createElement("img");
+        img.src = product.image;
+        img.alt = product.name;
+
+        const productInfo = document.createElement("div");
+        productInfo.className = "productInfo";
+        productInfo.textContent = product.name + "\nHKD $" + product.price;
+
+        const addToCart = document.createElement("button");
+        addToCart.className = "add-to-cart";
+        addToCart.dataset.pid = product.pid;
+        addToCart.textContent = "Add to cart";
+
+        a.appendChild(img);
+        a.appendChild(productInfo);
+        productDiv.appendChild(a);
+        productDiv.appendChild(addToCart);
         productList.appendChild(productDiv);
       });
     });
