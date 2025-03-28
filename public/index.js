@@ -66,7 +66,7 @@ async function fetchAllProducts() {
         a.href = "product.html?pid=" + encodeURIComponent(product.pid);
 
         const img = document.createElement("img");
-        img.src = product.image;
+        img.src = encodeURIComponent(product.image);
         img.alt = product.name;
 
         const productInfo = document.createElement("div");
