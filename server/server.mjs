@@ -69,7 +69,7 @@ const upload = multer({
 app.use(cors(corsOptions));
 app.use(helmet());
 
-app.use(
+/* app.use(
   session({
     genid: function (req) {
       return uuidv4();
@@ -84,7 +84,7 @@ app.use(
       maxAge: 24 * 60 * 60 * 1000, //1 day
     },
   })
-);
+); */
 
 const tokens = new csrf();
 
