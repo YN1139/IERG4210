@@ -74,7 +74,12 @@ async function fetchAllProducts() {
 
         const productInfo = document.createElement("div");
         productInfo.className = "productInfo";
-        productInfo.textContent = product.name + "\n" + "HKD $" + product.price;
+        const name = document.createElement("div");
+        name.textContent = product.name;
+        const price = document.createElement("div");
+        price.textContent = "HKD $" + product.price;
+        productInfo.appendChild(name);
+        productInfo.appendChild(price);
 
         const addToCart = document.createElement("button");
         addToCart.className = "add-to-cart";
@@ -111,15 +116,11 @@ async function fetchProducts(catid = null) {
 
         const productInfo = document.createElement("div");
         productInfo.className = "productInfo";
-
         const name = document.createElement("div");
         name.textContent = product.name;
-        const space = document.createElement("br");
         const price = document.createElement("div");
         price.textContent = "HKD $" + product.price;
-
         productInfo.appendChild(name);
-        productInfo.appendChild(space);
         productInfo.appendChild(price);
 
         const addToCart = document.createElement("button");
