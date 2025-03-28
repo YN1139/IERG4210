@@ -1,5 +1,3 @@
-import { profile } from "console";
-
 const API = "http://13.238.18.138:3000";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -116,10 +114,12 @@ async function fetchProducts(catid = null) {
 
         const name = document.createElement("div");
         name.textContent = product.name;
+        const space = document.createElement("br");
         const price = document.createElement("div");
         price.textContent = "HKD $" + product.price;
 
         productInfo.appendChild(name);
+        productInfo.appendChild(space);
         productInfo.appendChild(price);
 
         const addToCart = document.createElement("button");
