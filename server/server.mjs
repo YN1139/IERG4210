@@ -3,7 +3,6 @@ import cors from "cors";
 import helmet from "helmet";
 import session from "cookie-session";
 import csrf from "csrf";
-import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
 import mysql from "mysql2";
 import multer from "multer";
@@ -11,6 +10,11 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import stripe from "stripe";
+
+const stripe = stripe(
+  "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
+);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -105,14 +109,14 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
     if (err) throw err;
-    res.json(categories);
+    res.json(sanitizeInput(categories));
   });
 });
 
 app.get("/api/prod", async (req, res) => {
   db.query("SELECT * FROM products", async (err, products) => {
     if (err) throw err;
-    res.json(products);
+    res.json(sanitizeInput(products));
   });
 });
 
@@ -124,7 +128,7 @@ app.get("/api/category/:catid", async (req, res) => {
     [catid],
     async (err, category) => {
       if (err) throw err;
-      res.json(category);
+      res.json(sanitizeInput(category));
     }
   );
 });
@@ -137,7 +141,7 @@ app.get("/api/products/:catid", async (req, res) => {
     [catid],
     async (err, products) => {
       if (err) throw err;
-      res.json(products);
+      res.json(sanitizeInput(products));
     }
   );
 });
@@ -150,7 +154,7 @@ app.get("/api/product/:pid", async (req, res) => {
     [pid],
     async (err, product) => {
       if (err) throw err;
-      res.json(product);
+      res.json(sanitizeInput(product));
     }
   );
 });
@@ -158,7 +162,7 @@ app.get("/api/product/:pid", async (req, res) => {
 //Update the database after receriving the form submission from the client
 app.post("/admin/add-product", upload.single("image"), async (req, res) => {
   try {
-    const { catid, name, price, description } = req.body;
+    const { catid, name, price, description } = sanitizeInput(req.body);
     const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
 
     const sql =
@@ -186,7 +190,7 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
 //Login the user
 app.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = sanitizeInput(req.body);
     const sql = "SELECT * FROM users WHERE email = ?";
     const [users] = await userDb.promise().query(sql, [email]);
 
@@ -233,7 +237,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/create-account", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = sanitizeInput(req.body);
 
     const [existingUsers] = await userDb
       .promise()
@@ -271,6 +275,70 @@ app.post("/create-account", async (req, res) => {
   }
 });
 
+//payment
+app.post("/pay", async (req, res) => {
+  const { items } = req.body; // Get line items from the request body
+
+  const salt = crypto.randomBytes(32).toString("hex");
+  const digestString = [
+    "hkd",
+    "cd@s27.com",
+    salt,
+    ...orderItems.map((item) => `${item.pid}-${item.quantity}-${item.price}`),
+    totalAmount.toFixed(2),
+  ].join("|");
+
+  const digest = crypto.createHash("sha256").update(digestString).digest("hex");
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: items.map((item) => ({
+        price_data: {
+          currency: "hkd",
+          product_data: {
+            name: item.name,
+          },
+          unit_amount: item.price * 100,
+        },
+        quantity: item.quantity,
+      })),
+      mode: "payment",
+      ui_mode: "embedded",
+      success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/success",
+      cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/cancel",
+    });
+
+    const [orderResult] = await db
+      .promise()
+      .query(
+        "INSERT INTO orders (stripe_session_id, customer_id, total_amount, order_date, digest, salt, details) VALUES (?, ?, ?, NOW(), ?, ?, ?)",
+        [
+          null,
+          req.session.userId || null,
+          totalAmount,
+          digest,
+          salt,
+          line_items,
+        ]
+      );
+    res.redirect(303, session.url);
+  } catch (error) {
+    console.error("Error creating payment intent:", error);
+    res.status(500).send({ error: "Payment failed" });
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
+
+function sanitizeInput(input) {
+  // Replace HTML special chars
+  return input
+    .trim()
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}

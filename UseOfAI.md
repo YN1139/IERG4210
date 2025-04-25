@@ -2,13 +2,13 @@
 
 **Student ID**: 1155191923
 
-**Project Phase**: 4
+**Project Phase**: 5
 
-**Date**: 28 Mar, 2025
+**Date**: 25 Apr, 2025
 
 ## Acknowledgement
 
-I acknowledge the use of [Copilot] as a reference towards the completion of the project.
+I acknowledge the use of [Copilot] and [Gemini] as a reference towards the completion of the project.
 
 ### Transcript
 
@@ -480,3 +480,99 @@ The `sameSite: "strict"` setting helps but doesn't meet the requirement for "sec
    ```
 
 These changes would satisfy the requirements for applying and validating nonces on all forms and protecting against both traditional and login CSRF attacks.
+
+**Prompt**:
+Help me modify Cart.js so that it can initiate the checkout process.
+
+### Response
+
+Client-Side Checkout Trigger (cart.js & HTML)
+
+Include Stripe.js in your HTML (e.g., cart.html or main layout):
+HTML
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  // Initialize Stripe.js with your Publishable Key
+  const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY'); // Replace with your actual test publishable key
+</script>
+<script src="cart.js"></script>
+
+Modify Checkout Button Logic (cart.js):
+Add an event listener to your "Checkout" button.
+Prevent default form submission.
+Gather cart items (pid, quantity).
+Send this data to your server endpoint (/create-checkout-session).
+Handle the server response (get the Stripe Session ID).
+Redirect to Stripe Checkout using stripe.redirectToCheckout.
+Clear the cart upon successful initiation.
+
+````javascript
+    async initiateCheckout() {
+        if (this.items.size === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
+
+        // 1. Prepare cart data (pid and quantity only)
+        const cartData = Array.from(this.items.entries()).map(([pid, item]) => ({
+            pid: pid, // Ensure pid is sent as expected by the backend (string or number)
+            quantity: item.quantity,
+        }));
+
+        // Add loading indicator to the button
+        const checkoutButton = document.getElementById('checkout-button');
+        const originalButtonText = checkoutButton.textContent;
+        checkoutButton.textContent = 'Processing...';
+        checkoutButton.disabled = true;
+
+
+        try {
+            // 2. Send cart data to the server to create a Checkout Session
+            const response = await fetch(`${API}/create-checkout-session`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add CSRF token header if needed by your server setup
+                    // 'CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ items: cartData }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server error: ${response.status}`);
+            }
+
+            const session = await response.json();
+
+            // 3. Redirect to Stripe Checkout using the session ID
+            const { error } = await this.stripe.redirectToCheckout({
+                sessionId: session.id,
+            });
+
+            // If redirectToCheckout fails (e.g., network error), display error
+            if (error) {
+                console.error('Stripe redirection error:', error);
+                alert(`Could not redirect to payment page: ${error.message}`);
+                 // Restore button state on failure
+                 checkoutButton.textContent = originalButtonText;
+                 checkoutButton.disabled = false;
+            } else {
+                 // Clear cart *only after* successfully initiating the redirect
+                 // Note: This line might not execute if redirect is immediate.
+                 // Clearing might be better handled on the success/cancel pages
+                 // or confirmed via webhook status.
+                 // For simplicity here, we clear optimistically.
+                 console.log("Redirecting to Stripe...");
+                 this.clearCart();
+            }
+
+        } catch (error) {
+            console.error('Checkout initiation failed:', error);
+            alert(`Checkout failed: ${error.message}`);
+             // Restore button state on failure
+             checkoutButton.textContent = originalButtonText;
+             checkoutButton.disabled = false;
+        } ```
+````
