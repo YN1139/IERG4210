@@ -1,4 +1,6 @@
-//const API = "http://13.238.18.138:3000";
+const stripe = Stripe(
+  "pk_test_51RHU04CXaNkR4rcTbqBCkVLKSJJj5OGrQZXemNNDaPrSnpQ9xj1ZCOWDoXb6h3niWuRWId5uwmbOOvrM9cLZLu7p00XlGCPg8u"
+);
 
 document.addEventListener("DOMContentLoaded", function () {
   if (!window.cart) {
@@ -36,7 +38,16 @@ class ShoppingCart {
         this.removeItem(pid);
       }
     });
+
+    document.getElementById("checkout").addEventListener("click", async () => {
+      if (!this.stripe) {
+        console.log("Stripe not initialized");
+        return;
+      }
+      await this.handleCheckout();
+    });
   }
+
   async fetchProductDetails(pid) {
     try {
       const response = await fetch(`${API}/api/product/${pid}`);
@@ -146,6 +157,37 @@ class ShoppingCart {
     } catch (error) {
       console.error("Error loading cart:", error);
       localStorage.removeItem("shopping-cart");
+    }
+  }
+
+  async handleCheckout() {
+    //pass only pid and quantity to the server
+    const cart = Array.from(this.items.entries()).map(([pid, item]) => ({
+      pid,
+      quantity: item.quantity,
+    }));
+
+    const response = await fetch(`${API}/pay`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cart),
+    });
+
+    const session = await response.json();
+
+    if (session.error) {
+      alert(session.error);
+    } else {
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+      if (result.error) {
+        alert(result.error.message);
+      } else {
+        this.clearCart();
+      }
     }
   }
 }
