@@ -17,15 +17,14 @@
         </ul>
         <div class="shoppingCart">
           <button>Shopping Cart</button>
-          <div class="shoppingCartContent">
+          <form class="shoppingCartContent">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}" />
             <ul id="cart-item"></ul>
             <div id="cart-total">
               Total: $<span id="total-amount">0.0</span>
             </div>
-            <button id="checkout">
-              <a href="#">Checkout</a>
-            </button>
-          </div>
+            <button id="checkout" type="submit">Checkout</button>
+          </form>
         </div>
       </nav>
     </header>
