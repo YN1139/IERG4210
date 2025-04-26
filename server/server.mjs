@@ -288,7 +288,7 @@ app.post("/create-account", async (req, res) => {
 //payment
 app.post("/pay", async (req, res) => {
   const { items } = req.body; // Get line items from the request body
-
+  console.log(items);
   const salt = crypto.randomBytes(32).toString("hex");
   const digestString = [
     "hkd",
@@ -306,7 +306,7 @@ app.post("/pay", async (req, res) => {
         price_data: {
           currency: "hkd",
           product_data: {
-            name: item.name,
+            pid: item.pid,
           },
           unit_amount: item.price * 100,
         },

@@ -1,4 +1,4 @@
-const stripe = stripe(
+const stripe = Stripe(
   "pk_test_51RHU04CXaNkR4rcTbqBCkVLKSJJj5OGrQZXemNNDaPrSnpQ9xj1ZCOWDoXb6h3niWuRWId5uwmbOOvrM9cLZLu7p00XlGCPg8u"
 );
 
@@ -40,7 +40,7 @@ class ShoppingCart {
     });
 
     document.getElementById("checkout").addEventListener("click", async () => {
-      if (!this.stripe) {
+      if (!stripe) {
         console.log("Stripe not initialized");
         return;
       }
