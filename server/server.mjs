@@ -10,9 +10,9 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import stripe from "stripe";
+import Stripe from "stripe";
 
-const stripe = stripe(
+const stripe = Stripe(
   "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
 );
 
