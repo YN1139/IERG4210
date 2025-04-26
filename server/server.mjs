@@ -21,7 +21,7 @@ const __dirname = dirname(__filename);
 const app = express();
 
 const corsOptions = {
-  origin: "*",
+  origin: "https://s27.ierg4210.ie.cuhk.edu.hk",
   credentials: true, // access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
@@ -75,8 +75,10 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
+        defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "https://js.stripe.com/v3/"],
-        requireTrustedTypeFor: ["script"],
+        frameSrc: ["'self'", "https://js.stripe.com"],
+        requireTrustedTypseFor: ["script"],
       },
     },
   })
