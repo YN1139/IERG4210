@@ -1,6 +1,21 @@
 const API = "";
 
 document.addEventListener("DOMContentLoaded", function () {
+  fetch("/api/csrf-token")
+    .then((res) => res.json())
+    .then((data) => {
+      document.querySelectorAll("form").forEach((form) => {
+        let csrfInput = form.querySelector('input[name="_csrf"]');
+        if (!csrfInput) {
+          csrfInput = document.createElement("input");
+          csrfInput.type = "hidden";
+          csrfInput.name = "_csrf";
+          form.appendChild(csrfInput);
+        }
+        csrfInput.value = data.csrfToken;
+      });
+    });
+
   fetchCategories();
 
   if (window.localStorage.getItem("category")) {
