@@ -78,7 +78,6 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "https://js.stripe.com/v3/"],
         frameSrc: ["'self'", "https://js.stripe.com"],
-        requireTrustedTypesFor: ["'script'"],
       },
     },
   })
