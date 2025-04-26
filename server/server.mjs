@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import session from "cookie-session";
+import session from "express-session";
 import csrf from "csrf";
 import crypto from "crypto";
 import mysql from "mysql2";
@@ -27,18 +27,18 @@ const corsOptions = {
 };
 
 //loading the database
-const db = mysql.createConnection({
+const dbConst = {
   host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
   port: "3306",
   user: "shop27-admin",
   password: "mypass",
+};
+const db = mysql.createConnection({
+  ...dbConst,
   database: "shop27",
 });
 const userDb = mysql.createConnection({
-  host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
-  port: "3306",
-  user: "shop27-admin",
-  password: "mypass",
+  ...dbConst,
   database: "shop27account",
 });
 
@@ -71,7 +71,16 @@ const upload = multer({
 
 //cors and helmet middleware
 app.use(cors(corsOptions));
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: ["self", "https://js.stripe.com/v3/"],
+        requireTrustedTypeFor: ["script"],
+      },
+    },
+  })
+);
 
 /* app.use(
   session({
@@ -308,7 +317,7 @@ app.post("/pay", async (req, res) => {
       cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/cancel",
     });
 
-    const [orderResult] = await db
+    await db
       .promise()
       .query(
         "INSERT INTO orders (stripe_session_id, customer_id, total_amount, order_date, digest, salt, details) VALUES (?, ?, ?, NOW(), ?, ?, ?)",
