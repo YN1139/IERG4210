@@ -2,17 +2,17 @@ const API = "";
 
 document.addEventListener("DOMContentLoaded", function () {
   fetch("/api/csrf-token")
-    .then((res) => res.json())
+    .then((response) => response.json())
     .then((data) => {
       document.querySelectorAll("form").forEach((form) => {
-        let csrfInput = form.querySelector('input[name="_csrf"]');
-        if (!csrfInput) {
-          csrfInput = document.createElement("input");
-          csrfInput.type = "hidden";
-          csrfInput.name = "_csrf";
-          form.appendChild(csrfInput);
+        let csrf = form.querySelector('input[name="_csrf"]');
+        if (!csrf) {
+          csrf = document.createElement("input");
+          csrf.type = "hidden";
+          csrf.name = "_csrf";
+          form.appendChild(csrf);
         }
-        csrfInput.value = data.csrfToken;
+        csrf.value = data.csrfToken;
       });
     });
 
