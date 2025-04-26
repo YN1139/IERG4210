@@ -83,12 +83,9 @@ app.use(
   })
 );
 
-/* app.use(
+app.use(
   session({
-    genid: function (req) {
-      return uuidv4();
-    },
-    secret: "testingSessionGeneration", //process.env.SESSION_SECRET ,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -98,15 +95,14 @@ app.use(
       maxAge: 24 * 60 * 60 * 1000, //1 day
     },
   })
-); */
+);
 
 const tokens = new csrf();
-
 app.use((req, res, next) => {
-  var secret = tokens.secretSync();
-  var token = tokens.create(secret);
-  req.csrfToken = token;
-  res.locals.csrfToken = token;
+  if (!req.session.csrf_secret) {
+    req.session.csrf_secret = tokens.secretSync(); //generate secret for csrf token
+  }
+  res.locals.csrfToken = tokens.create(req.session.csrfSecret);
   next();
 });
 
@@ -115,6 +111,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", express.static(path.join(__dirname, "../public")));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 
+//==========API============
+app.get("/api/csrf-token", (req, res) => {
+  res.json({ csrfToken: res.locals.csrfToken });
+});
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
@@ -170,35 +170,42 @@ app.get("/api/product/:pid", async (req, res) => {
 });
 
 //Update the database after receriving the form submission from the client
-app.post("/admin/add-product", upload.single("image"), async (req, res) => {
-  try {
-    const { catid, name, price, description } = req.body;
-    const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
+app.post(
+  "/admin/add-product",
+  upload.single("image"),
+  validateCSRF,
+  async (req, res) => {
+    try {
+      const { catid, name, price, description } = req.body;
+      const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
 
-    const sql =
-      "INSERT INTO products (catid, name, price, description, image) VALUES (?, ?, ?, ?, ?)";
-    const [result] = await db
-      .promise()
-      .query(sql, [catid, name, price, description, imagePath]);
-    const pid = result.insertId;
+      const sql =
+        "INSERT INTO products (catid, name, price, description, image) VALUES (?, ?, ?, ?, ?)";
+      const [result] = await db
+        .promise()
+        .query(sql, [catid, name, price, description, imagePath]);
+      const pid = result.insertId;
 
-    //update the image with pid if image path exist in database
-    if (imagePath) {
-      const newImagePath = `../public/uploads/${pid}${path.extname(imagePath)}`; //define a new path to access and rename the image file
-      //console.log(imagePath, newImagePath);
-      fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
-      const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
-      const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
-      await db.promise().query(updateSql, [dbImagePath, pid]);
+      //update the image with pid if image path exist in database
+      if (imagePath) {
+        const newImagePath = `../public/uploads/${pid}${path.extname(
+          imagePath
+        )}`; //define a new path to access and rename the image file
+        //console.log(imagePath, newImagePath);
+        fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
+        const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
+        const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
+        await db.promise().query(updateSql, [dbImagePath, pid]);
+      }
+      res.status(200).redirect("/admin");
+    } catch (error) {
+      res.status(400).send(error);
     }
-    res.status(200).redirect("/admin");
-  } catch (error) {
-    res.status(400).send(error);
   }
-});
+);
 
 //Login the user
-app.post("/login", async (req, res) => {
+app.post("/login", validateCSRF, async (req, res) => {
   try {
     const { email, password } = req.body;
     const sql = "SELECT * FROM users WHERE email = ?";
@@ -245,7 +252,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/create-account", async (req, res) => {
+app.post("/create-account", validateCSRF, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -286,7 +293,7 @@ app.post("/create-account", async (req, res) => {
 });
 
 //payment
-app.post("/pay", async (req, res) => {
+app.post("/pay", validateCSRF, async (req, res) => {
   const { items } = req.body; // Get line items from the request body
   console.log(items);
   const salt = crypto.randomBytes(32).toString("hex");
@@ -294,7 +301,8 @@ app.post("/pay", async (req, res) => {
     "hkd",
     "cd@s27.com",
     salt,
-    ...orderItems.map((item) => `${item.pid}-${item.quantity}-${item.price}`),
+    ...items.map((item) => `${item.pid}-${item.quantity}-${item.price}`),
+    //! make a function to get the price from the database
     totalAmount.toFixed(2),
   ].join("|");
 
@@ -341,3 +349,12 @@ app.post("/pay", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
+
+function validateCSRF(req, res, next) {
+  const csrfCookie = req.cookies.csrf_token;
+  const csrfHeader = req.headers["x-csrf-token"];
+  if (!csrfCookie || !csrfHeader || csrfCookie !== csrfHeader) {
+    return res.status(403).send("CSRF validation failed");
+  }
+  next();
+}
