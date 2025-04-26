@@ -75,7 +75,7 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        scriptSrc: ["self", "https://js.stripe.com/v3/"],
+        scriptSrc: ["'self'", "https://js.stripe.com/v3/"],
         requireTrustedTypeFor: ["script"],
       },
     },
