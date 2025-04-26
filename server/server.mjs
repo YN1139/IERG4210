@@ -85,7 +85,7 @@ app.use(
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: crypto.randomBytes(32).toString("hex"),
     resave: false,
     saveUninitialized: false,
     cookie: {
