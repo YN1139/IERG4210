@@ -118,14 +118,14 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
     if (err) throw err;
-    res.json(sanitizeInput(categories));
+    res.json(categories);
   });
 });
 
 app.get("/api/prod", async (req, res) => {
   db.query("SELECT * FROM products", async (err, products) => {
     if (err) throw err;
-    res.json(sanitizeInput(products));
+    res.json(products);
   });
 });
 
@@ -137,7 +137,7 @@ app.get("/api/category/:catid", async (req, res) => {
     [catid],
     async (err, category) => {
       if (err) throw err;
-      res.json(sanitizeInput(category));
+      res.json(category);
     }
   );
 });
@@ -150,7 +150,7 @@ app.get("/api/products/:catid", async (req, res) => {
     [catid],
     async (err, products) => {
       if (err) throw err;
-      res.json(sanitizeInput(products));
+      res.json(products);
     }
   );
 });
@@ -163,7 +163,7 @@ app.get("/api/product/:pid", async (req, res) => {
     [pid],
     async (err, product) => {
       if (err) throw err;
-      res.json(sanitizeInput(product));
+      res.json(product);
     }
   );
 });
@@ -171,7 +171,7 @@ app.get("/api/product/:pid", async (req, res) => {
 //Update the database after receriving the form submission from the client
 app.post("/admin/add-product", upload.single("image"), async (req, res) => {
   try {
-    const { catid, name, price, description } = sanitizeInput(req.body);
+    const { catid, name, price, description } = req.body;
     const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
 
     const sql =
@@ -199,7 +199,7 @@ app.post("/admin/add-product", upload.single("image"), async (req, res) => {
 //Login the user
 app.post("/login", async (req, res) => {
   try {
-    const { email, password } = sanitizeInput(req.body);
+    const { email, password } = req.body;
     const sql = "SELECT * FROM users WHERE email = ?";
     const [users] = await userDb.promise().query(sql, [email]);
 
@@ -246,7 +246,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/create-account", async (req, res) => {
   try {
-    const { email, password } = sanitizeInput(req.body);
+    const { email, password } = req.body;
 
     const [existingUsers] = await userDb
       .promise()
@@ -340,14 +340,3 @@ app.post("/pay", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
-
-function sanitizeInput(input) {
-  // Replace HTML special chars
-  return input
-    .trim()
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
