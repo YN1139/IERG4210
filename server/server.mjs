@@ -351,9 +351,9 @@ app.listen(3000, () => {
 });
 
 function validateCSRF(req, res, next) {
-  const csrfCookie = req.cookies.csrf_token;
-  const csrfHeader = req.headers["x-csrf-token"];
-  if (!csrfCookie || !csrfHeader || csrfCookie !== csrfHeader) {
+  const token =
+    req.body._csrf || req.headers["csrf-token"] || req.headers["x-csrf-token"];
+  if (!token || !tokens.verify(req.session.csrf_secret, token)) {
     return res.status(403).send("CSRF validation failed");
   }
   next();
