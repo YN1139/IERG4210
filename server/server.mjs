@@ -87,7 +87,7 @@ app.use(
   session({
     secret: "your-very-secure-secret-key",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       httpOnly: true,
       secure: true,
@@ -96,6 +96,13 @@ app.use(
     },
   })
 );
+
+app.use((req, res, next) => {
+  console.log("Session ID:", req.sessionID);
+  console.log("Has session:", !!req.session);
+  console.log("CSRF Secret exists:", !!req.session.csrf_secret);
+  next();
+});
 
 const tokens = new csrf();
 app.use((req, res, next) => {
