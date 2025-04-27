@@ -85,7 +85,7 @@ app.use(
 
 app.use(
   session({
-    secret: crypto.randomBytes(32).toString("hex"),
+    secret: "testing for csrf",
     resave: false,
     saveUninitialized: false,
     cookie: {
