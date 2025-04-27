@@ -1,7 +1,7 @@
 const API = "";
 
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("/api/csrf-token")
+  fetch("/api/csrf-token", { credentials: "include" })
     .then((response) => response.json())
     .then((data) => {
       document.querySelectorAll("form").forEach((form) => {
