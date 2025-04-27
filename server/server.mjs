@@ -69,6 +69,9 @@ const upload = multer({
   },
 });
 
+app.set("trust proxy", 1); //trust the reverse proxy to set the secure flag on the cookie
+//ref to sample code, HUGE THANKS
+
 //cors and helmet middleware
 app.use(cors(corsOptions));
 app.use(
@@ -85,7 +88,8 @@ app.use(
 
 app.use(
   session({
-    secret: "your-very-secure-secret-key",
+    secret: crypto.randomBytes(32).toString("hex"),
+    name: "sess",
     resave: false,
     saveUninitialized: true,
     cookie: {
