@@ -102,7 +102,10 @@ app.use((req, res, next) => {
   if (!req.session.csrf_secret) {
     req.session.csrf_secret = tokens.secretSync(); //generate secret for csrf token
   }
+  console.log(req.session.csrf_secret);
   res.locals.csrfToken = tokens.create(req.session.csrf_secret);
+  console.log(res.locals.csrfToken);
+  res.setHeader("csrf-token", res.locals.csrfToken); //set the csrf token in the header
   next();
 });
 
