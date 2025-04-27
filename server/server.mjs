@@ -296,7 +296,7 @@ app.post("/create-account", validateCSRF, async (req, res) => {
       .query(sql, [email, hashedPassword, passwordSalt])
       .then(() => {
         console.log("User created successfully");
-        res.status(200).json({ createOK: 1 }).end();
+        res.status(200).json({ "account created": true }).end();
       })
       .catch((err) => {
         console.log(err);
