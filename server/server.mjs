@@ -101,6 +101,7 @@ const tokens = new csrf();
 app.use((req, res, next) => {
   if (!req.session.csrf_secret) {
     req.session.csrf_secret = tokens.secretSync();
+    console.log("New CSRF secret created:", req.session.csrf_secret);
   }
   next();
 });
@@ -113,6 +114,7 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
   const csrfToken = tokens.create(req.session.csrf_secret);
+  console.log("Sending CSRF token:", csrfToken);
   res.json({ csrfToken });
 });
 //Load the categories and products to homepage
