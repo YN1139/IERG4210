@@ -101,6 +101,7 @@ app.use(
   })
 );
 
+//check session id and existence
 app.use((req, res, next) => {
   console.log("Session ID:", req.sessionID);
   console.log("Has session:", !!req.session);
