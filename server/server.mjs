@@ -88,7 +88,6 @@ app.use(
 app.use(
   session({
     secret: "your-very-secure-secret-key",
-    resave: false,
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
