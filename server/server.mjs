@@ -358,7 +358,10 @@ function validateCSRF(req, res, next) {
   console.log(req.headers["x-csrf-token"]);
   const token =
     req.body._csrf || req.headers["csrf-token"] || req.headers["x-csrf-token"];
-  if (!token || !tokens.verify(req.session.csrf_secret, token)) {
+  if (!token) {
+    return res.status(403).send("CSRF token not found");
+  }
+  if (!tokens.verify(req.session.csrf_secret, token)) {
     return res.status(403).send("CSRF validation failed");
   }
   next();
