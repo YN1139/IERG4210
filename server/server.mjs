@@ -100,11 +100,8 @@ app.use(
 const tokens = new csrf();
 app.use((req, res, next) => {
   if (!req.session.csrf_secret) {
-    req.session.csrf_secret = tokens.secretSync(); //generate secret for csrf token
+    req.session.csrf_secret = tokens.secretSync();
   }
-  console.log(req.session.csrf_secret);
-  res.locals.csrfToken = tokens.create(req.session.csrf_secret);
-  console.log(res.locals.csrfToken);
   next();
 });
 
@@ -115,7 +112,8 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
-  res.json({ csrfToken: res.locals.csrfToken });
+  const csrfToken = tokens.create(req.session.csrf_secret);
+  res.json({ csrfToken });
 });
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
