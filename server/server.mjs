@@ -69,6 +69,8 @@ const upload = multer({
   },
 });
 
+app.set("trust proxy", 1);
+
 //cors and helmet middleware
 app.use(cors(corsOptions));
 app.use(
