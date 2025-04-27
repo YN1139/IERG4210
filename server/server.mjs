@@ -69,8 +69,6 @@ const upload = multer({
   },
 });
 
-app.set("trust proxy", 1);
-
 //cors and helmet middleware
 app.use(cors(corsOptions));
 app.use(
@@ -98,13 +96,6 @@ app.use(
     },
   })
 );
-
-app.use((req, res, next) => {
-  console.log("Session ID:", req.sessionID);
-  console.log("Has session:", !!req.session);
-  console.log("CSRF Secret exists:", !!req.session.csrf_secret);
-  next();
-});
 
 const tokens = new csrf();
 app.use((req, res, next) => {
