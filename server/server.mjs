@@ -85,7 +85,7 @@ app.use(
 
 app.use(
   session({
-    secret: "testing for csrf",
+    secret: "your-very-secure-secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: {
