@@ -111,6 +111,7 @@ app.use((req, res, next) => {
 
 const tokens = new csrf();
 app.use((req, res, next) => {
+  //Check if the secret exists in the session, if not, create a new one
   if (!req.session.csrf_secret) {
     req.session.csrf_secret = tokens.secretSync();
     console.log("New CSRF secret created:", req.session.csrf_secret);
@@ -368,8 +369,6 @@ function validateCSRF(req, res, next) {
   console.log("CSRF validation started");
   console.log(req.session.csrf_secret);
   console.log(req.body._csrf);
-  console.log(req.headers["csrf-token"]);
-  console.log(req.headers["x-csrf-token"]);
   const token =
     req.body._csrf || req.headers["csrf-token"] || req.headers["x-csrf-token"];
   if (!token) {
