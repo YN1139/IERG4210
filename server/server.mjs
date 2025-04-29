@@ -132,10 +132,10 @@ app.get("/api/csrf-token", (req, res) => {
   res.json({ csrfToken });
 });
 
-app.get("/admin", requireAdmin, (req, res) => {
+/* app.get("/admin", requireAdmin, (req, res) => {
   console.log(req.session.admin);
-  res.sendFile(path.join(__dirname, "../public/admin.html"));
-});
+  res.render("../public/admin.html");
+}); */
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
