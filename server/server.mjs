@@ -312,12 +312,16 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
       return res.status(400).json({ error: "Email already registered" });
     }
     const salt = crypto.randomBytes(64); //generate a random salt
-    const hashedPassword = crypto
-      .scrypt(password, salt, 64, (err, derivedKey) => {
+    const hashedPassword = crypto.scrypt(
+      password,
+      salt,
+      64,
+      (err, derivedKey) => {
         if (err) throw err;
         console.log(derivedKey.toString("hex"));
-      })
-      .toString("hex"); //hash the password with the salt
+        console.log(derivedKey);
+      }
+    );
 
     console.log("Hashed password:", hashedPassword);
     const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
