@@ -125,7 +125,7 @@ app.use("/admin", requireAdmin);
 app.use("/", express.static(path.join(__dirname, "../public/users")));
 
 app.get("/admin", requireAdmin, (req, res) => {
-  res.sendFile("../public/admin.html");
+  res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
