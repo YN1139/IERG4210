@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function fetchUserStatus() {
-  fetch(API + "/api/userStatus")
+  fetch("/api/userStatus")
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
