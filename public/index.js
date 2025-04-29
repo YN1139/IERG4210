@@ -105,7 +105,7 @@ async function fetchProducts(catid = null) {
         productDiv.className = "product";
 
         const a = document.createElement("a");
-        a.href = "product.html?pid=" + encodeURIComponent(product.pid);
+        a.href = "/product?pid=" + encodeURIComponent(product.pid);
 
         const img = document.createElement("img");
         img.src = product.image;
