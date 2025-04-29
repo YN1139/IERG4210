@@ -255,11 +255,14 @@ app.post("/login", validateCSRF, async (req, res) => {
           req.session.userId = users[0].userid;
           req.session.admin = users[0].admin;
 
-          if (req.session.admin === 1) {
-            return res.redirect("/admin");
-          } else {
-            return res.redirect("/");
-          }
+          req.session.save(function (err) {
+            if (err) return err;
+            if (req.session.admin === 1) {
+              return res.status(200).redirect("/admin");
+            } else {
+              return res.status(200).redirect("/");
+            }
+          });
         });
       }
     });
