@@ -123,6 +123,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/admin", requireAdmin);
 app.use("/", express.static(path.join(__dirname, "../public/users")));
+app.get("/login", (req, res) => {
+  res.render("../public/users/login.html");
+});
 
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
