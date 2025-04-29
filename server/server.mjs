@@ -238,11 +238,11 @@ app.post("/login", validateCSRF, async (req, res) => {
     const salt = users[0].salt;
     const storedPassword = users[0].password;
 
-    crypto.scrypt(storedPassword, salt, 64, { N: 1024 }, (err, derivedKey) => {
+    crypto.scrypt(password, salt, 64, (err, derivedKey) => {
       if (err) throw err;
       console.log(derivedKey.toString("hex"));
       const derivedPassword = derivedKey.toString("hex");
-      if (derivedPassword !== password) {
+      if (derivedPassword !== storedPassword) {
         //if the password is not matched, return an error
         return res
           .status(401)
@@ -255,7 +255,7 @@ app.post("/login", validateCSRF, async (req, res) => {
           req.session.userId = users[0].userid;
           req.session.admin = users[0].admin;
 
-          if (req.session.admin === true) {
+          if (req.session.admin === 1) {
             return res.redirect("/admin");
           } else {
             return res.redirect("/");
@@ -280,16 +280,10 @@ app.post("/create-account", validateCSRF, async (req, res) => {
       return res.status(400).json({ error: "Email already registered" });
     }
     const passwordSalt = crypto.randomBytes(64); //generate a random salt
-    crypto.scrypt(
-      password,
-      passwordSalt,
-      64,
-      { N: 1024 },
-      (err, derivedKey) => {
-        if (err) throw err;
-        console.log(derivedKey.toString("hex"));
-      }
-    ); //hash the password with the salt
+    crypto.scrypt(password, passwordSalt, 64, (err, derivedKey) => {
+      if (err) throw err;
+      console.log(derivedKey.toString("hex"));
+    }); //hash the password with the salt
     const hashedPassword = derivedKey.toString("hex");
     const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
     await userDb
@@ -303,8 +297,8 @@ app.post("/create-account", validateCSRF, async (req, res) => {
         console.log(err);
         res.status(400).send(err);
       });
-  } catch (error) {
-    res.status(400).send(error);
+  } catch (err) {
+    res.status(400).send(err);
   }
 });
 
@@ -384,7 +378,7 @@ function validateCSRF(req, res, next) {
 function requireAdmin(req, res, next) {
   console.log("Admin check started");
   console.log("Session admin status:", req.session.admin);
-  if (req.session.admin === true) {
+  if (req.session.admin === 1) {
     next();
   } else {
     res.redirect("/"); //redirect to homepage if not admin
