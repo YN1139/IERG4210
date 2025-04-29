@@ -319,7 +319,7 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
       (err, derivedKey) => {
         if (err) throw err;
         console.log(derivedKey.toString("hex"));
-        console.log(derivedKey);
+        return derivedKey.toString("hex"); //hash the password with the salt
       }
     );
 
