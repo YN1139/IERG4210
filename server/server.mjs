@@ -303,7 +303,7 @@ app.post("/checkLogin", validateCSRF, async (req, res) => {
 app.post("/create-account", validateCSRF, async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log(req, body, email, password);
     const [existingUsers] = await userDb
       .promise()
       .query("SELECT * FROM users WHERE email = ?", [email]);
@@ -311,24 +311,31 @@ app.post("/create-account", validateCSRF, async (req, res) => {
     if (existingUsers.length > 0) {
       return res.status(400).json({ error: "Email already registered" });
     }
-    const passwordSalt = crypto.randomBytes(64); //generate a random salt
-    crypto.scrypt(password, passwordSalt, 64, (err, derivedKey) => {
-      if (err) throw err;
-      console.log(derivedKey.toString("hex"));
-    }); //hash the password with the salt
-    const hashedPassword = derivedKey.toString("hex");
-    const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
-    await userDb
-      .promise()
-      .query(sql, [email, hashedPassword, passwordSalt])
-      .then(() => {
-        console.log("User created successfully");
-        res.status(200).json({ "account created": true }).end();
+    const salt = crypto.randomBytes(64); //generate a random salt
+    const hashedPassword = crypto
+      .scrypt(password, salt, 64, (err, derivedKey) => {
+        if (err) throw err;
+        console.log(derivedKey.toString("hex"));
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).send(err);
+      .toString("hex"); //hash the password with the salt
+
+    console.log("Hashed password:", hashedPassword);
+    const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
+    const [newUser] = await userDb
+      .promise()
+      .query(sql, [email, hashedPassword, salt]);
+    console.log(newUser);
+
+    req.session.regenerate(function () {
+      req.session.email = email;
+      req.session.userId = newUser.userid;
+      req.session.admin = newUser.admin;
+
+      req.session.save(function (err) {
+        if (err) return err;
+        return res.status(200).redirect("/");
       });
+    });
   } catch (err) {
     res.status(400).send(err);
   }
