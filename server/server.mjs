@@ -250,7 +250,7 @@ app.post("/login", validateCSRF, async (req, res) => {
           .end();
       } else {
         console.log("Login successful");
-        req.session.regenerate(function (err) {
+        req.session.regenerate(function () {
           req.session.email = req.body.email;
           req.session.userId = users[0].userid;
           req.session.admin = users[0].admin;
