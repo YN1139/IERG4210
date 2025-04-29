@@ -303,7 +303,7 @@ app.post("/checkLogin", validateCSRF, async (req, res) => {
 app.post("/createAccount", validateCSRF, async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req, body, email, password);
+    console.log(req.body, email, password);
     const [existingUsers] = await userDb
       .promise()
       .query("SELECT * FROM users WHERE email = ?", [email]);
