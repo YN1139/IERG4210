@@ -26,5 +26,14 @@ async function fetchUserStatus() {
       const li = document.createElement("li");
       li.textContent = data;
       navBar.appendChild(li);
+
+      //add logout button if user is logged in
+      if (data !== "guest") {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        li.textContent = "Logout";
+        a.href = "/logout";
+        navBar.appendChild(li);
+      }
     });
 }

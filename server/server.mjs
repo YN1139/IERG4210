@@ -153,6 +153,12 @@ app.get("/api/userStatus", (req, res) => {
     return res.json(userStatus);
   }
 });
+
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.clearCookie("sess");
+  res.redirect("/");
+});
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
