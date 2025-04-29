@@ -33,6 +33,7 @@ async function fetchUserStatus() {
         const a = document.createElement("a");
         li.textContent = "Logout";
         a.href = "/logout";
+        li.appendChild(a);
         navBar.appendChild(li);
       }
     });
