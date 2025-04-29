@@ -133,6 +133,26 @@ app.get("/api/csrf-token", (req, res) => {
   console.log("Sending CSRF token:", csrfToken);
   res.json({ csrfToken });
 });
+
+app.get("/api/userStatus", (req, res) => {
+  let userStatus = "guest"; //default user status
+  if (req.session.admin === 1) {
+    userStatus = "admin"; //if the user is admin, set the user status to admin
+    return res.json(userStatus);
+  } else if (req.session.admin === 0) {
+    userDb.query(
+      "SELECT * FROM users WHERE userid = ?",
+      [req.session.userId],
+      (err, user) => {
+        if (err) throw err;
+        userStatus = user[0].email;
+        return res.json(userStatus);
+      }
+    );
+  } else {
+    return res.json(userStatus);
+  }
+});
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
