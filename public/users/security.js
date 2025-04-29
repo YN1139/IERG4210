@@ -14,4 +14,17 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("csrf to client", csrf.value);
       });
     });
+  fetchUserStatus();
 });
+
+async function fetchUserStatus() {
+  fetch(API + "/api/userStatus")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const navBar = document.querySelector(".pages ul");
+      const li = document.createElement("li");
+      li.textContent = data.userStatus;
+      navBar.appendChild(li);
+    });
+}
