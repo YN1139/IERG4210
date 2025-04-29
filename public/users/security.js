@@ -31,7 +31,7 @@ async function fetchUserStatus() {
       if (data !== "guest") {
         const li = document.createElement("li");
         const a = document.createElement("a");
-        li.textContent = "Logout";
+        a.textContent = "Logout";
         a.href = "/logout";
         li.appendChild(a);
         navBar.appendChild(li);
