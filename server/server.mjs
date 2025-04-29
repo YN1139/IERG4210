@@ -121,15 +121,20 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/admin", requireAdmin);
 app.use("/", express.static(path.join(__dirname, "../public")));
 app.use("/public", express.static(path.join(__dirname, "../public")));
-app.use("/admin", requireAdmin);
 
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
   const csrfToken = tokens.create(req.session.csrf_secret);
   console.log("Sending CSRF token:", csrfToken);
   res.json({ csrfToken });
+});
+
+app.get("/admin", requireAdmin, (req, res) => {
+  console.log(req.session.admin);
+  res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
@@ -383,6 +388,8 @@ function validateCSRF(req, res, next) {
 }
 
 function requireAdmin(req, res, next) {
+  console.log("Admin check started");
+  console.log("Session admin status:", req.session.admin);
   if (req.session.admin === true) {
     next();
   } else {
