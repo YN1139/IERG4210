@@ -127,6 +127,11 @@ app.use("/", express.static(path.join(__dirname, "../public/users")));
 app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.clearCookie("sess");
+  res.redirect("/");
+});
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
   const csrfToken = tokens.create(req.session.csrf_secret);
@@ -154,11 +159,6 @@ app.get("/api/userStatus", (req, res) => {
   }
 });
 
-app.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.clearCookie("sess");
-  res.redirect("/");
-});
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
@@ -300,7 +300,7 @@ app.post("/checkLogin", validateCSRF, async (req, res) => {
   }
 });
 
-app.post("/create-account", validateCSRF, async (req, res) => {
+app.post("/createAccount", validateCSRF, async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log(req, body, email, password);
