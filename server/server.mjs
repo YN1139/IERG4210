@@ -207,7 +207,7 @@ app.post(
 
       //update the image with pid if image path exist in database
       if (imagePath) {
-        const newImagePath = `../public/uploads/${pid}${path.extname(
+        const newImagePath = `../public/users/uploads/${pid}${path.extname(
           imagePath
         )}`; //define a new path to access and rename the image file
         //console.log(imagePath, newImagePath);
