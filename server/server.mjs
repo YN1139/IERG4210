@@ -123,9 +123,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/admin", requireAdmin);
 app.use("/", express.static(path.join(__dirname, "../public/users")));
-app.get("/login", (req, res) => {
-  res.render("../public/users/login.html");
-});
 
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
@@ -224,7 +221,7 @@ app.post(
 );
 
 //Login the user
-app.post("/login", validateCSRF, async (req, res) => {
+app.post("/checkLogin", validateCSRF, async (req, res) => {
   try {
     const { email, password } = req.body;
     const sql = "SELECT * FROM users WHERE email = ?";
