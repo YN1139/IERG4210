@@ -68,6 +68,8 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 
 - Reference: https://stackoverflow.com/questions/63215969/executing-a-click-function-after-redirecting-the-person-to-another-page
 
+29/4: updated URL to individual products, solving problems of scripts not loading in product.html due to direct loading wrong paths
+
 ## Phase 4:
 
 - Client-side form validation applied

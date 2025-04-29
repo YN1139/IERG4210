@@ -123,6 +123,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", express.static(path.join(__dirname, "../public")));
 app.use("/public", express.static(path.join(__dirname, "../public")));
+app.use("/admin", requireAdmin);
 
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
@@ -249,17 +250,17 @@ app.post("/login", validateCSRF, async (req, res) => {
           .json({ loginError: "Invalid email or password" })
           .end();
       } else {
+        console.log("Login successful");
         req.session.regenerate(function (err) {
           req.session.email = req.body.email;
           req.session.userId = users[0].userid;
           req.session.admin = users[0].admin;
 
           if (req.session.admin === true) {
-            res.redirect("/admin");
+            return res.redirect("/admin");
           } else {
-            res.redirect("/");
+            return res.redirect("/");
           }
-          res.status(200).json({ loginOK: 1 }).end();
         });
       }
     });
@@ -382,7 +383,7 @@ function validateCSRF(req, res, next) {
 }
 
 function requireAdmin(req, res, next) {
-  if (req.session.admin === 1) {
+  if (req.session.admin === true) {
     next();
   } else {
     res.redirect("/"); //redirect to homepage if not admin
