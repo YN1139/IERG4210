@@ -122,8 +122,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/admin", requireAdmin);
-app.use("/", express.static(path.join(__dirname, "../public")));
-app.use("/public", express.static(path.join(__dirname, "../public")));
+app.use("/", express.static(path.join(__dirname, "../public/users")));
 
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
@@ -131,11 +130,6 @@ app.get("/api/csrf-token", (req, res) => {
   console.log("Sending CSRF token:", csrfToken);
   res.json({ csrfToken });
 });
-
-/* app.get("/admin", requireAdmin, (req, res) => {
-  console.log(req.session.admin);
-  res.render("../public/admin.html");
-}); */
 //Load the categories and products to homepage
 app.get("/api/cat", async (req, res) => {
   db.query("SELECT * FROM categories", async (err, categories) => {
