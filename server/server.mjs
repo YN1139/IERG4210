@@ -189,6 +189,7 @@ app.post(
   "/admin/add-product",
   upload.single("image"),
   validateCSRF,
+  requireAdmin,
   async (req, res) => {
     try {
       const { catid, name, price, description } = req.body;
@@ -366,9 +367,9 @@ app.listen(3000, () => {
 });
 
 function validateCSRF(req, res, next) {
-  console.log("CSRF validation started");
+  /* console.log("CSRF validation started");
   console.log(req.session.csrf_secret);
-  console.log(req.body._csrf);
+  console.log(req.body._csrf); */
   const token =
     req.body._csrf || req.headers["csrf-token"] || req.headers["x-csrf-token"];
   if (!token) {
@@ -378,4 +379,12 @@ function validateCSRF(req, res, next) {
     return res.status(403).send("CSRF validation failed");
   }
   next();
+}
+
+function requireAdmin(req, res, next) {
+  if (req.session.admin === 1) {
+    next();
+  } else {
+    res.redirect("/"); //redirect to homepage if not admin
+  }
 }
