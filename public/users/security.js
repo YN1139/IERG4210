@@ -24,7 +24,7 @@ async function fetchUserStatus() {
       console.log(data);
       const navBar = document.querySelector(".pages ul");
       const li = document.createElement("li");
-      li.textContent = data.userStatus;
+      li.textContent = data;
       navBar.appendChild(li);
     });
 }
