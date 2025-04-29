@@ -226,7 +226,7 @@ app.post("/login", validateCSRF, async (req, res) => {
     const { email, password } = req.body;
     const sql = "SELECT * FROM users WHERE email = ?";
     const [users] = await userDb.promise().query(sql, [email]);
-
+    console.log(users);
     //if the user does not exist, return an error
     if (users.length === 0) {
       return res
