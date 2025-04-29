@@ -313,7 +313,7 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
     }
     const salt = crypto.randomBytes(64); //generate a random salt
     let hashedPassword;
-    crypto.scrypt(password, salt, 64, (err, derivedKey) => {
+    crypto.scryptSync(password, salt, 64, (err, derivedKey) => {
       if (err) throw err;
       console.log(derivedKey.toString("hex"));
       hashedPassword = derivedKey.toString("hex"); //hash the password with the salt
