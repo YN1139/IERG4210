@@ -128,8 +128,9 @@ app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
 app.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.clearCookie("sess");
+  req.session.destroy(function () {
+    res.clearCookie("sess");
+  });
   res.redirect("/");
 });
 //==========API============
@@ -318,10 +319,11 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
 
     console.log("Salt:", salt.toString("hex"));
     console.log("Hashed password:", hashedPassword);
-    const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
+    const sql =
+      "INSERT INTO users (email, password, salt, admin) VALUES (?, ?, ?, ?)";
     const [newUser] = await userDb
       .promise()
-      .query(sql, [email, hashedPassword, salt.toString("hex")]);
+      .query(sql, [email, hashedPassword, salt.toString("hex"), 0]);
     console.log(newUser);
 
     req.session.regenerate(function () {
@@ -331,12 +333,52 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
 
       req.session.save(function (err) {
         if (err) return err;
+        return res.status(200).redirect("/");
       });
     });
-    res.status(200).redirect("/");
   } catch (err) {
     console.log("Error creating account:", err);
     res.status(400).send(err);
+  }
+});
+
+app.post("/resetPassword", validateCSRF, async (req, res) => {
+  try {
+    const { email, oldPW, newPW } = req.body;
+    const sql = "SELECT * FROM users WHERE email = ?";
+    const [users] = await userDb.promise().query(sql, [email]);
+    console.log(users);
+    //if the user does not exist, return an error
+    if (users.length === 0) {
+      return res.status(401).json({ Error: "User not exist" }).end();
+    }
+    //if the user exists, check the password
+    const UID = users[0].userid;
+    const storedSalt = users[0].salt;
+    const salt = Buffer.from(storedSalt, "hex");
+    const storedPassword = users[0].oldPW;
+    const derivedKey = crypto.scryptSync(oldPW, salt, 64).toString("hex");
+    if (derivedKey !== storedPassword) {
+      //if the password is not matched, return an error
+      return res.status(401).json({ Error: "Invalid password" }).end();
+    }
+
+    const newSalt = crypto.randomBytes(64); //generate a new salt for newPW
+    const newDerivedKey = crypto.scryptSync(newPW, newSalt, 64).toString("hex");
+    const sqlUpdate =
+      "UPDATE users SET password = ?, salt = ? WHERE userID = ?";
+    const [update] = await userDb
+      .promise()
+      .query(sqlUpdate, [newDerivedKey, newSalt.toString("hex"), UID]);
+    console.log(update);
+
+    req.session.destroy(function () {
+      res.clearCookie("sess");
+    });
+    res.status(200).redirect("/");
+  } catch (error) {
+    console.log("Error resetting password:", error);
+    res.status(400).send(error);
   }
 });
 
