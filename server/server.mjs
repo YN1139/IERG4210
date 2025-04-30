@@ -328,8 +328,10 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
 
     req.session.regenerate(function () {
       req.session.email = email;
-      req.session.userId = newUser.userid;
-      req.session.admin = newUser.admin;
+      req.session.userId = newUser.insertId;
+      req.session.admin = 0;
+
+      console.log("Session created:", req.session);
 
       req.session.save(function (err) {
         if (err) return err;
