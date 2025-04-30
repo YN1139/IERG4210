@@ -264,7 +264,8 @@ app.post("/checkLogin", validateCSRF, async (req, res) => {
         .end();
     }
     //if the user exists, check the password
-    const salt = users[0].salt;
+    const storedSalt = users[0].salt;
+    const salt = Buffer.from(storedSalt, "hex");
     const storedPassword = users[0].password;
 
     crypto.scrypt(password, salt, 64, (err, derivedKey) => {
