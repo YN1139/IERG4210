@@ -88,7 +88,7 @@ app.use(
       includeSubDomains: true,
     },
     xFrameOptions: { action: "deny" },
-    xssFilter: true,
+    xssFilter: false, //let nginx handle x-xss-protection
     noSniff: true,
     referrerPolicy: { policy: "no-referrer-when-downgrade" },
   })
