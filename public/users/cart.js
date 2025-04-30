@@ -1,12 +1,11 @@
-const stripe = Stripe(
-  "pk_test_51RHU04CXaNkR4rcTbqBCkVLKSJJj5OGrQZXemNNDaPrSnpQ9xj1ZCOWDoXb6h3niWuRWId5uwmbOOvrM9cLZLu7p00XlGCPg8u"
-);
-
 document.addEventListener("DOMContentLoaded", function () {
   if (!window.cart) {
     window.cart = new ShoppingCart();
   }
   window.cart.updateUI();
+  if (!stripe) {
+    InitStripe();
+  }
 });
 
 class ShoppingCart {
@@ -190,4 +189,13 @@ class ShoppingCart {
       }
     }
   }
+}
+
+async function InitStripe() {
+  fetch("/api/stripe")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const stripe = Stripe(data);
+    });
 }

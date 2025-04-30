@@ -142,6 +142,12 @@ app.get("/logout", (req, res) => {
   });
 });
 //==========API============
+app.get("/api/stripe", (req, res) => {
+  const stripe_cart = Stripe(
+    "pk_test_51RHU04CXaNkR4rcTbqBCkVLKSJJj5OGrQZXemNNDaPrSnpQ9xj1ZCOWDoXb6h3niWuRWId5uwmbOOvrM9cLZLu7p00XlGCPg8u"
+  );
+  res.json({ stripe_cart });
+});
 app.get("/api/csrf-token", (req, res) => {
   const csrfToken = tokens.create(req.session.csrf_secret);
   console.log("Sending CSRF token:", csrfToken);
