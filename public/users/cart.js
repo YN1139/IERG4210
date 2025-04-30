@@ -1,3 +1,5 @@
+let stripe;
+
 document.addEventListener("DOMContentLoaded", function () {
   if (!window.cart) {
     window.cart = new ShoppingCart();
@@ -196,6 +198,6 @@ async function InitStripe() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      const stripe = Stripe(data);
+      stripe = Stripe(data);
     });
 }
