@@ -359,7 +359,7 @@ app.post("/resetPassword", validateCSRF, async (req, res) => {
     const UID = users[0].userid;
     const storedSalt = users[0].salt;
     const salt = Buffer.from(storedSalt, "hex");
-    const storedPassword = users[0].oldPW;
+    const storedPassword = users[0].password;
     const derivedKey = crypto.scryptSync(oldPW, salt, 64).toString("hex");
     if (derivedKey !== storedPassword) {
       //if the password is not matched, return an error
