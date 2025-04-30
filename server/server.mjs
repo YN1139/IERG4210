@@ -87,9 +87,10 @@ app.use(
       maxAge: 31536000,
       includeSubDomains: true,
     },
-    xFrameOptions: "DENY",
-    xXssProtection: "1; mode=block",
-    referrerPolicy: referrerPolicy({ policy: "no-referrer-when-downgrade" }),
+    xFrameOptions: { action: "deny" },
+    xssFilter: true,
+    noSniff: true,
+    referrerPolicy: { policy: "no-referrer-when-downgrade" },
   })
 );
 
