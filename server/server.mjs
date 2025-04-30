@@ -315,11 +315,12 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
     const derivedKey = crypto.scryptSync(password, salt, 64);
     const hashedPassword = derivedKey.toString("hex");
 
+    console.log("Salt:", salt.toString("hex"));
     console.log("Hashed password:", hashedPassword);
     const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
     const [newUser] = await userDb
       .promise()
-      .query(sql, [email, hashedPassword, salt]);
+      .query(sql, [email, hashedPassword, salt.toString("hex")]);
     console.log(newUser);
 
     req.session.regenerate(function () {
