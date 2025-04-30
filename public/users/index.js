@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function fetchBreadcrumb(catid = null) {
-  fetch(API + "/api/category/" + catid)
+  fetch("/api/category/" + catid)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -32,7 +32,7 @@ async function fetchBreadcrumb(catid = null) {
 }
 
 async function fetchCategories() {
-  fetch(API + "/api/cat")
+  fetch("/api/cat")
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -52,7 +52,7 @@ async function fetchCategories() {
 }
 
 async function fetchAllProducts() {
-  fetch(API + "/api/prod/")
+  fetch("/api/prod/")
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -94,7 +94,7 @@ async function fetchAllProducts() {
 
 async function fetchProducts(catid = null) {
   fetchBreadcrumb(catid);
-  fetch(API + "/api/products/" + catid)
+  fetch("/api/products/" + catid)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
