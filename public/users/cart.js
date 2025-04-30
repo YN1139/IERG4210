@@ -197,7 +197,7 @@ async function InitStripe() {
   fetch("/api/stripe")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      console.log(data.stripe_cart);
       stripe = Stripe(data);
     });
 }
