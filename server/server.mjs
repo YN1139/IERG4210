@@ -130,8 +130,8 @@ app.get("/admin", requireAdmin, (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
     res.clearCookie("sess");
+    res.redirect("/");
   });
-  res.redirect("/");
 });
 //==========API============
 app.get("/api/csrf-token", (req, res) => {
@@ -347,6 +347,7 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
 app.post("/resetPassword", validateCSRF, async (req, res) => {
   try {
     const { email, oldPW, newPW } = req.body;
+    console.log(req.body);
     const sql = "SELECT * FROM users WHERE email = ?";
     const [users] = await userDb.promise().query(sql, [email]);
     console.log(users);
@@ -376,8 +377,8 @@ app.post("/resetPassword", validateCSRF, async (req, res) => {
 
     req.session.destroy(function () {
       res.clearCookie("sess");
+      res.status(200).redirect("/");
     });
-    res.status(200).redirect("/");
   } catch (error) {
     console.log("Error resetting password:", error);
     res.status(400).send(error);
