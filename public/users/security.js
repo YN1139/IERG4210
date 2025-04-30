@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
           form.appendChild(csrf);
         }
         csrf.value = data.csrfToken;
-        console.log("csrf to client", csrf.value);
+        //console.log("csrf to client", csrf.value);
       });
     });
   fetchUserStatus();
