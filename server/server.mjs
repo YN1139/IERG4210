@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
+import helmet, { referrerPolicy } from "helmet";
 import session from "express-session";
 import csrf from "csrf";
 import crypto from "crypto";
@@ -83,6 +83,13 @@ app.use(
         frameSrc: ["'self'", "https://js.stripe.com"],
       },
     },
+    strictTransportSecurity: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+    },
+    xFrameOptions: "DENY",
+    xXssProtection: "1; mode=block",
+    referrerPolicy: referrerPolicy({ policy: "no-referrer-when-downgrade" }),
   })
 );
 
