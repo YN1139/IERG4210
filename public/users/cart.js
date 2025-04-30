@@ -198,6 +198,6 @@ async function InitStripe() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data.stripe_cart);
-      stripe = Stripe(data);
+      stripe = Stripe(data.stripe_cart);
     });
 }
