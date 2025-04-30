@@ -625,3 +625,53 @@ With this approach:
 2. Browser will automatically request linked resources like CSS and JS files
 3. Static middleware will serve those files from the public directory
 4. The `requireAdmin` middleware ensures only admins can access the page
+
+**Promt:**
+the salt is stored in hex form, which cannot be used as comparing the password, what can I do to change this?
+
+### Response
+
+# Fixing the Salt Format Issue in Password Verification
+
+You've identified a critical security issue! Your salt is stored as a hex string in the database, but `crypto.scrypt()` requires the salt in Buffer format for correct password comparison.
+
+## The Problem
+
+```javascript
+// When creating account:
+const salt = crypto.randomBytes(64); // Buffer
+const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
+await userDb.query(sql, [email, hashedPassword, salt.toString("hex")]); // Stored as hex string
+
+// When verifying password:
+const salt = users[0].salt; // This is now a hex STRING, not a Buffer
+crypto.scrypt(password, salt, 64, (err, derivedKey) => {
+  // ❌ Wrong salt format!
+  // This will NEVER match the original hash
+});
+```
+
+## The Solution
+
+You need to convert the salt back to a Buffer when validating passwords:
+
+```javascript
+// In your login route:
+const saltHex = users[0].salt;
+const salt = Buffer.from(saltHex, "hex"); // Convert hex string back to Buffer
+
+crypto.scrypt(password, salt, 64, (err, derivedKey) => {
+  if (err) throw err;
+  console.log(derivedKey.toString("hex"));
+  const derivedPassword = derivedKey.toString("hex");
+  if (derivedPassword !== storedPassword) {
+    // Error handling...
+  } else {
+    // Success handling...
+  }
+});
+```
+
+This ensures the salt is in the same format during both password creation and verification, allowing the derived keys to match when the correct password is entered.
+
+Be sure to test your login function after making this change to ensure it works correctly with both new and existing accounts.

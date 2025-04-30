@@ -331,9 +331,9 @@ app.post("/createAccount", validateCSRF, async (req, res) => {
 
       req.session.save(function (err) {
         if (err) return err;
-        res.status(200).redirect("/");
       });
     });
+    res.status(200).redirect("/");
   } catch (err) {
     console.log("Error creating account:", err);
     res.status(400).send(err);
