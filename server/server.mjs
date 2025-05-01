@@ -139,6 +139,9 @@ app.get("/admin", requireAdmin, (req, res) => {
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/users/login.html"));
 });
+app.get("/product", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/users/product.html"));
+});
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
     res.clearCookie("sess");
