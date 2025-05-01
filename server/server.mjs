@@ -135,15 +135,6 @@ app.use("/", express.static(path.join(__dirname, "../public/users")));
 app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
-app.get("/product", requireAdmin, (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/users/product.html"));
-});
-app.get("/new", requireAdmin, (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/users/createAcc.html"));
-});
-app.get("/change-password", requireAdmin, (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/users/password.html"));
-});
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
     res.clearCookie("sess");
