@@ -11,6 +11,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import Stripe from "stripe";
+import { Server } from "https";
 
 const stripe = Stripe(
   "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
@@ -134,6 +135,9 @@ app.use("/", express.static(path.join(__dirname, "../public/users")));
 
 app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
+});
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/users/admin.html"));
 });
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
