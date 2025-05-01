@@ -74,7 +74,7 @@ app.set("trust proxy", 1); //trust the reverse proxy to set the secure flag on t
 
 //cors and helmet middleware
 app.use(cors(corsOptions));
-app.use((req, res, next) => {
+app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
@@ -91,8 +91,8 @@ app.use((req, res, next) => {
     xssFilter: false, //let nginx handle x-xss-protection
     noSniff: true,
     referrerPolicy: { policy: "no-referrer-when-downgrade" },
-  })(req, res, next);
-});
+  })
+);
 
 app.use(
   session({
@@ -134,6 +134,15 @@ app.use("/", express.static(path.join(__dirname, "../public/users")));
 
 app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
+});
+app.get("/product", requireAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/users/product.html"));
+});
+app.get("/new", requireAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/users/createAcc.html"));
+});
+app.get("/change-password", requireAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, ".../public/users/password.html"));
 });
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
