@@ -137,7 +137,7 @@ app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
 app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/users/admin.html"));
+  res.sendFile(path.join(__dirname, "../public/users/login.html"));
 });
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
