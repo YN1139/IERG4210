@@ -142,7 +142,7 @@ app.get("/new", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/users/createAcc.html"));
 });
 app.get("/change-password", requireAdmin, (req, res) => {
-  res.sendFile(path.join(__dirname, ".../public/users/password.html"));
+  res.sendFile(path.join(__dirname, "../public/users/password.html"));
 });
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
