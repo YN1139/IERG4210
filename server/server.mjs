@@ -74,7 +74,7 @@ app.set("trust proxy", 1); //trust the reverse proxy to set the secure flag on t
 
 //cors and helmet middleware
 app.use(cors(corsOptions));
-app.use(
+app.use((req, res, next) => {
   helmet({
     contentSecurityPolicy: {
       directives: {
@@ -91,8 +91,8 @@ app.use(
     xssFilter: false, //let nginx handle x-xss-protection
     noSniff: true,
     referrerPolicy: { policy: "no-referrer-when-downgrade" },
-  })
-);
+  })(req, res, next);
+});
 
 app.use(
   session({
