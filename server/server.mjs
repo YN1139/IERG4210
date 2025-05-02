@@ -435,8 +435,6 @@ app.post("/pay", validateCSRF, async (req, res) => {
         quantity: itemQuantity[i],
       })),
       mode: "payment",
-      success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
-      cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
     });
     console.log("Session created:", session);
     res.redirect(session.url); // Redirect to the checkout session URL
