@@ -174,7 +174,10 @@ class ShoppingCart {
       pid,
       quantity: item.quantity,
     })); */
-    const cart = [...this.items.entries()];
+    const cart = [...this.items.entries()].map(([pid, item]) => ({
+      pid,
+      quantity: item.quantity,
+    }));
     console.log("cart", cart);
 
     const response = await fetch(`/pay`, {
