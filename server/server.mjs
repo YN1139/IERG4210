@@ -415,7 +415,6 @@ app.post("/pay", validateCSRF, async (req, res) => {
     for (let i = 0; i < items.length; i++) {
       console.log(itemQuantity[i]);
     }
-    console.log(items.quantity);
     var sql = "SELECT * FROM products WHERE pid IN ( ? )";
     const [orderProducts] = await db
       .promise()
@@ -423,21 +422,18 @@ app.post("/pay", validateCSRF, async (req, res) => {
     console.log(orderProducts);
 
     var session = await stripe.checkout.sessions.create({
-      line_items: orderProducts.map((product, i) => {
-        console.log(product);
-        console.log(i);
-        return {
-          price_data: {
-            currency: "hkd",
-            product_data: {
-              name: product.name,
-              images: [`https://s27.ierg4210.ie.cuhk.edu.hk/${product.image}`],
-            },
-            unit_amount: product.price * 100,
+      line_items: orderProducts.map((product, i) => ({
+        //i = index of the mapping
+        price_data: {
+          currency: "hkd",
+          product_data: {
+            name: product.name,
+            images: [`https://s27.ierg4210.ie.cuhk.edu.hk/${product.image}`],
           },
-          quantity: itemQuantity[index],
-        };
-      }),
+          unit_amount: product.price * 100,
+        },
+        quantity: itemQuantity[i],
+      })),
       mode: "payment",
       ui_mode: "embedded",
       success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
