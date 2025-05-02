@@ -174,7 +174,7 @@ class ShoppingCart {
       pid,
       quantity: item.quantity,
     })); */
-    const cart = [...this.items.entries()].map(([pid, item]) => ({
+    const cart = [...this.items].map(([pid, item]) => ({
       pid,
       quantity: item.quantity,
     }));
