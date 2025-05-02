@@ -168,6 +168,8 @@ class ShoppingCart {
       quantity: item.quantity,
     }));
 
+    console.log("cart", cart);
+
     const response = await fetch(`/pay`, {
       method: "POST",
       headers: {
@@ -176,7 +178,7 @@ class ShoppingCart {
       body: JSON.stringify(cart),
     });
 
-    const session = await response.json();
+    /* const session = await response.json();
 
     if (session.error) {
       alert(session.error);
@@ -189,7 +191,7 @@ class ShoppingCart {
       } else {
         this.clearCart();
       }
-    }
+    } */
   }
 }
 
