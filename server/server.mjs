@@ -406,9 +406,9 @@ app.post("/resetPassword", validateCSRF, async (req, res) => {
 
 //payment
 app.post("/pay", validateCSRF, async (req, res) => {
-  const { items } = req.body; // Get line items from the request body
-  console.log(items);
   try {
+    const { items } = req.body; // Get line items from the request body
+    console.log(items);
     const session = await stripe.checkout.sessions.create({
       line_items: items.map((item) => ({
         price_data: {
@@ -425,7 +425,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
       success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
       cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
     });
-    res.redirect(303, session.url);
+    console.log("Session created:", session);
   } catch (error) {
     console.error("Error creating payment intent:", error);
     res.status(500).send({ error: "Payment failed" });
