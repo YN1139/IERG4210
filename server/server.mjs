@@ -409,7 +409,7 @@ app.post("/resetPassword", validateCSRF, async (req, res) => {
 //payment
 app.post("/pay", validateCSRF, async (req, res) => {
   try {
-    const items = JSON.parse(req.body); // Get line items from the request body
+    const items = req.body; // Get line items from the request body
     console.log(items);
     const itemQuantity = items.map((item) => item.quantity);
     console.log(items.quantity);
