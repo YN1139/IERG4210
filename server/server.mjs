@@ -411,12 +411,12 @@ app.post("/pay", validateCSRF, async (req, res) => {
   try {
     const items = req.body; // Get line items from the request body
     console.log(items);
-    /* const itemQuantity = items.map((item) => item.quantity);
-    console.log(itemQuantity); */
+    const itemQuantity = items.map((item) => item.quantity);
+    console.log(items.quantity);
     var sql = "SELECT * FROM products WHERE pid IN ( ? )";
     const [orderProducts] = await db
       .promise()
-      .query(sql, [items.map((item) => item.pid)]); // Fetch product details one by one
+      .query(sql, [items.map((item) => item.pid)]); // Fetch product details one by one into an array
     console.log(orderProducts);
     const session = await stripe.checkout.sessions.create({
       line_items: orderProducts.map((product) => ({
@@ -427,7 +427,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
           },
           unit_amount: product.price * 100,
         },
-        quantity: items.find((item) => item.pid == product.pid).quantity,
+        quantity: items.quantity,
       })),
       mode: "payment",
       ui_mode: "embedded",
