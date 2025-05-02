@@ -675,3 +675,26 @@ crypto.scrypt(password, salt, 64, (err, derivedKey) => {
 This ensures the salt is in the same format during both password creation and verification, allowing the derived keys to match when the correct password is entered.
 
 Be sure to test your login function after making this change to ensure it works correctly with both new and existing accounts.
+
+**Promt:**
+how can I clear the shopping cart
+
+### Response
+
+To clear the shopping cart, you should:
+
+1. **Clear the items from the cart's internal Map**
+2. **Update the UI**
+3. **Remove the cart data from localStorage**
+
+You can add a method like this to your `ShoppingCart` class:
+
+```javascript
+clearCart() {
+  this.items.clear();
+  this.updateUI();
+  localStorage.removeItem("shopping-cart");
+}
+```
+
+You can then call `this.clearCart();` after a successful checkout, or whenever you want to empty the cart.
