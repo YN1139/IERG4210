@@ -40,7 +40,8 @@ class ShoppingCart {
       }
     });
 
-    document.getElementById("checkout").addEventListener("click", async () => {
+    document.getElementById("checkout").addEventListener("click", async (e) => {
+      e.preventDefault();
       if (!stripe) {
         console.log("Stripe not initialized");
         return;
