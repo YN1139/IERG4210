@@ -163,6 +163,11 @@ class ShoppingCart {
 
   async handleCheckout() {
     console.log(this.items);
+    if (this.items.size === 0) {
+      alert("Cart is empty.");
+      return;
+    }
+
     //pass only pid and quantity to the server
     const cart = Array.from(this.items.entries()).map(([pid, item]) => ({
       pid,
