@@ -407,7 +407,7 @@ app.post("/resetPassword", validateCSRF, async (req, res) => {
 });
 
 //payment
-app.post("/pay", validateCSRF, async (req, res) => {
+app.get("/pay", validateCSRF, async (req, res) => {
   try {
     const { items } = req.body; // Get line items from the request body
     console.log(items);
