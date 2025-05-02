@@ -17,6 +17,19 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchUserStatus();
 });
 
+document
+  .querySelector("#submit-password")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+    const password = document.querySelector("#password").value;
+    const confirmPassword = document.querySelector("#confirm-password").value;
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return false;
+    }
+    return true;
+  });
+
 async function fetchUserStatus() {
   fetch("/api/userStatus")
     .then((response) => response.json())
