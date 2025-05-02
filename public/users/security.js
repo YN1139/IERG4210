@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
 document
   .querySelector("#submit-password")
   .addEventListener("click", function (event) {
-    event.preventDefault();
     const password = document.querySelector("#password").value;
     const confirmPassword = document.querySelector("#confirm-password").value;
     if (password !== confirmPassword) {
