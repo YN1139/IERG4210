@@ -423,17 +423,21 @@ app.post("/pay", validateCSRF, async (req, res) => {
     console.log(orderProducts);
 
     var session = await stripe.checkout.sessions.create({
-      line_items: orderProducts.map((product) => ({
-        price_data: {
-          currency: "hkd",
-          product_data: {
-            name: product.name,
-            images: [`https://s27.ierg4210.ie.cuhk.edu.hk/${product.image}`],
+      line_items: orderProducts.map((product, i) => {
+        console.log(product);
+        console.log(i);
+        return {
+          price_data: {
+            currency: "hkd",
+            product_data: {
+              name: product.name,
+              images: [`https://s27.ierg4210.ie.cuhk.edu.hk/${product.image}`],
+            },
+            unit_amount: product.price * 100,
           },
-          unit_amount: product.price * 100,
-        },
-        quantity: items.find((item) => item.pid === product.pid).quantity,
-      })),
+          quantity: itemQuantity[index],
+        };
+      }),
       mode: "payment",
       ui_mode: "embedded",
       success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
