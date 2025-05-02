@@ -202,13 +202,10 @@ class ShoppingCart {
       const result = await stripe.redirectToCheckout({
         sessionId: session.id,
       });
-      if (result.error) {
-        alert(result.error.message);
-      } else {
-        this.items.clear();
-        this.updateUI();
-        localStorage.removeItem("shopping-cart");
-      }
+      console.log("result", result);
+      this.items.clear();
+      this.updateUI();
+      localStorage.removeItem("shopping-cart");
     }
   }
 }
