@@ -427,7 +427,8 @@ app.post("/pay", validateCSRF, async (req, res) => {
           price_data: {
             currency: "hkd",
             product_data: {
-              pid: product.pid,
+              name: product.name,
+              images: [`https://s27.ierg4210.ie.cuhk.edu.hk/${product.image}`],
             },
             unit_amount: product.price * 100,
           },
