@@ -168,7 +168,7 @@ class ShoppingCart {
       quantity: item.quantity,
     }));
 
-    const response = await fetch(`${API}/pay`, {
+    const response = await fetch(`/pay`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
