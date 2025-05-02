@@ -79,8 +79,10 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "https://js.stripe.com/v3/"],
+        scriptSrc: ["'self'", "https://js.stripe.com"],
         frameSrc: ["'self'", "https://js.stripe.com"],
+        styleSrc: ["'self'", "https://js.stripe.com"],
+        imgSrc: ["'self'", "https://js.stripe.com"],
       },
     },
     strictTransportSecurity: {
