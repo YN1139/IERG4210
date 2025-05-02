@@ -411,6 +411,8 @@ app.post("/pay", validateCSRF, async (req, res) => {
   try {
     const items = req.body; // Get line items from the request body
     console.log(items);
+    const itemQuantity = items.map((item) => item.quantity);
+    console.log(itemQuantity);
     var sql = "SELECT * FROM products WHERE pid IN ( ? )";
     const [orderProducts] = await db
       .promise()
@@ -425,7 +427,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
           },
           unit_amount: product.price * 100,
         },
-        quantity: items.map((item) => item.quantity),
+        quantity: itemQuantity,
       })),
       mode: "payment",
       ui_mode: "embedded",
