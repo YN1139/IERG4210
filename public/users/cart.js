@@ -199,13 +199,13 @@ class ShoppingCart {
     if (session.error) {
       alert(session.error);
     } else {
+      this.items.clear();
+      this.updateUI();
+      localStorage.removeItem("shopping-cart");
       const result = await stripe.redirectToCheckout({
         sessionId: session.id,
       });
       console.log("result", result);
-      this.items.clear();
-      this.updateUI();
-      localStorage.removeItem("shopping-cart");
     }
   }
 }
