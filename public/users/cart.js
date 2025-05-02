@@ -176,7 +176,7 @@ class ShoppingCart {
 
     console.log("cart", cart);
 
-    const response = await fetch(`/pay`, {
+    /* const response = await fetch(`/pay`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -190,7 +190,7 @@ class ShoppingCart {
     if (!response.ok) {
       alert("Failed to create checkout session. Please try again.");
       return;
-    }
+    } */
 
     /* const session = await response.json();
 
