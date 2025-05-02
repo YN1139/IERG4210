@@ -412,28 +412,33 @@ app.post("/pay", validateCSRF, async (req, res) => {
     const items = req.body; // Get line items from the request body
     console.log(items);
     const itemQuantity = items.map((item) => item.quantity);
+    for (i = 0; i < items.length; i++) {
+      console.log(itemQuantity[i]);
+    }
     console.log(items.quantity);
     var sql = "SELECT * FROM products WHERE pid IN ( ? )";
     const [orderProducts] = await db
       .promise()
       .query(sql, [items.map((item) => item.pid)]); // Fetch product details one by one into an array
     console.log(orderProducts);
-    const session = await stripe.checkout.sessions.create({
-      line_items: orderProducts.map((product) => ({
-        price_data: {
-          currency: "hkd",
-          product_data: {
-            pid: product.pid,
+    for (i = 0; i < items.length; i++) {
+      var session = await stripe.checkout.sessions.create({
+        line_items: orderProducts.map((product) => ({
+          price_data: {
+            currency: "hkd",
+            product_data: {
+              pid: product.pid,
+            },
+            unit_amount: product.price * 100,
           },
-          unit_amount: product.price * 100,
-        },
-        quantity: items.quantity,
-      })),
-      mode: "payment",
-      ui_mode: "embedded",
-      /* success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
+          quantity: itemQuantity[i],
+        })),
+        mode: "payment",
+        ui_mode: "embedded",
+        /* success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
       cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/", */
-    });
+      });
+    }
     console.log("Session created:", session);
   } catch (error) {
     console.error("Error creating payment intent:", error);
