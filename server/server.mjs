@@ -412,7 +412,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
     const items = req.body; // Get line items from the request body
     console.log(items);
     const itemQuantity = items.map((item) => item.quantity);
-    for (i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       console.log(itemQuantity[i]);
     }
     console.log(items.quantity);
@@ -421,7 +421,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
       .promise()
       .query(sql, [items.map((item) => item.pid)]); // Fetch product details one by one into an array
     console.log(orderProducts);
-    for (i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       var session = await stripe.checkout.sessions.create({
         line_items: orderProducts.map((product) => ({
           price_data: {
