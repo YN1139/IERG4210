@@ -207,6 +207,7 @@ class ShoppingCart {
       } else {
         this.items.clear();
         this.updateUI();
+        localStorage.removeItem("shopping-cart");
       }
     }
   }
