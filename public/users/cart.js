@@ -172,8 +172,10 @@ class ShoppingCart {
 
     const response = await fetch(`/pay`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-Token": document.querySelector('input[name="_csrf"]').value,
       },
       body: JSON.stringify(cart),
     });
