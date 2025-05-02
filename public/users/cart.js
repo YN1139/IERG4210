@@ -194,7 +194,7 @@ class ShoppingCart {
       return;
     }
 
-    /* const session = await response.json();
+    const session = await response.json();
 
     if (session.error) {
       alert(session.error);
@@ -207,7 +207,7 @@ class ShoppingCart {
       } else {
         this.clearCart();
       }
-    } */
+    }
   }
 }
 
