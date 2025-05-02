@@ -162,21 +162,22 @@ class ShoppingCart {
   }
 
   async handleCheckout() {
-    console.log(this.items);
+    console.log(this.items.entries());
     if (this.items.size === 0) {
       alert("Cart is empty.");
       return;
     }
 
     //pass only pid and quantity to the server
-    const cart = Array.from(this.items.entries()).map(([pid, item]) => ({
+    //turn the map into an array of objects and remap it to only include pid and quantity
+    /* const cart = Array.from(this.items.entries()).map(([pid, item]) => ({
       pid,
       quantity: item.quantity,
-    }));
-
+    })); */
+    const cart = [...this.items.entries()];
     console.log("cart", cart);
 
-    /* const response = await fetch(`/pay`, {
+    const response = await fetch(`/pay`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -190,7 +191,7 @@ class ShoppingCart {
     if (!response.ok) {
       alert("Failed to create checkout session. Please try again.");
       return;
-    } */
+    }
 
     /* const session = await response.json();
 
