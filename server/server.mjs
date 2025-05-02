@@ -427,7 +427,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
           },
           unit_amount: product.price * 100,
         },
-        quantity: items.find((item) => item.pid === product.pid).quantity,
+        quantity: items.find((item) => item.pid == product.pid).quantity,
       })),
       mode: "payment",
       ui_mode: "embedded",
