@@ -11,6 +11,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import Stripe from "stripe";
+import { connect } from "http2";
 
 const stripe = Stripe(
   "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
@@ -83,6 +84,11 @@ app.use(
         frameSrc: ["'self'", "https://js.stripe.com"],
         styleSrc: ["'self'", "https://js.stripe.com"],
         imgSrc: ["'self'", "https://js.stripe.com"],
+        connectSrc: [
+          "'self'",
+          "https://checkout.stripe.com",
+          "https://js.stripe.com",
+        ],
       },
     },
     strictTransportSecurity: {
