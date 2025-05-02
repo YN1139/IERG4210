@@ -11,7 +11,6 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import Stripe from "stripe";
-import { Server } from "https";
 
 const stripe = Stripe(
   "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
@@ -409,18 +408,6 @@ app.post("/resetPassword", validateCSRF, async (req, res) => {
 app.post("/pay", validateCSRF, async (req, res) => {
   const { items } = req.body; // Get line items from the request body
   console.log(items);
-  const salt = crypto.randomBytes(32).toString("hex");
-  const digestString = [
-    "hkd",
-    "cd@s27.com",
-    salt,
-    ...items.map((item) => `${item.pid}-${item.quantity}-${item.price}`),
-    //! make a function to get the price from the database
-    totalAmount.toFixed(2),
-  ].join("|");
-
-  const digest = crypto.createHash("sha256").update(digestString).digest("hex");
-
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: items.map((item) => ({
@@ -435,23 +422,9 @@ app.post("/pay", validateCSRF, async (req, res) => {
       })),
       mode: "payment",
       ui_mode: "embedded",
-      success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/success",
-      cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/cancel",
+      success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
+      cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
     });
-
-    await db
-      .promise()
-      .query(
-        "INSERT INTO orders (stripe_session_id, customer_id, total_amount, order_date, digest, salt, details) VALUES (?, ?, ?, NOW(), ?, ?, ?)",
-        [
-          null,
-          req.session.userId || null,
-          totalAmount,
-          digest,
-          salt,
-          line_items,
-        ]
-      );
     res.redirect(303, session.url);
   } catch (error) {
     console.error("Error creating payment intent:", error);
