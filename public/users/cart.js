@@ -170,10 +170,7 @@ class ShoppingCart {
 
     //pass only pid and quantity to the server
     //turn the map into an array of objects and remap it to only include pid and quantity
-    /* const cart = Array.from(this.items.entries()).map(([pid, item]) => ({
-      pid,
-      quantity: item.quantity,
-    })); */
+    //ref: https://coreui.io/blog/how-to-convert-a-map-to-an-array-in-javascript/
     const cart = [...this.items].map(([pid, item]) => ({
       pid,
       quantity: item.quantity,

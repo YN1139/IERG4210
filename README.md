@@ -86,3 +86,7 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
   - not yet done the redirect part, as not yet set the session
 - Updated to HTTPS
   - reference to IERG3800 settings and certbot
+
+## Phase 5:
+
+- ref: https://coreui.io/blog/how-to-convert-a-map-to-an-array-in-javascript/
