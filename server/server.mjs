@@ -421,7 +421,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
       .query(sql, [items.map((item) => item.pid)]); // Fetch product details one by one into an array
     console.log(orderProducts);
 
-    var session = await stripe.checkout.sessions.create({
+    const session = await stripe.checkout.sessions.create({
       line_items: orderProducts.map((product, i) => ({
         //i = index of the mapping
         price_data: {
@@ -435,8 +435,10 @@ app.post("/pay", validateCSRF, async (req, res) => {
         quantity: itemQuantity[i],
       })),
       mode: "payment",
+      success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
+      cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
     });
-    console.log("Session created:", session);
+    //console.log("Session created:", session);
     res.redirect(session.url); // Redirect to the checkout session URL
   } catch (error) {
     console.error("Error creating payment intent:", error);
