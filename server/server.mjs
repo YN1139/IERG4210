@@ -444,8 +444,8 @@ app.post("/pay", validateCSRF, async (req, res) => {
       success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
       cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
     });
-    //console.log("Session created:", session);
-    res.redirect(session.url); // Redirect to the checkout session URL
+    console.log("Session created:", session);
+    res.json({ id: session.id }); // Redirect to the checkout session URL
   } catch (error) {
     console.error("Error creating payment intent:", error);
     res.status(500).send({ error: "Payment failed" });
