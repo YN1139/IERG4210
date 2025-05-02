@@ -205,7 +205,8 @@ class ShoppingCart {
       if (result.error) {
         alert(result.error.message);
       } else {
-        this.clearCart();
+        this.items.clear();
+        this.updateUI();
       }
     }
   }
