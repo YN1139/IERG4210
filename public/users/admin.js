@@ -35,6 +35,7 @@ function loadForm() {
 
           const checkbox = document.createElement("input");
           checkbox.type = "checkbox";
+          checkbox.name = "pid";
           checkbox.value = product.pid;
 
           const productInfo = document.createElement("div");
