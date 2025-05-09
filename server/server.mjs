@@ -276,7 +276,7 @@ app.post(
     }
   }
 );
-/* 
+
 app.post(
   "/admin/delete-product",
   validateCSRF,
@@ -290,7 +290,7 @@ app.post(
       res.status(400).send(error);
     }
   }
-); */
+);
 
 //Login the user
 app.post("/checkLogin", validateCSRF, async (req, res) => {
