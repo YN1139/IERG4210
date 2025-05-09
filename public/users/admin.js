@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const formDropdown = document.getElementById("action");
   formDropdown.addEventListener("change", function () {
     showForm();
+    loadForm();
   });
 });
 
@@ -17,8 +18,9 @@ function showForm() {
   document.getElementById(selctedValue).style.display = "block";
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+function loadForm() {
   const formValue = document.getElementById("action").value;
+  console.log(formValue);
   if (formValue === "delete") {
     fetch("/api/prod")
       .then((response) => response.json())
@@ -44,4 +46,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       });
   }
-});
+}
