@@ -34,6 +34,7 @@
       method="post"
       enctype="multipart/form-data"
     >
+      <input type="hidden" name="_csrf" />
       <label for="category">Category:</label>
       <select name="catid" class="category" required>
         <option value="1">J-Pop</option>
@@ -75,6 +76,7 @@
       method="post"
       enctype="multipart/form-data"
     >
+      <input type="hidden" name="_csrf" />
       <label for="category">Category:</label>
       <select name="catid" name="category" required>
         <option value="1">J-Pop</option>
@@ -109,6 +111,7 @@
       method="post"
       enctype="multipart/form-data"
     >
+      <input type="hidden" name="_csrf" />
       <div id="products-list"></div>
       <button type="submit">Submit</button>
     </form>
