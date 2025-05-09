@@ -277,6 +277,21 @@ app.post(
   }
 );
 
+app.post(
+  "/admin/delete-product",
+  validateCSRF,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const { pid } = req.body;
+      console.log(req.body, pid);
+      console.log("Deleting product");
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+);
+
 //Login the user
 app.post("/checkLogin", validateCSRF, async (req, res) => {
   try {

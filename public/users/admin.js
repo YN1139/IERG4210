@@ -38,7 +38,7 @@ function loadForm() {
           checkbox.value = product.pid;
 
           const productInfo = document.createElement("div");
-          productInfo.textContent = product.pid + "-" + product.name;
+          productInfo.textContent = product.pid + " - " + product.name;
 
           productDiv.appendChild(checkbox);
           productDiv.appendChild(productInfo);
