@@ -251,7 +251,7 @@ app.post(
     try {
       const { catid, name, price, description } = req.body;
       const imagePath = req.file ? req.file.path : null; //if there is a file, store the path, otherwise store null
-
+      console.log(req.body, req.file);
       const sql =
         "INSERT INTO products (catid, name, price, description, image) VALUES (?, ?, ?, ?, ?)";
       const [result] = await db
