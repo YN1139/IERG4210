@@ -472,9 +472,9 @@ app.listen(3000, () => {
 });
 
 function validateCSRF(req, res, next) {
-  /* console.log("CSRF validation started");
+  console.log("CSRF validation started");
   console.log(req.session.csrf_secret);
-  console.log(req.body._csrf); */
+  console.log(req.body._csrf);
   const token =
     req.body._csrf || req.headers["csrf-token"] || req.headers["x-csrf-token"];
   if (!token) {

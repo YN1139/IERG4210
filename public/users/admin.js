@@ -4,6 +4,17 @@ document.addEventListener("DOMContentLoaded", function () {
     showForm();
     loadForm();
   });
+
+  const deleteForm = document.getElementById("delete");
+  deleteForm.addEventListener("submit", function (e) {
+    // Get the CSRF token
+    const csrfToken = document.querySelector('input[name="_csrf"]').value;
+    if (!csrfToken) {
+      e.preventDefault();
+      alert("CSRF token is missing. Please refresh the page and try again.");
+      return;
+    }
+  });
 });
 
 function showForm() {
@@ -35,7 +46,7 @@ function loadForm() {
 
           const checkbox = document.createElement("input");
           checkbox.type = "checkbox";
-          checkbox.name = "pid";
+          checkbox.name = "pid[]";
           checkbox.value = product.pid;
 
           const productInfo = document.createElement("div");
