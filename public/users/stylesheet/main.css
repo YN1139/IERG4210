@@ -208,4 +208,8 @@ input[type="number"] {
 
 #products-list {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: 1px solid #adadad;
+  border-radius: 5px;
 }

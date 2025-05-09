@@ -35,7 +35,7 @@
       enctype="multipart/form-data"
     >
       <label for="category">Category:</label>
-      <select name="catid" id="category" required>
+      <select name="catid" class="category" required>
         <option value="1">J-Pop</option>
         <option value="2">K-Pop</option>
         <option value="3">Canton-Pop</option>
@@ -52,14 +52,18 @@
       <!--Regex: only letter, numbers, whitespace, and chinese-->
       <br />
       <label for="price">Price:</label>
-      <input type="number" id="price" required min="0" />
+      <input type="number" class="price" required min="0" />
       <br />
       <label for="description">Description:</label>
-      <textarea id="description" wrap="hard" required></textarea>
+      <textarea class="description" wrap="hard" required></textarea>
       <br />
       <label for="image">Image: Please upload in .jpeg or .png or .gif</label>
       <br />
-      <input type="file" id="image" accept="image/jpeg, image/png, image/gif" />
+      <input
+        type="file"
+        class="image"
+        accept="image/jpeg, image/png, image/gif"
+      />
       <br />
       <button type="submit">Submit</button>
     </form>
@@ -72,7 +76,7 @@
       enctype="multipart/form-data"
     >
       <label for="category">Category:</label>
-      <select name="catid" id="category" required>
+      <select name="catid" class="category" required>
         <option value="1">J-Pop</option>
         <option value="2">K-Pop</option>
         <option value="3">Canton-Pop</option>
@@ -80,18 +84,22 @@
       </select>
       <br />
       <label for="name">CD Name:</label>
-      <input type="text" id="name" required pattern="[A-Za-z0-9\s\-\']+" />
+      <input type="text" class="name" required pattern="[A-Za-z0-9\s\-\']+" />
       <br />
       <label for="price">Price:</label>
-      <input type="number" id="price" required />
+      <input type="number" class="price" required />
       <br />
       <label for="description">Description:</label>
-      <textarea id="description" wrap="hard" required></textarea>
+      <textarea class="description" wrap="hard" required></textarea>
       <br />
       <label for="image">Image:</label>
       <br />
       <label for="image">Please upload in .jpeg or .png or .gif</label>
-      <input type="file" id="image" accept="image/jpeg, image/png, image/gif" />
+      <input
+        type="file"
+        class="image"
+        accept="image/jpeg, image/png, image/gif"
+      />
       <br />
       <button type="submit">Submit</button>
     </form>
