@@ -215,6 +215,8 @@ input[type="number"] {
 #products-list .product {
   display: flex;
   flex-direction: row;
+  align-items: center;
   border: 1px solid #adadad;
   border-radius: 5px;
+  padding: 10px;
 }
