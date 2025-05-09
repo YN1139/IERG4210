@@ -210,6 +210,11 @@ input[type="number"] {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+#products-list .product {
+  display: flex;
+  flex-direction: row;
   border: 1px solid #adadad;
   border-radius: 5px;
 }
