@@ -22,7 +22,7 @@ async function loadForm() {
   const formValue = document.getElementById("action").value;
   console.log(formValue);
   if (formValue === "delete") {
-    fetch("/api/prod")
+    await fetch("/api/prod")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -49,7 +49,7 @@ async function loadForm() {
   }
 
   if (formValue === "edit") {
-    fetch("/api/prod")
+    await fetch("/api/prod")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -67,7 +67,8 @@ async function loadForm() {
           const selectedProduct = data.find(
             (product) => product.pid == selectedPid
           ); //find the product with the selected pid
-          fetch("/api/cat/")
+          const prodCat = document.getElementById("edit-category");
+          prodCat.value = fetch("/api/cat/")
             .then((response) => response.json())
             .then((data) => {
               data.find((category) => selectedProduct.catid == category.catid);
