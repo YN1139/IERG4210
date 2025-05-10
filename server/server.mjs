@@ -288,10 +288,32 @@ app.post(
 
 app.post(
   "/admin/edit-product",
+  upload.single("image"),
   validateCSRF,
   requireAdmin,
   async (req, res) => {
     try {
+      console.log(req.body);
+      const { pid, catid, name, price, description, image } = req.body;
+      const imagePath = req.file ? req.file.path : image; //if there is a file, store the path, otherwise store null
+      console.log(req.body, req.file);
+      const sql =
+        "UPDATE products SET catid = ?, name = ?, price = ?, description = ?, image = ? WHERE pid = ?";
+      const [result] = await db
+        .promise()
+        .query(sql, [catid, name, price, description, imagePath, pid]);
+      console.log(result);
+      //update the image with pid if image path exist in database
+      if (imagePath) {
+        const newImagePath = `../public/users/uploads/${pid}${path.extname(
+          imagePath
+        )}`; //define a new path to access and rename the image file
+        //console.log(imagePath, newImagePath);
+        fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
+        const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
+        const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
+        await db.promise().query(updateSql, [dbImagePath, pid]);
+      }
       res.status(200).redirect("/admin");
     } catch (error) {
       res.status(400).send(error);
