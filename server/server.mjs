@@ -286,7 +286,7 @@ app.post(
       const { pid } = req.body;
       console.log(req.body, pid);
       console.log("Deleting product");
-      const sql = "DELETE FROM products WHERE pid = ?";
+      const sql = "DELETE FROM products WHERE pid IN (?)";
       const [result] = await db.promise().query(sql, [pid]);
       console.log(result);
       res.status(200).redirect("/admin");
