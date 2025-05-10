@@ -155,6 +155,14 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
   });
 });
+
+app.get("/panel", requireAdmin, (req, res) => {
+  if (req.session.admin === 1) {
+    res.redirect("/admin");
+  } else {
+    res.redirect("/panel");
+  }
+});
 //==========API============
 app.get("/api/stripe", (req, res) => {
   const stripe_cart =

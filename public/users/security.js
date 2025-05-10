@@ -43,12 +43,18 @@ async function fetchUserStatus() {
 
       //add logout button if user is logged in
       if (data !== "guest") {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.textContent = "Logout";
-        a.href = "/logout";
-        li.appendChild(a);
-        navBar.appendChild(li);
+        const logout_li = document.createElement("li");
+        const logout_a = document.createElement("a");
+        logout_a.textContent = "Logout";
+        logout_a.href = "/logout";
+        logout_li.appendChild(logout_a);
+        const panel_li = document.createElement("li");
+        const panel_a = document.createElement("a");
+        panel_a.textContent = "Panel";
+        panel_a.href = "/panel";
+        panel_li.appendChild(panel_a);
+        navBar.appendChild(panel_li);
+        navBar.appendChild(logout_li);
       }
     });
 }
