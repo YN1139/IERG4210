@@ -8,7 +8,7 @@
 
 ## Acknowledgement
 
-I acknowledge the use of [Copilot] and [Gemini] as a reference towards the completion of the project.
+I acknowledge the use of [Copilot], [Cursor] and [Gemini] as a reference towards the completion of the project.
 
 ### Transcript
 
@@ -698,3 +698,355 @@ clearCart() {
 ```
 
 You can then call `this.clearCart();` after a successful checkout, or whenever you want to empty the cart.
+
+**Promt**
+When the checkout button is clicked (Order validation): / 4'
+o Pass ONLY the pid and quantity of every individual product to your server using AJAX and cancel the default
+form submission
+o Server generates a digest that is composed of at least:
+▪ Currency
+▪ Merchant’s email address
+▪ A random salt
+▪ The pid and quantity of each selected product (Is quantity positive number?)
+▪ The current price of each selected product gathered from DB
+▪ The total price of all selected products
+Hint: separate them with a delimiter before passing to a hash function
+o Server stores all the items to generate the digest into a new database table called orders
+▪ The user could be logged in or as “guest” to purchase, store username with order in DB
+o Pass the newly inserted orderID (identifying the order) and the generated digest back to the client by
+putting them into the hidden ﬁelds of invoice and custom respectively
+o Clear the shopping cart at the client-side
+o Submit the form now to PayPal using programmatic form submission 4. Setup an endpoint/webhook to get notiﬁed once a payment is completed
+o Validate the authenticity of data by verifying that it is indeed sent from PayPal / 1'
+▪ Your endpoint is served over HTTPS
+o Check that the transaction has not been previously processed / 1'
+o Regenerate a digest with the data provided by PayPal (same order and algorithm) / 2'
+o Validate the digest against the one stored in the database table orders / 2'
+▪ If validated, the integrity of the hashed ﬁelds is assured
+▪ Save the transaction and product list (pid, quantity and price) into DB
+Debugging Hint: You can print out the parameters passed by PayPal to console for checking
+
+5. After the buyer has ﬁnished paying with PayPal, auto redirect the buyer back to your shop / 1'
+6. Display the DB orders table in admin panel: product list, payment status…etc. / 1'
+7. Let members check what they have purchased in the most recent ﬁve orders. / 4'
+   o Show the order information in the member portal.
+
+How to do these requirement above with stripe instead?
+
+### Response
+
+I'll help you implement this with Stripe, following the same requirements but adapting them for Stripe's workflow:
+
+1. First, let's modify the cart.js to handle checkout:
+
+```javascript
+// In cart.js
+class ShoppingCart {
+  async handleCheckout() {
+    if (this.items.size === 0) {
+      alert("Cart is empty.");
+      return;
+    }
+
+    // 1. Prepare order data (only pid and quantity)
+    const orderItems = [...this.items].map(([pid, item]) => ({
+      pid,
+      quantity: item.quantity,
+    }));
+
+    try {
+      // 2. Send to server for validation and digest generation
+      const response = await fetch("/pay", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector('input[name="_csrf"]').value,
+        },
+        body: JSON.stringify(orderItems),
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create checkout session");
+      }
+
+      const { sessionId, orderId, digest } = await response.json();
+
+      // 3. Create hidden form for Stripe
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "/create-checkout-session";
+
+      // Add hidden fields
+      const fields = {
+        order_id: orderId,
+        digest: digest,
+        session_id: sessionId,
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+
+      // 4. Clear cart
+      this.items.clear();
+      this.updateUI();
+      localStorage.removeItem("shopping-cart");
+
+      // 5. Submit form to initiate Stripe checkout
+      form.submit();
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to initiate checkout. Please try again.");
+    }
+  }
+}
+```
+
+2. Server-side implementation:
+
+```javascript
+// In server.mjs
+import crypto from "crypto";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Function to generate digest
+function generateOrderDigest(orderData, salt) {
+  const components = [
+    "HKD", // Currency
+    "merchant@example.com", // Merchant email
+    salt, // Random salt
+    // Order items
+    ...orderData
+      .map((item) => `${item.pid}:${item.quantity}:${item.price}`)
+      .join("|"),
+    // Total amount
+    orderData.reduce((sum, item) => sum + item.price * item.quantity, 0),
+  ];
+
+  return crypto
+    .createHash("sha256")
+    .update(components.join("||"))
+    .digest("hex");
+}
+
+// Create orders table
+const createOrdersTable = `
+CREATE TABLE IF NOT EXISTS orders (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_email VARCHAR(255) NOT NULL,
+  items JSON NOT NULL,
+  total_amount DECIMAL(10,2) NOT NULL,
+  status VARCHAR(20) NOT NULL,
+  payment_id VARCHAR(255),
+  digest VARCHAR(64) NOT NULL,
+  salt VARCHAR(32) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)`;
+
+// Payment endpoint
+app.post("/pay", validateCSRF, async (req, res) => {
+  try {
+    const items = req.body;
+    const userEmail = req.session.email || "guest";
+
+    // 1. Validate quantities
+    if (!items.every((item) => item.quantity > 0)) {
+      return res.status(400).json({ error: "Invalid quantity" });
+    }
+
+    // 2. Get current prices from database
+    const [products] = await db
+      .promise()
+      .query("SELECT pid, price FROM products WHERE pid IN (?)", [
+        items.map((item) => item.pid),
+      ]);
+
+    // 3. Prepare order data with prices
+    const orderData = items.map((item) => {
+      const product = products.find((p) => p.pid === item.pid);
+      return {
+        pid: item.pid,
+        quantity: item.quantity,
+        price: product.price,
+        subtotal: product.price * item.quantity,
+      };
+    });
+
+    const total = orderData.reduce((sum, item) => sum + item.subtotal, 0);
+
+    // 4. Generate salt and digest
+    const salt = crypto.randomBytes(16).toString("hex");
+    const digest = generateOrderDigest(orderData, salt);
+
+    // 5. Store order in database
+    const [orderResult] = await db
+      .promise()
+      .query(
+        "INSERT INTO orders (user_email, items, total_amount, status, digest, salt) VALUES (?, ?, ?, ?, ?, ?)",
+        [userEmail, JSON.stringify(orderData), total, "pending", digest, salt]
+      );
+
+    const orderId = orderResult.insertId;
+
+    // 6. Create Stripe checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: orderData.map((item) => ({
+        price_data: {
+          currency: "hkd",
+          product_data: {
+            name: `Product ${item.pid}`,
+          },
+          unit_amount: item.price * 100,
+        },
+        quantity: item.quantity,
+      })),
+      mode: "payment",
+      success_url: `${process.env.BASE_URL}/success?order_id=${orderId}`,
+      cancel_url: `${process.env.BASE_URL}/cancel`,
+      metadata: {
+        orderId: orderId,
+        digest: digest,
+      },
+    });
+
+    res.json({
+      sessionId: session.id,
+      orderId: orderId,
+      digest: digest,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Payment failed" });
+  }
+});
+
+// Stripe webhook handler
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+    let event;
+
+    try {
+      // 1. Verify Stripe signature
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET
+      );
+    } catch (err) {
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+      const orderId = session.metadata.orderId;
+      const receivedDigest = session.metadata.digest;
+
+      // 2. Check if transaction already processed
+      const [existingOrders] = await db
+        .promise()
+        .query("SELECT * FROM orders WHERE id = ? AND status = ?", [
+          orderId,
+          "completed",
+        ]);
+
+      if (existingOrders.length > 0) {
+        return res.status(400).json({ error: "Transaction already processed" });
+      }
+
+      // 3. Get order data
+      const [orders] = await db
+        .promise()
+        .query("SELECT * FROM orders WHERE id = ?", [orderId]);
+
+      if (orders.length === 0) {
+        return res.status(400).json({ error: "Order not found" });
+      }
+
+      const order = orders[0];
+
+      // 4. Regenerate and validate digest
+      const regeneratedDigest = generateOrderDigest(
+        JSON.parse(order.items),
+        order.salt
+      );
+
+      if (regeneratedDigest !== receivedDigest) {
+        console.error("Digest mismatch:", {
+          stored: order.digest,
+          received: receivedDigest,
+          regenerated: regeneratedDigest,
+        });
+        return res.status(400).json({ error: "Digest validation failed" });
+      }
+
+      // 5. Update order status
+      await db
+        .promise()
+        .query("UPDATE orders SET status = ?, payment_id = ? WHERE id = ?", [
+          "completed",
+          session.payment_intent,
+          orderId,
+        ]);
+    }
+
+    res.json({ received: true });
+  }
+);
+
+// Admin panel endpoint
+app.get("/admin/orders", requireAdmin, async (req, res) => {
+  const [orders] = await db
+    .promise()
+    .query("SELECT * FROM orders ORDER BY created_at DESC");
+  res.json(orders);
+});
+
+// Member portal endpoint
+app.get("/api/user/orders", async (req, res) => {
+  const userEmail = req.session.email;
+  const [orders] = await db
+    .promise()
+    .query(
+      "SELECT * FROM orders WHERE user_email = ? ORDER BY created_at DESC LIMIT 5",
+      [userEmail]
+    );
+  res.json(orders);
+});
+```
+
+This implementation:
+
+1. Follows the same validation and digest generation requirements
+2. Uses Stripe instead of PayPal for payment processing
+3. Maintains the same security measures:
+   - Digest generation with all required components
+   - Transaction verification
+   - Duplicate payment prevention
+   - Data integrity validation
+4. Provides the same functionality:
+   - Order storage
+   - Payment processing
+   - Admin panel access
+   - Member portal access
+
+The main differences from the PayPal implementation are:
+
+1. Using Stripe's checkout session instead of PayPal's form
+2. Using Stripe's webhook for payment confirmation
+3. Using Stripe's built-in security features
+4. Different redirect handling (Stripe handles this automatically)
+
+Let me know if you need any clarification or have questions about specific parts of the implementation!

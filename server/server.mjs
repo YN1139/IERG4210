@@ -140,7 +140,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/admin", requireAdmin);
 app.use("/", express.static(path.join(__dirname, "../public/users")));
 
-//==========Login and Admin Panel============
 app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
@@ -155,13 +154,6 @@ app.get("/logout", (req, res) => {
     res.clearCookie("sess");
     res.redirect("/");
   });
-});
-app.get("/panel", requireAdmin, (req, res) => {
-  if (req.session.admin === 1) {
-    res.redirect("/admin");
-  } else {
-    res.redirect("/panel");
-  }
 });
 //==========API============
 app.get("/api/stripe", (req, res) => {
@@ -249,7 +241,6 @@ app.get("/api/product/:pid", async (req, res) => {
   );
 });
 
-//==========Post Requests============
 //Update the database after receriving the form submission from the client
 app.post(
   "/admin/add-product",
@@ -287,43 +278,6 @@ app.post(
 );
 
 app.post(
-  "/admin/edit-product",
-  upload.single("image"),
-  validateCSRF,
-  requireAdmin,
-  async (req, res) => {
-    try {
-      console.log(req.body);
-      const { pid, catid, name, price, description } = req.body;
-      const imagePath = req.file ? req.file.path : req.body.ogImage; //if there is a file, store the path, otherwise store og image
-      console.log(req.body, req.file, req.body.ogImage);
-      const sql =
-        "UPDATE products SET catid = ?, name = ?, price = ?, description = ?, image = ? WHERE pid = ?";
-      const [result] = await db
-        .promise()
-        .query(sql, [catid, name, price, description, imagePath, pid]);
-      console.log(result);
-      //update the image with pid if image path exist in database
-      if (req.file) {
-        if (imagePath) {
-          const newImagePath = `../public/users/uploads/${pid}${path.extname(
-            imagePath
-          )}`; //define a new path to access and rename the image file
-          //console.log(imagePath, newImagePath);
-          fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
-          const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
-          const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
-          await db.promise().query(updateSql, [dbImagePath, pid]);
-        }
-      }
-      res.status(200).redirect("/admin");
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  }
-);
-
-app.post(
   "/admin/delete-product",
   validateCSRF,
   requireAdmin,
@@ -332,10 +286,6 @@ app.post(
       const { pid } = req.body;
       console.log(req.body, pid);
       console.log("Deleting product");
-      const sql = "DELETE FROM products WHERE pid IN (?)";
-      const [result] = await db.promise().query(sql, [pid]);
-      console.log(result);
-      res.status(200).redirect("/admin");
     } catch (error) {
       res.status(400).send(error);
     }
@@ -490,7 +440,26 @@ app.post("/pay", validateCSRF, async (req, res) => {
     const [orderProducts] = await db
       .promise()
       .query(sql, [items.map((item) => item.pid)]); // Fetch product details one by one into an array
+
     console.log(orderProducts);
+
+    const salt = crypto.randomBytes(64);
+
+    const digestItems = [
+      "HKD",
+      "admin@s27.com",
+      orderProducts
+        .map(
+          (product, i) => `${product.pid}|${itemQuantity[i]}|${product.price}`
+        )
+        .join("|"),
+      orderProducts.reduce(
+        (sum, product, i) => sum + product.price * itemQuantity[i],
+        0
+      ),
+    ].join("|");
+
+    console.log(digestItems);
 
     const session = await stripe.checkout.sessions.create({
       line_items: orderProducts.map((product, i) => ({
