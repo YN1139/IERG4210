@@ -18,7 +18,7 @@ function showForm() {
   document.getElementById(selctedValue).style.display = "block";
 }
 
-function loadForm() {
+async function loadForm() {
   const formValue = document.getElementById("action").value;
   console.log(formValue);
   if (formValue === "delete") {
@@ -65,14 +65,21 @@ function loadForm() {
         selectProduct.addEventListener("change", function () {
           const selectedPid = selectProduct.value;
           const selectedProduct = data.find(
-            (product) => product.pid === selectedPid
+            (product) => product.pid == selectedPid
           ); //find the product with the selected pid
+          fetch("/api/category/")
+            .then((response) => response.json())
+            .then((data) => {
+              data.find((category) => selectedProduct.catid == category.catid);
+            });
           const prodName = document.getElementById("edit-name");
           prodName.value = selectedProduct.name;
           const prodPrice = document.getElementById("edit-price");
           prodPrice.value = selectedProduct.price;
           const prodDesc = document.getElementById("edit-description");
           prodDesc.value = selectedProduct.description;
+          const prodImage = document.getElementById("edit-image");
+          prodImage.value = selectedProduct.image;
         });
       });
   }
