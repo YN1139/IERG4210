@@ -53,16 +53,18 @@ function loadForm() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        const editDropdown = document.createElement("select");
-        editDropdown.name = "pid";
-        editDropdown.id = "edit-dropdown";
+        const editDropdown = document.getElementById("edit-dropdown");
+        editDropdown.innerHTML = "";
+        const selectProduct = document.createElement("select");
+        selectProduct.name = "pid";
+        selectProduct.id = "edit-dropdown";
         data.forEach((product) => {
           const option = document.createElement("option");
           option.value = product.pid;
           option.textContent = product.name;
-          editDropdown.appendChild(option);
+          selectProduct.appendChild(option);
         });
-        document.getElementById("edit-dropdown").appendChild(editDropdown);
+        editDropdown.appendChild(selectProduct);
       });
   }
 }
