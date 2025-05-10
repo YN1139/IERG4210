@@ -140,6 +140,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/admin", requireAdmin);
 app.use("/", express.static(path.join(__dirname, "../public/users")));
 
+//==========Login and Admin Panel============
 app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
@@ -155,7 +156,6 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
   });
 });
-
 app.get("/panel", requireAdmin, (req, res) => {
   if (req.session.admin === 1) {
     res.redirect("/admin");
@@ -249,6 +249,7 @@ app.get("/api/product/:pid", async (req, res) => {
   );
 });
 
+//==========Post Requests============
 //Update the database after receriving the form submission from the client
 app.post(
   "/admin/add-product",
@@ -278,6 +279,19 @@ app.post(
         const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
         await db.promise().query(updateSql, [dbImagePath, pid]);
       }
+      res.status(200).redirect("/admin");
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+);
+
+app.post(
+  "/admin/edit-product",
+  validateCSRF,
+  requireAdmin,
+  async (req, res) => {
+    try {
       res.status(200).redirect("/admin");
     } catch (error) {
       res.status(400).send(error);
