@@ -61,11 +61,11 @@ function loadForm() {
           option.value = product.pid;
           option.textContent = product.name;
           selectProduct.appendChild(option);
-          const prodName = document.getElementsByName("name")[0];
+          const prodName = document.getElementById("edit-name");
           prodName.value = product.name;
-          const prodPrice = document.getElementsByName("price")[0];
+          const prodPrice = document.getElementById("edit-price");
           prodPrice.value = product.price;
-          const prodDesc = document.getElementsByName("description")[0];
+          const prodDesc = document.getElementById("edit-description");
           prodDesc.value = product.description;
         });
       });
