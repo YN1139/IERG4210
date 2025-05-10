@@ -89,13 +89,24 @@
       </select>
       <br />
       <label for="name">CD Name:</label>
-      <input type="text" name="name" required pattern="[A-Za-z0-9\s\-\']+" />
+      <input
+        type="text"
+        name="name"
+        id="edit-name"
+        required
+        pattern="[A-Za-z0-9\s\-\']+"
+      />
       <br />
       <label for="price">Price:</label>
-      <input type="number" name="price" required />
+      <input type="number" name="price" id="edit-price" required />
       <br />
       <label for="description">Description:</label>
-      <textarea name="description" wrap="hard" required></textarea>
+      <textarea
+        name="description"
+        wrap="hard"
+        id="edit-description"
+        required
+      ></textarea>
       <br />
       <label for="image">Please upload in .jpeg or .png or .gif</label>
       <input
