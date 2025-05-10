@@ -67,7 +67,7 @@ async function loadForm() {
           const selectedProduct = data.find(
             (product) => product.pid == selectedPid
           ); //find the product with the selected pid
-          fetch("/api/category/")
+          fetch("/api/cat/")
             .then((response) => response.json())
             .then((data) => {
               data.find((category) => selectedProduct.catid == category.catid);
@@ -78,8 +78,6 @@ async function loadForm() {
           prodPrice.value = selectedProduct.price;
           const prodDesc = document.getElementById("edit-description");
           prodDesc.value = selectedProduct.description;
-          const prodImage = document.getElementById("edit-image");
-          prodImage.value = selectedProduct.image;
         });
       });
   }
