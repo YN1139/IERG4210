@@ -443,7 +443,11 @@ app.post("/pay", validateCSRF, async (req, res) => {
 
     console.log(orderProducts);
 
-    const salt = crypto.randomBytes(64);
+    const salt = crypto.randomBytes(64).toString("hex");
+    const total = orderProducts.reduce(
+      (sum, product, i) => sum + product.price * itemQuantity[i],
+      0
+    );
 
     const digestItems = [
       "HKD",
@@ -453,14 +457,35 @@ app.post("/pay", validateCSRF, async (req, res) => {
           (product, i) => `${product.pid}|${itemQuantity[i]}|${product.price}`
         )
         .join("|"),
-      orderProducts.reduce(
-        (sum, product, i) => sum + product.price * itemQuantity[i],
-        0
-      ),
+      total,
+      salt,
     ].join("|");
 
     console.log(digestItems);
+    const digest = crypto
+      .createHash("sha256")
+      .update(digestItems)
+      .digest("base64");
 
+    console.log(digest);
+
+    const sql =
+      "INSERT INTO orders (products, user, salt, total, digest, status) VALUES (?, ?, ?, ?, ?, ?)";
+    const [newOrder] = await db.promise().query(sql, [
+      orderProducts.map((product, i) => {
+        return {
+          pid: product.pid,
+          quantity: itemQuantity[i],
+          price: product.price,
+        };
+      }),
+      req.session.email ? req.session.email : "guest",
+      salt,
+      total,
+      digest,
+      "pending",
+    ]);
+    console.log(newOrder);
     const session = await stripe.checkout.sessions.create({
       line_items: orderProducts.map((product, i) => ({
         //i = index of the mapping
