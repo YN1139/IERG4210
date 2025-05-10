@@ -68,10 +68,12 @@ async function loadForm() {
             (product) => product.pid == selectedPid
           ); //find the product with the selected pid
           const prodCat = document.getElementById("edit-category");
-          prodCat.value = fetch("/api/cat/")
+          fetch("/api/cat/")
             .then((response) => response.json())
             .then((data) => {
-              data.find((category) => selectedProduct.catid == category.catid);
+              prodCat.value = data.find(
+                (category) => selectedProduct.catid == category.catid
+              ).name;
             });
           const prodName = document.getElementById("edit-name");
           prodName.value = selectedProduct.name;
