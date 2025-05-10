@@ -58,18 +58,21 @@ function loadForm() {
         selectProduct.id = "edit-dropdown";
         data.forEach((product) => {
           const option = document.createElement("option");
-          option.value = product.pid;
+          option.value = product.pid; //set the value of the option to the pid of the product
           option.textContent = product.name;
           selectProduct.appendChild(option);
         });
         selectProduct.addEventListener("change", function () {
-          console.log(selectProduct);
+          const selectedPid = selectProduct.value;
+          const selectedProduct = data.find(
+            (product) => product.pid === selectedPid
+          ); //find the product with the selected pid
           const prodName = document.getElementById("edit-name");
-          prodName.value = selectProduct.name;
+          prodName.value = selectedProduct.name;
           const prodPrice = document.getElementById("edit-price");
-          prodPrice.value = selectProduct.price;
+          prodPrice.value = selectedProduct.price;
           const prodDesc = document.getElementById("edit-description");
-          prodDesc.value = selectProduct.description;
+          prodDesc.value = selectedProduct.description;
         });
       });
   }
