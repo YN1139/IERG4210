@@ -75,6 +75,8 @@ async function loadForm() {
           prodPrice.value = selectedProduct.price;
           const prodDesc = document.getElementById("edit-description");
           prodDesc.value = selectedProduct.description;
+          const prodImage = document.getElementById("ogImage");
+          prodImage.src = selectedProduct.image;
         });
       });
   }
