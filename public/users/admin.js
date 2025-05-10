@@ -47,4 +47,22 @@ function loadForm() {
         });
       });
   }
+
+  if (formValue === "edit") {
+    fetch("/api/prod")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const editDropdown = document.createElement("select");
+        editDropdown.name = "pid";
+        editDropdown.id = "edit-dropdown";
+        data.forEach((product) => {
+          const option = document.createElement("option");
+          option.value = product.pid;
+          option.textContent = product.name;
+          editDropdown.appendChild(option);
+        });
+        document.getElementById("edit-dropdown").appendChild(editDropdown);
+      });
+  }
 }
