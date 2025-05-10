@@ -121,7 +121,8 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
   flex-basis: 25%; /* 4 items per row */
 }
 
-.product img {
+.product img,
+#ogImage {
   width: 200px;
   height: 200px;
 }
