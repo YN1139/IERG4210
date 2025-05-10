@@ -469,9 +469,9 @@ app.post("/pay", validateCSRF, async (req, res) => {
 
     console.log(digest);
 
-    const sql =
+    const order_sql =
       "INSERT INTO orders (products, user, salt, total, digest, status) VALUES (?, ?, ?, ?, ?, ?)";
-    const [newOrder] = await db.promise().query(sql, [
+    const [newOrder] = await db.promise().query(order_sql, [
       orderProducts.map((product, i) => {
         return {
           pid: product.pid,
