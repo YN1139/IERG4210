@@ -473,11 +473,11 @@ app.post("/pay", validateCSRF, async (req, res) => {
       "INSERT INTO orders (products, user, salt, total, digest, status) VALUES (?, ?, ?, ?, ?, ?)";
     const [newOrder] = await db.promise().query(order_sql, [
       orderProducts.map((product, i) => {
-        return {
+        return JSON.stringify({
           pid: product.pid,
           quantity: itemQuantity[i],
           price: product.price,
-        };
+        });
       }),
       req.session.email ? req.session.email : "guest",
       salt,
