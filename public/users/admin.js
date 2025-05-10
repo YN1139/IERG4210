@@ -53,9 +53,7 @@ function loadForm() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        const editDropdown = document.getElementById("edit-dropdown");
-        editDropdown.innerHTML = "";
-        const selectProduct = document.createElement("select");
+        const selectProduct = document.getElementById("edit-dropdown");
         selectProduct.name = "pid";
         selectProduct.id = "edit-dropdown";
         data.forEach((product) => {
@@ -64,7 +62,6 @@ function loadForm() {
           option.textContent = product.name;
           selectProduct.appendChild(option);
         });
-        editDropdown.appendChild(selectProduct);
       });
   }
 }
