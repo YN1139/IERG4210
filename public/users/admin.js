@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const formDropdown = document.getElementById("action");
   formDropdown.addEventListener("change", function () {
     showForm();
-    loadForm();
     fetchCategories();
+    loadForm();
   });
   const switchTo = document.querySelectorAll(".categoryMenu a");
   console.log(switchTo);
@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         hideOrders();
         showForm();
-        loadForm();
         fetchCategories();
+        loadForm();
       }
     });
   });
@@ -84,7 +84,7 @@ async function loadForm() {
   }
 
   if (formValue === "edit") {
-    fetchCategories();
+    await fetchCategories();
     await fetch("/api/prod")
       .then((response) => response.json())
       .then((data) => {
@@ -180,8 +180,8 @@ async function fetchOrders() {
     });
 }
 
-function fetchCategories() {
-  fetch("/api/cat")
+async function fetchCategories() {
+  await fetch("/api/cat")
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
