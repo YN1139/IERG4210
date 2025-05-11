@@ -126,7 +126,6 @@ function fetchOrders() {
           });
 
         orderContainer.appendChild(orderItem);
-        orderContainer.appendChild(orderProducts);
       });
       const orderTotal = document.createElement("td");
       orderTotal.textContent = order.total;
