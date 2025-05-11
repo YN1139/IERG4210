@@ -11,7 +11,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import Stripe from "stripe";
-import { connect } from "http2";
+import nodemailer from "nodemailer";
 
 const stripe = Stripe(
   "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
@@ -195,6 +195,33 @@ app.post(
         const update_sql = "UPDATE orders SET status = ? WHERE orderID = ?";
         await db.promise().query(update_sql, ["completed", order_id]);
         console.log("Order completed.");
+
+        const customerEmail = session.customer_details.email;
+
+        let s27 = await nodemailer.createTestAccount();
+
+        let transporter = nodemailer.createTransport({
+          host: "smtp.ethereal.email",
+          port: 465,
+          secure: true,
+          auth: {
+            user: s27.user,
+            pass: s27.pass,
+          },
+        });
+
+        let info = await transporter.sendMail({
+          from: '"S27 shop" <admin@s27.com>',
+          to: customerEmail,
+          subject: "Your Order Invoice",
+          text: `Thank you for your order!`,
+          html: `<h1>Thank you for your order!</h1>
+                 <p>Your order ID is <b>${order_id}</b>.</p>
+                 <p>Please check your order status at our website.</p>`,
+        });
+
+        console.log("Invoice email sent: %s", info.messageId);
+
         res.json({ received: true });
       } catch (error) {
         console.error("Error completing order:", error);

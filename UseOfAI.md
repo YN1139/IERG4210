@@ -1050,3 +1050,150 @@ The main differences from the PayPal implementation are:
 4. Different redirect handling (Stripe handles this automatically)
 
 Let me know if you need any clarification or have questions about specific parts of the implementation!
+
+**Prompt**
+how can I send invoice with email after the checkout is completed with stripe?
+
+### Response
+
+To **send an invoice or order confirmation email after a Stripe Checkout is completed**, you need to do this in your **webhook handler** after verifying the payment. Stripe does not send a custom invoice email for one-time Checkout Sessions by default (it only does for recurring/subscription invoices), so you must send the email yourself from your server.
+
+Here’s how you can do it:
+
+---
+
+## 1. **Choose an Email Sending Library**
+
+For Node.js, the most popular is [`nodemailer`](https://nodemailer.com/about/).
+
+Install it:
+
+```bash
+npm install nodemailer
+```
+
+---
+
+## 2. **Update Your Webhook Handler**
+
+After you verify the payment and update the order status, send the email.
+
+**Example:**
+
+```js
+import nodemailer from "nodemailer";
+
+// ... your other imports and code ...
+
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    } catch (err) {
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+      const { order_id, digest } = session.metadata;
+
+      try {
+        // Fetch order from DB
+        const order_sql =
+          "SELECT * FROM orders WHERE orderID = ? AND status = ?";
+        const [orderRows] = await db
+          .promise()
+          .query(order_sql, [order_id, "pending"]);
+        if (orderRows.length === 0)
+          throw new Error("Order not found or completed.");
+        const order = orderRows[0];
+
+        // ... your digest verification and status update code ...
+
+        // === SEND EMAIL HERE ===
+        // Get customer email from session or order (if you store it)
+        // For example, if you store email in the order:
+        const customerEmail = order.user; // Adjust this if your column is named differently
+
+        // Set up nodemailer transporter (use your real SMTP credentials)
+        let transporter = nodemailer.createTransport({
+          host: "smtp.example.com",
+          port: 465,
+          secure: true, // true for 465, false for other ports
+          auth: {
+            user: "your@email.com",
+            pass: "yourEmailPassword",
+          },
+        });
+
+        // Compose the email
+        let info = await transporter.sendMail({
+          from: '"Your Shop" <your@email.com>',
+          to: customerEmail,
+          subject: "Your Order Invoice",
+          text: `Thank you for your order! Your order ID is ${order_id}.`,
+          html: `<h1>Thank you for your order!</h1>
+                 <p>Your order ID is <b>${order_id}</b>.</p>
+                 <p>Order details: ${order.products}</p>
+                 <p>Total: HKD ${order.total}</p>`,
+        });
+
+        console.log("Invoice email sent: %s", info.messageId);
+
+        res.json({ received: true });
+      } catch (error) {
+        console.error("Error completing order:", error);
+        res.json({ received: false });
+      }
+    }
+  }
+);
+```
+
+---
+
+## 3. **What to Include in the Email**
+
+- Order ID
+- List of products (parse the JSON if you want a nice format)
+- Total price
+- Any other info (shipping, etc.)
+
+---
+
+## 4. **Tips**
+
+- **Do not send emails in the client-side code**; always do it server-side after payment is confirmed.
+- You can use Gmail, SendGrid, Mailgun, or any SMTP provider with nodemailer.
+- For production, use environment variables for your SMTP credentials.
+
+---
+
+## 5. **Optional: Attach a PDF Invoice**
+
+If you want to attach a PDF invoice, you can generate one (using libraries like [pdfkit](https://pdfkit.org/)) and attach it in the `attachments` field of `sendMail`.
+
+---
+
+## 6. **Stripe Invoices (for Subscriptions/Recurring)**
+
+If you use Stripe’s **invoicing** features (for subscriptions), Stripe can send invoices automatically. For one-time Checkout, you must send your own.
+
+---
+
+### **Summary**
+
+- Use your webhook handler to send the email after payment is confirmed.
+- Use `nodemailer` or a similar library.
+- Include order details in the email.
+- Make sure to only send the email after verifying the payment and updating the order status.
+
+---
+
+**If you want a more detailed example (with product list formatting, etc.), just ask!**
