@@ -364,6 +364,17 @@ app.get("/api/user-orders", async (req, res) => {
 
 //Update the database after receriving the form submission from the client
 app.post(
+  "/admin/add-category",
+  validateCSRF,
+  requireAdmin,
+  async (req, res) => {
+    const { name } = req.body;
+    const sql = "INSERT INTO categories (name) VALUES (?)";
+    const [result] = await db.promise().query(sql, [name]);
+    res.status(200).redirect("/admin");
+  }
+);
+app.post(
   "/admin/add-product",
   upload.single("image"),
   validateCSRF,
