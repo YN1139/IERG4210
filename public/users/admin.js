@@ -51,9 +51,8 @@ function showForm() {
 
 async function loadForm() {
   const formValue = document.getElementById("action").value;
-  console.log(formValue);
   if (formValue === "add") {
-    fetchCategories();
+    await fetchCategories();
   }
   if (formValue === "delete") {
     await fetch("/api/prod")
@@ -114,8 +113,9 @@ async function loadForm() {
         });
       });
   }
-  if (formValue == "add-category") {
-    await fetchCategories();
+  if (formValue === "add-cat") {
+    const addCatName = document.getElementById("add-cat-name");
+    addCatName.value = "";
   }
   if (formValue === "delete-cat") {
     await fetchCategories();
