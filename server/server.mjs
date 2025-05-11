@@ -474,11 +474,13 @@ app.post("/pay", validateCSRF, async (req, res) => {
 
     const orderData = items.map((item) => {
       const product = orderProducts.find((p) => p.pid === item.pid);
+      if (!product) {
+        throw new Error(`Product with ID ${item.pid} not found`);
+      }
       return {
         pid: item.pid,
         quantity: item.quantity,
-        price: product.price,
-        subtotal: product.price * item.quantity,
+        price: product.price * item.quantity,
       };
     });
 
