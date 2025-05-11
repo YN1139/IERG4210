@@ -301,14 +301,18 @@ app.post(
     try {
       console.log(req.body);
       const { pid, catid, name, price, description } = req.body;
-      const imagePath = req.file ? req.file.path : req.body.ogImage; //if there is a file, store the path, otherwise store og image
-      console.log(req.body, req.file, req.body.ogImage);
+
+      const imagesql = "SELECT image FROM products WHERE pid = ?";
+      const [image] = await db.promise().query(imagesql, [pid]);
+      console.log(image);
+      const imagePath = req.file ? req.file.path : image[0].image;
       const sql =
         "UPDATE products SET catid = ?, name = ?, price = ?, description = ?, image = ? WHERE pid = ?";
       const [result] = await db
         .promise()
         .query(sql, [catid, name, price, description, imagePath, pid]);
       console.log(result);
+
       //update the image with pid if image path exist in database
       if (req.file) {
         if (imagePath) {
