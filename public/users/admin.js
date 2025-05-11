@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     showForm();
     loadForm();
   });
-  const switchTo = document.getElementsByClassName("categoryMenu");
+  const switchTo = document.querySelector(".categoryMenu a");
   console.log(switchTo);
   switchTo.addEventListener("click", function () {
     if (switchTo.textContent === "Products") {
