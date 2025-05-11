@@ -87,5 +87,22 @@ function fetchOrders() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      const orderContainer = document.createElement("tr");
+      orderContainer.id = "order-container";
+      data.forEach((order) => {
+        const orderItem = document.createElement("td");
+        orderItem.textContent = order.id;
+        const orderProducts = document.createElement("td");
+        orderProducts.textContent = order.products;
+        const orderTotal = document.createElement("td");
+        orderTotal.textContent = order.total;
+        const orderStatus = document.createElement("td");
+        orderStatus.textContent = order.status;
+        orderContainer.appendChild(orderItem);
+        orderContainer.appendChild(orderProducts);
+        orderContainer.appendChild(orderTotal);
+        orderContainer.appendChild(orderStatus);
+      });
+      document.getElementById("orders-list").appendChild(orderContainer);
     });
 }
