@@ -246,7 +246,7 @@ app.get("/login", (req, res) => {
 app.get("/product", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/users/product.html"));
 });
-app.get("/member-panel", (req, res) => {
+app.get("/member-panel", checkLogin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/member-panel.html"));
 });
 app.get("/logout", (req, res) => {
@@ -724,5 +724,13 @@ function requireAdmin(req, res, next) {
     next();
   } else {
     res.redirect("/"); //redirect to homepage if not admin
+  }
+}
+
+function checkLogin(req, res, next) {
+  if (req.session.email) {
+    next();
+  } else {
+    res.redirect("/login"); //redirect to login page if not logged in
   }
 }
