@@ -197,8 +197,10 @@ app.post(
         console.log("Order completed.");
 
         const customerEmail = session.customer_details.email;
+        console.log(customerEmail);
 
         let s27 = await nodemailer.createTestAccount();
+        console.log(s27);
 
         let transporter = nodemailer.createTransport({
           host: "smtp.ethereal.email",
