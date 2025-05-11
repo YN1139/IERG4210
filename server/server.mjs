@@ -169,10 +169,19 @@ app.post(
         const verifyDigestItem = [
           "HKD",
           "admin@s27.com",
-          order[0].products,
+          order[0].products
+            .map(
+              (product) =>
+                `${product.pid}|${product.quantity}|${
+                  product.price * product.quantity
+                }`
+            )
+            .join("|"),
           order[0].total,
           order[0].salt,
         ].join("|");
+
+        console.log(verifyDigestItem);
 
         const verifyDigest = crypto
           .createHash("sha256")
