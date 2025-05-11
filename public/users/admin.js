@@ -12,17 +12,15 @@ document.addEventListener("DOMContentLoaded", function () {
         hideForms();
         fetchOrders();
       } else {
-        hideTable();
-        showForm();
-        loadForm();
+        hideOrders();
       }
     });
   });
 });
 
-function hideTable() {
-  const table = document.getElementById("orders-table");
-  table.style.display = "none";
+function hideOrders() {
+  const ordersContainer = document.getElementById("orders-container");
+  ordersContainer.style.display = "none";
 }
 
 function showForm() {
@@ -120,36 +118,46 @@ function fetchOrders() {
   fetch("/api/orders")
     .then((response) => response.json())
     .then(async (data) => {
-      const ordersList = document.getElementById("orders-list");
+      const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";
 
+      const box = document.createElement("div");
+      box.className = "order-box";
+
       data.forEach((order) => {
-        const orderItem = document.createElement("tr");
-        orderItem.id = "order-container";
-        orderItem.textContent = order.id;
-        fetch("api/product/" + order.products[0].pid)
+        // Order ID
+        const idDiv = document.createElement("div");
+        idDiv.textContent = `Order #${order.id}`;
+        box.appendChild(idDiv);
+
+        const productsDiv = document.createElement("div");
+
+        fetch("/api/product/" + order.products[0].pid)
           .then((response) => response.json())
           .then((product) => {
-            console.log(product);
-            const orderProducts = document.createElement("td");
-            orderProducts.textContent = product.name;
-            orderContainer.appendChild(orderProducts);
-            const orderPrice = document.createElement("td");
-            orderPrice.textContent = product.price;
-            orderContainer.appendChild(orderPrice);
-            const orderQuantity = document.createElement("td");
-            orderQuantity.textContent = order.quantity;
-            orderContainer.appendChild(orderQuantity);
+            const productDiv = document.createElement("div");
+            productDiv.textContent = product.name;
+            productsDiv.appendChild(productDiv);
+            const priceDiv = document.createElement("div");
+            priceDiv.textContent = product.price;
+            productsDiv.appendChild(priceDiv);
+            const quantityDiv = document.createElement("div");
+            quantityDiv.textContent = order.quantity;
+            productsDiv.appendChild(quantityDiv);
           });
+        box.appendChild(productsDiv);
 
-        orderContainer.appendChild(orderItem);
+        const totalDiv = document.createElement("div");
+        totalDiv.className = "order-total";
+        totalDiv.innerHTML = `<b>Total:</b><br>HKD $${order.total}`;
+        box.appendChild(totalDiv);
+
+        const statusDiv = document.createElement("div");
+        statusDiv.className = "order-status";
+        statusDiv.innerHTML = `<b>Status:</b><br>${order.status}`;
+        box.appendChild(statusDiv);
+
+        container.appendChild(box);
       });
-      const orderTotal = document.createElement("td");
-      orderTotal.textContent = data.total;
-      const orderStatus = document.createElement("td");
-      orderStatus.textContent = data.status;
-      orderContainer.appendChild(orderTotal);
-      orderContainer.appendChild(orderStatus);
-      document.getElementById("orders-list").appendChild(orderContainer);
     });
 }

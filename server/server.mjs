@@ -203,28 +203,27 @@ app.post(
         console.log(s27);
 
         const transporter = nodemailer.createTransport({
-          host: 'smtp.ethereal.email',
+          host: "smtp.ethereal.email", //test account
           port: 587,
           auth: {
-              user: 'keith.nader88@ethereal.email',
-              pass: 'b6ZwkrmajASa6amR2S'
-          }
-      });
+            user: "keith.nader88@ethereal.email",
+            pass: "b6ZwkrmajASa6amR2S",
+          },
+        });
 
         let info = await transporter.sendMail({
           from: '"S27 shop" <shop27@s27.com>',
           to: customerEmail,
           subject: "Your Order Invoice",
           text: `Thank you for your order!`,
-          html: `<h1>Thank you for your order!</h1>
+          html: `<h1>Thank you for your order in s27 shop!</h1>
                  <p>Your order ID is <b>${order_id}</b>.</p>
                  <p>Please check your order status at our website.</p>`,
         });
 
         console.log("Invoice email sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
-        res.json({ received: true });
+        res.json({ received: true, url: nodemailer.getTestMessageUrl(info) });
       } catch (error) {
         console.error("Error completing order:", error);
         res.json({ received: false });
