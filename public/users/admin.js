@@ -133,14 +133,15 @@ function fetchOrders() {
       const box = document.createElement("div");
       box.className = "order-box";
 
-      // Order ID
-      const idDiv = document.createElement("div");
-      idDiv.textContent = `Order #${data.orderID}`;
-      box.appendChild(idDiv);
-
       data.forEach((order) => {
         console.log(order);
+        // Order ID
+        const idDiv = document.createElement("div");
+        idDiv.textContent = `Order #${data.orderID}`;
+        box.appendChild(idDiv);
+
         const productsDiv = document.createElement("div");
+
         fetch("/api/product/" + order.products[0].pid)
           .then((response) => response.json())
           .then((product) => {
@@ -153,8 +154,8 @@ function fetchOrders() {
             const quantityDiv = document.createElement("div");
             quantityDiv.textContent = order.quantity;
             productsDiv.appendChild(quantityDiv);
+            box.appendChild(productsDiv);
           });
-        box.appendChild(productsDiv);
 
         const totalDiv = document.createElement("div");
         totalDiv.className = "order-total";
