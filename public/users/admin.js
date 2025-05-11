@@ -4,6 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
     showForm();
     loadForm();
   });
+  const switchTo = document.getElementsByClassName("categoryMenu");
+  console.log(switchTo);
+  switchTo.addEventListener("click", function () {
+    if (switchTo.textContent === "Products") {
+      redirect("/admin");
+    } else if (switchTo.textContent === "Orders") {
+      fetchOrders();
+    }
+  });
 });
 
 function showForm() {
