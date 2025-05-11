@@ -354,7 +354,7 @@ app.get("/api/orders", requireAdmin, async (req, res) => {
   res.json(orders);
 });
 
-app.get("/api/user-orders", requireAdmin, async (req, res) => {
+app.get("/api/user-orders", async (req, res) => {
   const sql = "SELECT * FROM orders WHERE user = ?";
   const [orders] = await db.promise().query(sql, [req.session.email]);
   res.json(orders);
