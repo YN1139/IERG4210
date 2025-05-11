@@ -48,12 +48,7 @@
         >
           <input type="hidden" name="_csrf" />
           <label for="category">Category:</label>
-          <select name="catid" class="category" id="add-category" required>
-            <!-- <option value="1">J-Pop</option>
-            <option value="2">K-Pop</option>
-            <option value="3">Canton-Pop</option>
-            <option value="4">Movie Soundtrack</option> -->
-          </select>
+          <select name="catid" id="add-category" required></select>
           <br />
           <label for="name">CD Name:</label>
           <input
@@ -148,15 +143,15 @@
         </form>
 
         <form
-          id="add-category"
-          name="add-category"
+          id="add-cat"
+          name="add-cat"
           action="/admin/add-category"
           method="post"
           enctype="application/x-www-form-urlencoded"
         >
           <input type="hidden" name="_csrf" />
           <label for="category">Category:</label>
-          <input type="text" name="name" />
+          <input type="text" name="name" id="add-cat-name" />
           <button type="submit">Submit</button>
         </form>
 
