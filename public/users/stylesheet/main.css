@@ -86,6 +86,11 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
   padding: 10px 5px;
 }
 
+.admin-form {
+  display: flex;
+  flex-direction: column;
+}
+
 .categoryMenu {
   background-color: antiquewhite;
   border-radius: 8px;
