@@ -196,9 +196,6 @@ class ShoppingCart {
       alert("Failed to create checkout session. Please try again.");
       return;
     }
-
-    console.log("response.json()", await response.json());
-
     const session = await response.json();
 
     if (session.error) {
