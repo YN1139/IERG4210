@@ -79,6 +79,13 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
   padding: 10px 5px;
 }
 
+.admin-container {
+  display: flex;
+  width: 100%;
+  margin: 0 0;
+  padding: 10px 5px;
+}
+
 .categoryMenu {
   background-color: antiquewhite;
   border-radius: 8px;
