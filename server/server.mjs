@@ -473,9 +473,10 @@ app.post("/pay", validateCSRF, async (req, res) => {
     console.log(digest);
 
     const orderData = items.map((item) => {
-      const product = orderProducts.find((p) => p.pid == item.pid);
+      //map the items to the orderProducts
+      const product = orderProducts.find((product) => product.pid == item.pid); //find the product in items (cart) in the orderProducts
       if (!product) {
-        throw new Error(`Product with ID ${item.pid} not found`);
+        throw new Error(`Product with ID ${item.pid} not found`); //debug
       }
       return {
         pid: item.pid,
@@ -497,6 +498,9 @@ app.post("/pay", validateCSRF, async (req, res) => {
         "pending",
       ]);
     console.log(newOrder);
+
+    const order_id = newOrder.insertId;
+
     const session = await stripe.checkout.sessions.create({
       line_items: orderProducts.map((product, i) => ({
         //i = index of the mapping
@@ -513,9 +517,13 @@ app.post("/pay", validateCSRF, async (req, res) => {
       mode: "payment",
       success_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
       cancel_url: "https://s27.ierg4210.ie.cuhk.edu.hk/",
+      metadata: {
+        order_id: order_id,
+        digest: digest,
+      },
     });
     console.log("Session created:", session);
-    res.json({ id: session.id }); // Redirect to the checkout session URL
+    res.json({ id: session.id, digest: digest, order_id: order_id }); // Redirect to the checkout session URL
   } catch (error) {
     console.error("Error creating payment intent:", error);
     res.status(500).send({ error: "Payment failed" });
