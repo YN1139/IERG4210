@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   switchTo.forEach((a) => {
     a.addEventListener("click", function () {
       if (a.textContent === "Orders") {
+        hideForms();
         fetchOrders();
       }
     });
@@ -91,6 +92,13 @@ async function loadForm() {
   }
 }
 
+function hideForms() {
+  const forms = document.querySelectorAll("form");
+  forms.forEach((form) => {
+    form.style.display = "none";
+  });
+}
+
 function fetchOrders() {
   fetch("/api/orders")
     .then((response) => response.json())
@@ -102,7 +110,17 @@ function fetchOrders() {
         const orderItem = document.createElement("td");
         orderItem.textContent = order.id;
         const orderProducts = document.createElement("td");
-        orderProducts.textContent = order.products;
+        order.products.forEach((product) => {
+          const productItem = document.createElement("td");
+          productItem.textContent = product.name;
+          orderProducts.appendChild(productItem);
+          const productPrice = document.createElement("td");
+          productPrice.textContent = product.price;
+          productItem.appendChild(productPrice);
+          const productQuantity = document.createElement("td");
+          productQuantity.textContent = product.quantity;
+          productItem.appendChild(productQuantity);
+        });
         const orderTotal = document.createElement("td");
         orderTotal.textContent = order.total;
         const orderStatus = document.createElement("td");
