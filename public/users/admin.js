@@ -81,7 +81,6 @@ async function loadForm() {
         });
       });
   }
-
   if (formValue === "edit") {
     await fetchCategories();
     await fetch("/api/prod")
@@ -114,6 +113,13 @@ async function loadForm() {
           prodImage.src = selectedProduct.image;
         });
       });
+  }
+  if (formValue === "add-category") {
+    document.getElementById(formValue).style.display = "block";
+  }
+  if (formValue === "delete-cat") {
+    document.getElementById(formValue).style.display = "block";
+    await fetchCategories();
   }
 }
 
