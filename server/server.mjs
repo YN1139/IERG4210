@@ -211,7 +211,7 @@ app.post(
         });
 
         let info = await transporter.sendMail({
-          from: '"S27 shop" <admin@s27.com>',
+          from: '"S27 shop" <shop27@s27.com>',
           to: customerEmail,
           subject: "Your Order Invoice",
           text: `Thank you for your order!`,
