@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const formDropdown = document.getElementById("action");
   formDropdown.addEventListener("change", function () {
     showForm();
+    fetchCategories();
     loadForm();
   });
   const switchTo = document.querySelectorAll(".categoryMenu a");
