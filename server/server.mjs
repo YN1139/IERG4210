@@ -202,15 +202,14 @@ app.post(
         let s27 = await nodemailer.createTestAccount();
         console.log(s27);
 
-        let transporter = nodemailer.createTransport({
-          host: "smtp.ethereal.email",
-          port: 465,
-          secure: true,
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.ethereal.email',
+          port: 587,
           auth: {
-            user: s27.user,
-            pass: s27.pass,
-          },
-        });
+              user: 'keith.nader88@ethereal.email',
+              pass: 'b6ZwkrmajASa6amR2S'
+          }
+      });
 
         let info = await transporter.sendMail({
           from: '"S27 shop" <shop27@s27.com>',
@@ -223,6 +222,7 @@ app.post(
         });
 
         console.log("Invoice email sent: %s", info.messageId);
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
         res.json({ received: true });
       } catch (error) {
