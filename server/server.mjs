@@ -473,7 +473,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
     console.log(digest);
 
     const orderData = items.map((item) => {
-      const product = products.find((p) => p.pid === item.pid);
+      const product = orderProducts.find((p) => p.pid === item.pid);
       return {
         pid: item.pid,
         quantity: item.quantity,
