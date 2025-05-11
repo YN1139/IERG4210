@@ -192,7 +192,7 @@ app.post(
           throw new Error("Invalid digest.");
         }
 
-        const update_sql = "UPDATE orders SET status = ? WHERE id = ?";
+        const update_sql = "UPDATE orders SET status = ? WHERE orderID = ?";
         await db.promise().query(update_sql, ["completed", order_id]);
         console.log("Order completed.");
         res.json({ received: true });
