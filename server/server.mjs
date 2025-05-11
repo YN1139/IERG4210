@@ -414,7 +414,8 @@ app.post(
         await sharp(imagePath)
           .resize({ width: 500, fit: "inside" }) //allow autoscale on height
           .toFile(newImagePath);
-        fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
+        //fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
+        fs.unlinkSync(imagePath); //delete the original image file
         const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
         const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
         await db.promise().query(updateSql, [dbImagePath, pid]);
@@ -457,7 +458,8 @@ app.post(
           await sharp(imagePath)
             .resize({ width: 500, fit: "inside" })
             .toFile(newImagePath);
-          fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
+          //fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
+          fs.unlinkSync(imagePath); //delete the original image file
           const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
           const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
           await db.promise().query(updateSql, [dbImagePath, pid]);
