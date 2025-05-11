@@ -238,7 +238,7 @@ input[type="number"] {
 
 #edit,
 #delete,
-#add-category,
+#add-cat,
 #delete-cat {
   display: none;
 }
