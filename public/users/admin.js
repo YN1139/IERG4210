@@ -9,14 +9,22 @@ document.addEventListener("DOMContentLoaded", function () {
   switchTo.forEach((a) => {
     a.addEventListener("click", function () {
       if (a.textContent === "Orders") {
+        showOrders();
         hideForms();
         fetchOrders();
       } else {
         hideOrders();
+        showForm();
+        loadForm();
       }
     });
   });
 });
+
+function showOrders() {
+  const ordersContainer = document.getElementById("orders-container");
+  ordersContainer.style.display = "flex";
+}
 
 function hideOrders() {
   const ordersContainer = document.getElementById("orders-container");
@@ -118,18 +126,19 @@ function fetchOrders() {
   fetch("/api/orders")
     .then((response) => response.json())
     .then(async (data) => {
+      console.log(data);
       const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";
 
       const box = document.createElement("div");
       box.className = "order-box";
 
-      data.forEach((order) => {
-        // Order ID
-        const idDiv = document.createElement("div");
-        idDiv.textContent = `Order #${order.id}`;
-        box.appendChild(idDiv);
+      // Order ID
+      const idDiv = document.createElement("div");
+      idDiv.textContent = `Order #${data.id}`;
+      box.appendChild(idDiv);
 
+      data.forEach((order) => {
         const productsDiv = document.createElement("div");
 
         fetch("/api/product/" + order.products[0].pid)
