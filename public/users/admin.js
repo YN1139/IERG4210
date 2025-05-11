@@ -172,3 +172,21 @@ function fetchOrders() {
       });
     });
 }
+
+function fetchCategories() {
+  fetch("/api/categories")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const categoriesList =
+        document.getElementById("add-category") ||
+        document.getElementById("edit-category");
+      categoriesList.innerHTML = "";
+      data.forEach((category) => {
+        const option = document.createElement("option");
+        option.value = category.catid;
+        option.textContent = category.name;
+        categoriesList.appendChild(option);
+      });
+    });
+}
