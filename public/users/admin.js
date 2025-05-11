@@ -114,8 +114,8 @@ async function loadForm() {
         });
       });
   }
-  if (formValue === "add-category") {
-    showForm();
+  if (formValue == "add-category") {
+    await fetchCategories();
   }
   if (formValue === "delete-cat") {
     await fetchCategories();
@@ -189,9 +189,19 @@ async function fetchCategories() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      const addCategoriesList = document.getElementById("add-category");
       const editCategoriesList = document.getElementById("edit-category");
       const deleteCategoriesList = document.getElementById("delete-category");
 
+      if (addCategoriesList) {
+        addCategoriesList.innerHTML = "";
+        data.forEach((category) => {
+          const option = document.createElement("option");
+          option.value = category.catid;
+          option.textContent = category.name;
+          addCategoriesList.appendChild(option);
+        });
+      }
       if (editCategoriesList) {
         editCategoriesList.innerHTML = "";
         data.forEach((category) => {
