@@ -6,10 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   const switchTo = document.querySelectorAll(".categoryMenu a");
   console.log(switchTo);
-  switchTo.addEventListener("click", function () {
-    if (switchTo.textContent === "Orders") {
-      fetchOrders();
-    }
+  switchTo.forEach((a) => {
+    a.addEventListener("click", function () {
+      if (a.textContent === "Orders") {
+        fetchOrders();
+      }
+    });
   });
 });
 
