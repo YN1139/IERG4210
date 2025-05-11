@@ -259,7 +259,7 @@ app.get("/panel", (req, res) => {
   if (req.session.admin === 1) {
     res.redirect("/admin");
   } else {
-    res.redirect("/memeber-panel");
+    res.redirect("/member-panel");
   }
 });
 //==========API============
