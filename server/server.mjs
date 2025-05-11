@@ -155,6 +155,13 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
   });
 });
+app.get("/panel", requireAdmin, (req, res) => {
+  if (req.session.admin === 1) {
+    res.redirect("/admin");
+  } else {
+    res.redirect("/memeber-panel");
+  }
+});
 //==========API============
 app.get("/api/stripe", (req, res) => {
   const stripe_cart =
@@ -286,6 +293,43 @@ app.post(
 );
 
 app.post(
+  "/admin/edit-product",
+  upload.single("image"),
+  validateCSRF,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      console.log(req.body);
+      const { pid, catid, name, price, description } = req.body;
+      const imagePath = req.file ? req.file.path : req.body.ogImage; //if there is a file, store the path, otherwise store og image
+      console.log(req.body, req.file, req.body.ogImage);
+      const sql =
+        "UPDATE products SET catid = ?, name = ?, price = ?, description = ?, image = ? WHERE pid = ?";
+      const [result] = await db
+        .promise()
+        .query(sql, [catid, name, price, description, imagePath, pid]);
+      console.log(result);
+      //update the image with pid if image path exist in database
+      if (req.file) {
+        if (imagePath) {
+          const newImagePath = `../public/users/uploads/${pid}${path.extname(
+            imagePath
+          )}`; //define a new path to access and rename the image file
+          //console.log(imagePath, newImagePath);
+          fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
+          const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
+          const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
+          await db.promise().query(updateSql, [dbImagePath, pid]);
+        }
+      }
+      res.status(200).redirect("/admin");
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+);
+
+app.post(
   "/admin/delete-product",
   validateCSRF,
   requireAdmin,
@@ -294,6 +338,10 @@ app.post(
       const { pid } = req.body;
       console.log(req.body, pid);
       console.log("Deleting product");
+      const sql = "DELETE FROM products WHERE pid IN (?)";
+      const [result] = await db.promise().query(sql, [pid]);
+      console.log(result);
+      res.status(200).redirect("/admin");
     } catch (error) {
       res.status(400).send(error);
     }
