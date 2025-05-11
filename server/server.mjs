@@ -135,6 +135,64 @@ app.use((req, res, next) => {
   next();
 });
 
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    } catch (err) {
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+      console.log(session);
+      const { order_id, digest } = session.metadata;
+
+      try {
+        const order_sql = "SELECT * FROM orders WHERE id = ? AND status = ?";
+        const [order] = await db
+          .promise()
+          .query(order_sql, [order_id, "pending"]);
+        console.log(order);
+
+        if (order.length === 0) {
+          throw new Error("Order not found or completed.");
+        }
+
+        const verifyDigestItem = [
+          "HKD",
+          "admin@s27.com",
+          order[0].products,
+          order[0].total,
+          order[0].salt,
+        ].join("|");
+
+        const verifyDigest = crypto
+          .createHash("sha256")
+          .update(verifyDigestItem)
+          .digest("base64");
+
+        if (verifyDigest !== digest) {
+          throw new Error("Invalid digest.");
+        }
+
+        const update_sql = "UPDATE orders SET status = ? WHERE id = ?";
+        await db.promise().query(update_sql, ["completed", order_id]);
+        console.log("Order completed.");
+      } catch (error) {
+        console.error("Error completing order:", error);
+      }
+    }
+    res.json({ received: true });
+  }
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/admin", requireAdmin);
@@ -591,64 +649,6 @@ app.post("/pay", validateCSRF, async (req, res) => {
 });
 
 const endpointSecret = "whsec_sCR0K7Ua3QVMJM3CUpzxHzdNRR47hn4z";
-
-app.post(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  async (req, res) => {
-    const sig = req.headers["stripe-signature"];
-    let event;
-
-    try {
-      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-    } catch (err) {
-      res.status(400).send(`Webhook Error: ${err.message}`);
-      return;
-    }
-
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object;
-      console.log(session);
-      const { order_id, digest } = session.metadata;
-
-      try {
-        const order_sql = "SELECT * FROM orders WHERE id = ? AND status = ?";
-        const [order] = await db
-          .promise()
-          .query(order_sql, [order_id, "pending"]);
-        console.log(order);
-
-        if (order.length === 0) {
-          throw new Error("Order not found or completed.");
-        }
-
-        const verifyDigestItem = [
-          "HKD",
-          "admin@s27.com",
-          order[0].products,
-          order[0].total,
-          order[0].salt,
-        ].join("|");
-
-        const verifyDigest = crypto
-          .createHash("sha256")
-          .update(verifyDigestItem)
-          .digest("base64");
-
-        if (verifyDigest !== digest) {
-          throw new Error("Invalid digest.");
-        }
-
-        const update_sql = "UPDATE orders SET status = ? WHERE id = ?";
-        await db.promise().query(update_sql, ["completed", order_id]);
-        console.log("Order completed.");
-      } catch (error) {
-        console.error("Error completing order:", error);
-      }
-    }
-    res.json({ received: true });
-  }
-);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
