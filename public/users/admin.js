@@ -157,7 +157,7 @@ function fetchOrders() {
         statusDiv.innerHTML = `<b>Status:</b><br>${order.status}`;
         box.appendChild(statusDiv);
 
-        container.appendChild(box);
+        ordersList.appendChild(box);
       });
     });
 }
