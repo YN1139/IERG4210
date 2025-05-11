@@ -79,7 +79,8 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
   padding: 10px 5px;
 }
 
-.admin-container {
+.admin-container,
+.member-container {
   display: flex;
   width: 100%;
   margin: 0 0;

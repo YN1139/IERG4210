@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-  fetchOrders();
+  const switchTo = document.querySelectorAll(".categoryMenu a");
+  console.log(switchTo);
+  switchTo.forEach((a) => {
+    a.addEventListener("click", function () {
+      if (a.textContent === "Orders") {
+        fetchOrders();
+      }
+    });
+  });
 });
 
 function fetchOrders() {
