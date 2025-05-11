@@ -137,7 +137,7 @@ function fetchOrders() {
         console.log(order);
         // Order ID
         const idDiv = document.createElement("div");
-        idDiv.textContent = `Order #${data.orderID}`;
+        idDiv.textContent = `Order #${order.orderID}`;
         box.appendChild(idDiv);
 
         const productsDiv = document.createElement("div");
