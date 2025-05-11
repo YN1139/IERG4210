@@ -11,12 +11,17 @@ document.addEventListener("DOMContentLoaded", function () {
       if (a.textContent === "Orders") {
         hideForms();
         fetchOrders();
+      } else {
+        showForm();
+        loadForm();
       }
     });
   });
 });
 
 function showForm() {
+  const dropdown = document.getElementById("action");
+  dropdown.style.display = "block";
   const forms = document.querySelectorAll("form");
   const selctedValue = document.getElementById("action").value;
 
@@ -93,6 +98,8 @@ async function loadForm() {
 }
 
 function hideForms() {
+  const dropdown = document.getElementById("action");
+  dropdown.style.display = "none";
   const forms = document.querySelectorAll("form");
   forms.forEach((form) => {
     form.style.display = "none";
@@ -128,9 +135,9 @@ function fetchOrders() {
         orderContainer.appendChild(orderItem);
       });
       const orderTotal = document.createElement("td");
-      orderTotal.textContent = order.total;
+      orderTotal.textContent = data.total;
       const orderStatus = document.createElement("td");
-      orderStatus.textContent = order.status;
+      orderStatus.textContent = data.status;
       orderContainer.appendChild(orderTotal);
       orderContainer.appendChild(orderStatus);
       document.getElementById("orders-list").appendChild(orderContainer);
