@@ -4,12 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     showForm();
     loadForm();
   });
-  const switchToButton = document.getElementsByClassName("categoryMenu a");
-  switchToButton.addEventListener("click", function () {
-    if (switchToButton.textContent === "Orders") {
-      fetchOrders();
-    }
-  });
 });
 
 function showForm() {
