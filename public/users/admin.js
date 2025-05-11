@@ -141,7 +141,7 @@ function fetchOrders() {
         const productsDiv = document.createElement("div");
 
         order.products.forEach((products) => {
-          fetch("/api/product/" + product.pid)
+          fetch("/api/product/" + products.pid)
             .then((response) => response.json())
             .then((product) => {
               console.log(product);
@@ -149,10 +149,10 @@ function fetchOrders() {
               productDiv.textContent = product[0].name;
               productsDiv.appendChild(productDiv);
               const priceDiv = document.createElement("div");
-              priceDiv.textContent = product[0].price;
+              priceDiv.textContent = "HKD $" + product[0].price;
               productsDiv.appendChild(priceDiv);
               const quantityDiv = document.createElement("div");
-              quantityDiv.textContent = products.quantity;
+              quantityDiv.textContent = "x" + products.quantity;
               productsDiv.appendChild(quantityDiv);
             });
         });
