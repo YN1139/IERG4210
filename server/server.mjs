@@ -241,6 +241,14 @@ app.get("/api/product/:pid", async (req, res) => {
   );
 });
 
+app.get("/api/orders", requireAdmin, async (req, res) => {
+  const sql = "SELECT * FROM orders";
+  const [orders] = await db.promise().query(sql);
+  res.json(orders);
+});
+
+//=======POST EVENTS=========
+
 //Update the database after receriving the form submission from the client
 app.post(
   "/admin/add-product",
@@ -523,12 +531,72 @@ app.post("/pay", validateCSRF, async (req, res) => {
       },
     });
     console.log("Session created:", session);
-    res.json({ id: session.id, digest: digest, order_id: order_id }); // Redirect to the checkout session URL
+    res.json({ id: session.id }); // Redirect to the checkout session URL
   } catch (error) {
     console.error("Error creating payment intent:", error);
     res.status(500).send({ error: "Payment failed" });
   }
 });
+
+const endpointSecret = "whsec_sCR0K7Ua3QVMJM3CUpzxHzdNRR47hn4z";
+
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    const sig = request.headers["stripe-signature"];
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    } catch (err) {
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+      console.log(session);
+      const { order_id, digest } = session.metadata;
+
+      try {
+        const order_sql = "SELECT * FROM orders WHERE id = ? AND status = ?";
+        const [order] = await db
+          .promise()
+          .query(order_sql, [order_id, "pending"]);
+        console.log(order);
+
+        if (order.length === 0) {
+          throw new Error("Order not found or completed.");
+        }
+
+        const verifyDigestItem = [
+          "HKD",
+          "admin@s27.com",
+          order[0].products,
+          order[0].total,
+          order[0].salt,
+        ].join("|");
+
+        const verifyDigest = crypto
+          .createHash("sha256")
+          .update(verifyDigestItem)
+          .digest("base64");
+
+        if (verifyDigest !== digest) {
+          throw new Error("Invalid digest.");
+        }
+
+        const update_sql = "UPDATE orders SET status = ? WHERE id = ?";
+        await db.promise().query(update_sql, ["completed", order_id]);
+        console.log("Order completed.");
+      } catch (error) {
+        console.error("Error completing order:", error);
+      }
+    }
+    res.json({ received: true });
+  }
+);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

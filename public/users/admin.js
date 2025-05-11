@@ -81,3 +81,11 @@ async function loadForm() {
       });
   }
 }
+
+function fetchOrders() {
+  fetch("/api/orders")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
+}
