@@ -92,6 +92,11 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
   flex-direction: column;
 }
 
+#order-container {
+  display: flex;
+  flex-direction: column;
+}
+
 #action {
   width: max-content;
 }
