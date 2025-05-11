@@ -155,7 +155,8 @@ app.post(
       const { order_id, digest } = session.metadata;
 
       try {
-        const order_sql = "SELECT * FROM orders WHERE id = ? AND status = ?";
+        const order_sql =
+          "SELECT * FROM orders WHERE orderID = ? AND status = ?";
         const [order] = await db
           .promise()
           .query(order_sql, [order_id, "pending"]);
@@ -185,11 +186,12 @@ app.post(
         const update_sql = "UPDATE orders SET status = ? WHERE id = ?";
         await db.promise().query(update_sql, ["completed", order_id]);
         console.log("Order completed.");
+        res.json({ received: true });
       } catch (error) {
         console.error("Error completing order:", error);
+        res.json({ received: false });
       }
     }
-    res.json({ received: true });
   }
 );
 
