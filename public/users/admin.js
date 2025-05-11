@@ -106,30 +106,34 @@ function fetchOrders() {
       console.log(data);
       const orderContainer = document.createElement("tr");
       orderContainer.id = "order-container";
+
       data.forEach((order) => {
         const orderItem = document.createElement("td");
         orderItem.textContent = order.id;
-        const orderProducts = document.createElement("td");
-        order.products.forEach((product) => {
-          const productItem = document.createElement("td");
-          productItem.textContent = product.name;
-          orderProducts.appendChild(productItem);
-          const productPrice = document.createElement("td");
-          productPrice.textContent = product.price;
-          productItem.appendChild(productPrice);
-          const productQuantity = document.createElement("td");
-          productQuantity.textContent = product.quantity;
-          productItem.appendChild(productQuantity);
-        });
-        const orderTotal = document.createElement("td");
-        orderTotal.textContent = order.total;
-        const orderStatus = document.createElement("td");
-        orderStatus.textContent = order.status;
+        fetch("api/product/" + order.products[0].pid)
+          .then((response) => response.json())
+          .then((product) => {
+            console.log(product);
+            const orderProducts = document.createElement("td");
+            orderProducts.textContent = product.name;
+            orderContainer.appendChild(orderProducts);
+            const orderPrice = document.createElement("td");
+            orderPrice.textContent = product.price;
+            orderContainer.appendChild(orderPrice);
+            const orderQuantity = document.createElement("td");
+            orderQuantity.textContent = order.quantity;
+            orderContainer.appendChild(orderQuantity);
+          });
+
         orderContainer.appendChild(orderItem);
         orderContainer.appendChild(orderProducts);
-        orderContainer.appendChild(orderTotal);
-        orderContainer.appendChild(orderStatus);
       });
+      const orderTotal = document.createElement("td");
+      orderTotal.textContent = order.total;
+      const orderStatus = document.createElement("td");
+      orderStatus.textContent = order.status;
+      orderContainer.appendChild(orderTotal);
+      orderContainer.appendChild(orderStatus);
       document.getElementById("orders-list").appendChild(orderContainer);
     });
 }
