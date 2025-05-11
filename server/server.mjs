@@ -255,7 +255,7 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
   });
 });
-app.get("/panel", requireAdmin, (req, res) => {
+app.get("/panel", (req, res) => {
   if (req.session.admin === 1) {
     res.redirect("/admin");
   } else {
