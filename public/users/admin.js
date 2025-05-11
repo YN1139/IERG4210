@@ -148,10 +148,10 @@ function fetchOrders() {
             .then((product) => {
               console.log(product);
               const productDiv = document.createElement("div");
-              productDiv.textContent = product.name;
+              productDiv.textContent = product[0].name;
               productsDiv.appendChild(productDiv);
               const priceDiv = document.createElement("div");
-              priceDiv.textContent = product.price;
+              priceDiv.textContent = product[0].price;
               productsDiv.appendChild(priceDiv);
             });
           const quantityDiv = document.createElement("div");
