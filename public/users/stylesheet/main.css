@@ -239,7 +239,7 @@ input[type="number"] {
 #edit,
 #delete,
 #add-category,
-#delete-category {
+#delete-cat {
   display: none;
 }
 

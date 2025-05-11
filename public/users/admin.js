@@ -38,6 +38,7 @@ function showForm() {
   const dropdown = document.getElementById("action");
   dropdown.style.display = "block";
   const forms = document.querySelectorAll("form");
+  console.log(forms);
   const selctedValue = document.getElementById("action").value;
 
   console.log(selctedValue);
@@ -183,19 +184,9 @@ async function fetchCategories() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      const addCategoriesList = document.getElementById("add-category");
       const editCategoriesList = document.getElementById("edit-category");
       const deleteCategoriesList = document.getElementById("delete-category");
 
-      if (addCategoriesList) {
-        addCategoriesList.innerHTML = "";
-        data.forEach((category) => {
-          const option = document.createElement("option");
-          option.value = category.catid;
-          option.textContent = category.name;
-          addCategoriesList.appendChild(option);
-        });
-      }
       if (editCategoriesList) {
         editCategoriesList.innerHTML = "";
         data.forEach((category) => {
