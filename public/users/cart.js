@@ -35,10 +35,10 @@ class ShoppingCart {
         this.updateQuantity(pid, 1);
       } else if (e.target.classList.contains("decrement")) {
         this.updateQuantity(pid, -1);
-        if (this.items.get(pid).quantity === 0) {
-          this.removeItem(pid);
-        }
-      } else if (e.target.classList.contains("remove-item")) {
+      } else if (
+        e.target.classList.contains("remove-item") ||
+        this.items.get(pid).quantity === 0
+      ) {
         this.removeItem(pid);
       }
     });
