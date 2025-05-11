@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import Stripe from "stripe";
 import nodemailer from "nodemailer";
+import sharp from "sharp";
 
 const stripe = Stripe(
   "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
@@ -410,6 +411,9 @@ app.post(
           imagePath
         )}`; //define a new path to access and rename the image file
         //console.log(imagePath, newImagePath);
+        await sharp(imagePath)
+          .resize({ width: 500, fit: "inside" }) //allow autoscale on height
+          .toFile(newImagePath);
         fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
         const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
         const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
@@ -450,6 +454,9 @@ app.post(
             imagePath
           )}`; //define a new path to access and rename the image file
           //console.log(imagePath, newImagePath);
+          await sharp(imagePath)
+            .resize({ width: 500, fit: "inside" })
+            .toFile(newImagePath);
           fs.renameSync(imagePath, newImagePath); //rename the image file with the pid
           const dbImagePath = `uploads/${pid}${path.extname(imagePath)}`; //store the image path in the database
           const updateSql = "UPDATE products SET image = ? WHERE pid = ?"; //update the image path in the database
