@@ -87,10 +87,11 @@
           method="post"
           enctype="multipart/form-data"
         >
-          <select id="edit-dropdown" name="edit-dropdown" required></select>
           <input type="hidden" name="_csrf" />
+          <select id="edit-dropdown" required></select>
+          <br />
           <label for="category">Category:</label>
-          <select name="catid" name="category" required>
+          <select name="catid" id="edit-category" required>
             <option value="1">J-Pop</option>
             <option value="2">K-Pop</option>
             <option value="3">Canton-Pop</option>
@@ -101,20 +102,31 @@
           <input
             type="text"
             name="name"
+            id="edit-name"
             required
-            pattern="[A-Za-z0-9\s\-\']+"
+            pattern="[A-Za-z0-9\s\-'!\u300C\u300D\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+"
           />
           <br />
           <label for="price">Price:</label>
-          <input type="number" name="price" required />
+          <input type="number" name="price" id="edit-price" required />
           <br />
           <label for="description">Description:</label>
-          <textarea name="description" wrap="hard" required></textarea>
+          <textarea
+            name="description"
+            wrap="hard"
+            id="edit-description"
+            required
+          ></textarea>
           <br />
-          <label for="image">Please upload in .jpeg or .png or .gif</label>
+          <img id="ogImage" src="" alt="ogImage" name="ogImage" />
+          <br />
+          <label for="image"
+            >Please upload in .jpeg or .png or .gif if needed</label
+          >
           <input
             type="file"
             name="image"
+            id="upload-image"
             accept="image/jpeg, image/png, image/gif"
           />
           <br />
