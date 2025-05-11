@@ -96,6 +96,16 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
   display: flex;
   flex-direction: column;
 }
+.order-box {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fafafa;
+  gap: 2rem;
+}
 
 #action {
   width: max-content;

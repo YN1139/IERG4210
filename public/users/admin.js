@@ -135,12 +135,12 @@ function fetchOrders() {
 
       // Order ID
       const idDiv = document.createElement("div");
-      idDiv.textContent = `Order #${data.id}`;
+      idDiv.textContent = `Order #${data.orderID}`;
       box.appendChild(idDiv);
 
       data.forEach((order) => {
+        console.log(order);
         const productsDiv = document.createElement("div");
-
         fetch("/api/product/" + order.products[0].pid)
           .then((response) => response.json())
           .then((product) => {
