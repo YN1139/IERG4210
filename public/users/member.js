@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  fetchOrders();
   const switchTo = document.querySelectorAll(".categoryMenu a");
   console.log(switchTo);
   switchTo.forEach((a) => {
