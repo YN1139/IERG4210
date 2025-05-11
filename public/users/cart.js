@@ -197,7 +197,9 @@ class ShoppingCart {
       return;
     }
 
-    const { session, digest, order_id } = await response.json();
+    console.log("response.json()", await response.json());
+
+    const session = await response.json();
 
     if (session.error) {
       alert(session.error);
@@ -207,8 +209,8 @@ class ShoppingCart {
       localStorage.removeItem("shopping-cart");
       const result = await stripe.redirectToCheckout({
         sessionId: session.id,
-        digest: digest,
-        order_id: order_id,
+        order_id: session.metadata.order_id,
+        digest: session.metadata.digest,
       });
       console.log("result", result);
     }
