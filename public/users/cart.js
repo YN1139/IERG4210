@@ -199,7 +199,7 @@ class ShoppingCart {
 
     const { session, digest, order_id } = await response.json();
 
-    /* if (session.error) {
+    if (session.error) {
       alert(session.error);
     } else {
       this.items.clear();
@@ -211,36 +211,7 @@ class ShoppingCart {
         order_id: order_id,
       });
       console.log("result", result);
-    } */
-    // 3. Create hidden form for Stripe
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "/create-checkout-session";
-
-    // Add hidden fields
-    const fields = {
-      order_id: orderId,
-      digest: digest,
-      session_id: sessionId,
-    };
-
-    Object.entries(fields).forEach(([name, value]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = value;
-      form.appendChild(input);
-    });
-
-    document.body.appendChild(form);
-
-    // 4. Clear cart
-    this.items.clear();
-    this.updateUI();
-    localStorage.removeItem("shopping-cart");
-
-    // 5. Submit form to initiate Stripe checkout
-    form.submit();
+    }
   }
 }
 
