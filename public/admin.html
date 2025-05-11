@@ -35,6 +35,7 @@
           <option value="add">Add Product</option>
           <option value="edit">Edit Product</option>
           <option value="delete">Delete Product</option>
+          <option value="add-category">Add Category</option>
         </select>
 
         <form
@@ -143,6 +144,18 @@
         >
           <input type="hidden" name="_csrf" />
           <div id="products-list"></div>
+          <button type="submit">Submit</button>
+        </form>
+
+        <form
+          id="add-category"
+          name="add-category"
+          action="/admin/add-category"
+          method="post"
+        >
+          <input type="hidden" name="_csrf" />
+          <label for="category">Category:</label>
+          <input type="text" name="name" />
           <button type="submit">Submit</button>
         </form>
       </div>
