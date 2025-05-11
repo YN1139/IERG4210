@@ -115,10 +115,9 @@ async function loadForm() {
       });
   }
   if (formValue === "add-category") {
-    document.getElementById(formValue).style.display = "block";
+    showForm();
   }
   if (formValue === "delete-cat") {
-    document.getElementById(formValue).style.display = "block";
     await fetchCategories();
   }
 }
