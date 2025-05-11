@@ -3,12 +3,20 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function fetchOrders() {
-  fetch("/api/orders")
+  fetch("/api/user-orders")
     .then((response) => response.json())
     .then(async (data) => {
       console.log(data);
+
       const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";
+
+      if (data.length === 0) {
+        const noOrders = document.createElement("p");
+        noOrders.textContent = "No orders found";
+        ordersList.appendChild(noOrders);
+        return;
+      }
 
       data.forEach((order) => {
         console.log(order);
