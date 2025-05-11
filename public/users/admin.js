@@ -146,6 +146,7 @@ function fetchOrders() {
           fetch("/api/product/" + product.pid)
             .then((response) => response.json())
             .then((product) => {
+              console.log(product);
               const productDiv = document.createElement("div");
               productDiv.textContent = product.name;
               productsDiv.appendChild(productDiv);
@@ -168,7 +169,7 @@ function fetchOrders() {
         statusDiv.className = "order-status";
         statusDiv.innerHTML = `<b>Status:</b><br>${order.status}`;
         box.appendChild(statusDiv);
+        ordersList.appendChild(box);
       });
-      ordersList.appendChild(box);
     });
 }
