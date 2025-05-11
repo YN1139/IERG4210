@@ -115,7 +115,7 @@ async function loadForm() {
   }
   if (formValue === "add-cat") {
     const addCatName = document.getElementById("add-cat-name");
-    addCatName.value = "";
+    addCatName.textContent = "Please enter the name of the new category";
   }
   if (formValue === "delete-cat") {
     await fetchCategories();
