@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
+  fetchCategories();
   const formDropdown = document.getElementById("action");
   formDropdown.addEventListener("change", function () {
     showForm();
-    fetchCategories();
     loadForm();
+    fetchCategories();
   });
   const switchTo = document.querySelectorAll(".categoryMenu a");
   console.log(switchTo);
@@ -52,6 +53,9 @@ function showForm() {
 async function loadForm() {
   const formValue = document.getElementById("action").value;
   console.log(formValue);
+  if (formValue === "add") {
+    fetchCategories();
+  }
   if (formValue === "delete") {
     await fetch("/api/prod")
       .then((response) => response.json())
@@ -80,6 +84,7 @@ async function loadForm() {
   }
 
   if (formValue === "edit") {
+    fetchCategories();
     await fetch("/api/prod")
       .then((response) => response.json())
       .then((data) => {
@@ -124,7 +129,7 @@ function hideForms() {
   });
 }
 
-function fetchOrders() {
+async function fetchOrders() {
   fetch("/api/orders")
     .then((response) => response.json())
     .then(async (data) => {
