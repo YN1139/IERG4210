@@ -142,20 +142,22 @@ function fetchOrders() {
 
         const productsDiv = document.createElement("div");
 
-        fetch("/api/product/" + order.products[0].pid)
-          .then((response) => response.json())
-          .then((product) => {
-            const productDiv = document.createElement("div");
-            productDiv.textContent = product.name;
-            productsDiv.appendChild(productDiv);
-            const priceDiv = document.createElement("div");
-            priceDiv.textContent = product.price;
-            productsDiv.appendChild(priceDiv);
-            const quantityDiv = document.createElement("div");
-            quantityDiv.textContent = order.quantity;
-            productsDiv.appendChild(quantityDiv);
-            box.appendChild(productsDiv);
-          });
+        order.products.forEach((product) => {
+          fetch("/api/product/" + product.pid)
+            .then((response) => response.json())
+            .then((product) => {
+              const productDiv = document.createElement("div");
+              productDiv.textContent = product.name;
+              productsDiv.appendChild(productDiv);
+              const priceDiv = document.createElement("div");
+              priceDiv.textContent = product.price;
+              productsDiv.appendChild(priceDiv);
+            });
+          const quantityDiv = document.createElement("div");
+          quantityDiv.textContent = product.quantity;
+          productsDiv.appendChild(quantityDiv);
+        });
+        box.appendChild(productsDiv);
 
         const totalDiv = document.createElement("div");
         totalDiv.className = "order-total";
@@ -166,8 +168,7 @@ function fetchOrders() {
         statusDiv.className = "order-status";
         statusDiv.innerHTML = `<b>Status:</b><br>${order.status}`;
         box.appendChild(statusDiv);
-
-        ordersList.appendChild(box);
       });
+      ordersList.appendChild(box);
     });
 }
