@@ -206,8 +206,6 @@ class ShoppingCart {
       localStorage.removeItem("shopping-cart");
       const result = await stripe.redirectToCheckout({
         sessionId: session.id,
-        order_id: session.metadata.order_id,
-        digest: session.metadata.digest,
       });
       console.log("result", result);
     }
