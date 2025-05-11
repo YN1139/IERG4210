@@ -410,7 +410,7 @@ app.post(
         const newImagePath = `../public/users/uploads/${pid}${path.extname(
           imagePath
         )}`; //define a new path to access and rename the image file
-        //console.log(imagePath, newImagePath);
+        console.log(imagePath, newImagePath);
         await sharp(imagePath)
           .resize({ width: 500, fit: "inside" }) //allow autoscale on height
           .toFile(newImagePath);
