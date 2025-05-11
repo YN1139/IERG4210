@@ -130,19 +130,17 @@ function fetchOrders() {
       const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";
 
-      const box = document.createElement("div");
-      box.className = "order-box";
-
       data.forEach((order) => {
         console.log(order);
-        // Order ID
+        const box = document.createElement("div");
+        box.className = "order-box";
         const idDiv = document.createElement("div");
         idDiv.textContent = `Order #${order.orderID}`;
         box.appendChild(idDiv);
 
         const productsDiv = document.createElement("div");
 
-        order.products.forEach((product) => {
+        order.products.forEach((products) => {
           fetch("/api/product/" + product.pid)
             .then((response) => response.json())
             .then((product) => {
@@ -153,10 +151,10 @@ function fetchOrders() {
               const priceDiv = document.createElement("div");
               priceDiv.textContent = product[0].price;
               productsDiv.appendChild(priceDiv);
+              const quantityDiv = document.createElement("div");
+              quantityDiv.textContent = products.quantity;
+              productsDiv.appendChild(quantityDiv);
             });
-          const quantityDiv = document.createElement("div");
-          quantityDiv.textContent = product.quantity;
-          productsDiv.appendChild(quantityDiv);
         });
         box.appendChild(productsDiv);
 
@@ -169,6 +167,7 @@ function fetchOrders() {
         statusDiv.className = "order-status";
         statusDiv.innerHTML = `<b>Status:</b><br>${order.status}`;
         box.appendChild(statusDiv);
+
         ordersList.appendChild(box);
       });
     });
