@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         hideForms();
         fetchOrders();
       } else {
+        hideTable();
         showForm();
         loadForm();
       }
@@ -19,7 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+function hideTable() {
+  const table = document.getElementById("orders-table");
+  table.style.display = "none";
+}
+
 function showForm() {
+  const label = document.getElementById("action-label");
+  label.style.display = "block";
   const dropdown = document.getElementById("action");
   dropdown.style.display = "block";
   const forms = document.querySelectorAll("form");
@@ -98,6 +106,8 @@ async function loadForm() {
 }
 
 function hideForms() {
+  const label = document.getElementById("action-label");
+  label.style.display = "none";
   const dropdown = document.getElementById("action");
   dropdown.style.display = "none";
   const forms = document.querySelectorAll("form");
@@ -109,13 +119,13 @@ function hideForms() {
 function fetchOrders() {
   fetch("/api/orders")
     .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      const orderContainer = document.createElement("tr");
-      orderContainer.id = "order-container";
+    .then(async (data) => {
+      const ordersList = document.getElementById("orders-list");
+      ordersList.innerHTML = "";
 
       data.forEach((order) => {
-        const orderItem = document.createElement("td");
+        const orderItem = document.createElement("tr");
+        orderItem.id = "order-container";
         orderItem.textContent = order.id;
         fetch("api/product/" + order.products[0].pid)
           .then((response) => response.json())
