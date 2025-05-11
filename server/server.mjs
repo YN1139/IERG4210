@@ -454,7 +454,10 @@ app.post("/pay", validateCSRF, async (req, res) => {
       "admin@s27.com",
       orderProducts
         .map(
-          (product, i) => `${product.pid}|${itemQuantity[i]}|${product.price}`
+          (product, i) =>
+            `${product.pid}|${itemQuantity[i]}|${
+              product.price * itemQuantity[i]
+            }`
         )
         .join("|"),
       total,
@@ -469,22 +472,28 @@ app.post("/pay", validateCSRF, async (req, res) => {
 
     console.log(digest);
 
+    const orderData = items.map((item) => {
+      const product = products.find((p) => p.pid === item.pid);
+      return {
+        pid: item.pid,
+        quantity: item.quantity,
+        price: product.price,
+        subtotal: product.price * item.quantity,
+      };
+    });
+
     const order_sql =
       "INSERT INTO orders (products, user, salt, total, digest, status) VALUES (?, ?, ?, ?, ?, ?)";
-    const [newOrder] = await db.promise().query(order_sql, [
-      orderProducts.map((product, i) => {
-        return JSON.stringify({
-          pid: product.pid,
-          quantity: itemQuantity[i],
-          price: product.price,
-        });
-      }),
-      req.session.email ? req.session.email : "guest",
-      salt,
-      total,
-      digest,
-      "pending",
-    ]);
+    const [newOrder] = await db
+      .promise()
+      .query(order_sql, [
+        JSON.stringify(orderData),
+        req.session.email ? req.session.email : "guest",
+        salt,
+        total,
+        digest,
+        "pending",
+      ]);
     console.log(newOrder);
     const session = await stripe.checkout.sessions.create({
       line_items: orderProducts.map((product, i) => ({
