@@ -200,8 +200,8 @@ app.post(
         const customerEmail = session.customer_details.email;
         console.log(customerEmail);
 
-        let s27 = await nodemailer.createTestAccount();
-        console.log(s27);
+        /* let s27 = await nodemailer.createTestAccount();
+        console.log(s27); */
 
         const transporter = nodemailer.createTransport({
           host: "smtp.ethereal.email", //test account
