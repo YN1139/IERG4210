@@ -4,6 +4,13 @@ document.addEventListener("DOMContentLoaded", function () {
     showForm();
     loadForm();
   });
+  a.addEventListener("click", function () {
+    if (a.textContent === "Products") {
+      redirect("/admin");
+    } else if (a.textContent === "Orders") {
+      fetchOrders();
+    }
+  });
 });
 
 function showForm() {
