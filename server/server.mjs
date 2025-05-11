@@ -596,7 +596,7 @@ app.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   async (req, res) => {
-    const sig = request.headers["stripe-signature"];
+    const sig = req.headers["stripe-signature"];
     let event;
 
     try {
