@@ -4,12 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
     showForm();
     loadForm();
   });
-  const switchTo = document.querySelector(".categoryMenu a");
+  const switchTo = document.querySelectorAll(".categoryMenu a");
   console.log(switchTo);
   switchTo.addEventListener("click", function () {
-    if (switchTo.textContent === "Products") {
-      redirect("/admin");
-    } else if (switchTo.textContent === "Orders") {
+    if (switchTo.textContent === "Orders") {
       fetchOrders();
     }
   });
