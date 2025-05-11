@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         hideOrders();
         showForm();
         loadForm();
+        fetchCategories();
       }
     });
   });
@@ -175,7 +176,7 @@ function fetchOrders() {
 }
 
 function fetchCategories() {
-  fetch("/api/categories")
+  fetch("/api/cat")
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
