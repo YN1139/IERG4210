@@ -246,6 +246,9 @@ app.get("/login", (req, res) => {
 app.get("/product", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/users/product.html"));
 });
+app.get("/member-panel", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/users/member-panel.html"));
+});
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
     res.clearCookie("sess");
@@ -348,6 +351,12 @@ app.get("/api/product/:pid", async (req, res) => {
 app.get("/api/orders", requireAdmin, async (req, res) => {
   const sql = "SELECT * FROM orders";
   const [orders] = await db.promise().query(sql);
+  res.json(orders);
+});
+
+app.get("/api/user-orders", requireAdmin, async (req, res) => {
+  const sql = "SELECT * FROM orders WHERE user = ?";
+  const [orders] = await db.promise().query(sql, [req.session.email]);
   res.json(orders);
 });
 

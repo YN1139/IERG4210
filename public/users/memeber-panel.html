@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="stylesheet/main.css" />
+    <title>IERG4210 Admin</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>CD Shop</h1>
+      <nav class="pages">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="#">Check order</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!--!handle the CSS later-->
+    <h2>Member Page</h2>
+
+    <div class="member-container">
+      <div class="categoryMenu">
+        <a href="/api/user-orders">Orders</a>
+        <br />
+        <a href="/change-password">Change Password</a>
+        <br />
+        <a href="/logout">Logout</a>
+      </div>
+    </div>
+
+    <div class="member-content">
+      <div class="member-orders"></div>
+    </div>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="security.js"></script>
+    <script src="index.js"></script>
+    <script src="cart.js"></script>
+  </body>
+</html>
