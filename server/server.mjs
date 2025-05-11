@@ -374,6 +374,19 @@ app.post(
     res.status(200).redirect("/admin");
   }
 );
+
+app.post(
+  "/admin/delete-category",
+  validateCSRF,
+  requireAdmin,
+  async (req, res) => {
+    const { catid } = req.body;
+    const sql = "DELETE FROM categories WHERE catid = ?";
+    const [result] = await db.promise().query(sql, [catid]);
+    res.status(200).redirect("/admin");
+  }
+);
+
 app.post(
   "/admin/add-product",
   upload.single("image"),
