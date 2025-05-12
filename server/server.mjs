@@ -384,13 +384,13 @@ app.get("/api/user-orders", async (req, res) => {
 app.get("/api/orders/:orderID", async (req, res) => {
   const orderID = req.params.orderID;
   const sql = "SELECT * FROM customerOrder WHERE customerOrderID = ?";
-  const [customerOrderId] = await db.promise().query(sql, [orderID]);
-  console.log(customerOrderId);
+  const [customerOrder] = await db.promise().query(sql, [orderID]);
+  console.log(customerOrder);
   const order_sql = "SELECT * FROM orders WHERE orderID = ?";
   const [order] = await db
     .promise()
-    .query(order_sql, [customerOrderId[0].orderID]);
-  res.json({ order, customerOrderId });
+    .query(order_sql, [customerOrder[0].orderID]);
+  res.json({ order, customerOrder });
 });
 
 //=======POST EVENTS=========
