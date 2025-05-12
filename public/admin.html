@@ -101,7 +101,6 @@
             type="text"
             name="name"
             id="edit-name"
-            required
             pattern="[A-Za-z0-9\s\-'!\u300C\u300D\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+"
           />
           <br />
@@ -151,7 +150,13 @@
         >
           <input type="hidden" name="_csrf" />
           <label for="category">Category:</label>
-          <input type="text" name="name" id="add-cat-name" />
+          <input
+            type="text"
+            name="name"
+            id="add-cat-name"
+            required
+            pattern="[A-Za-z0-9\s\-'!\u300C\u300D\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+"
+          />
           <button type="submit">Submit</button>
         </form>
 

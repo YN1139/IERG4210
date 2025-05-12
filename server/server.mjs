@@ -250,6 +250,9 @@ app.get("/product", (req, res) => {
 app.get("/member-panel", checkLogin, (req, res) => {
   res.sendFile(path.join(__dirname, "../public/member-panel.html"));
 });
+app.get("/check-order", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/users/check-order.html"));
+});
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
     res.clearCookie("sess");
@@ -359,6 +362,13 @@ app.get("/api/user-orders", async (req, res) => {
   const sql = "SELECT * FROM orders WHERE user = ?";
   const [orders] = await db.promise().query(sql, [req.session.email]);
   res.json(orders);
+});
+
+app.get("/api/orders/:orderID", async (req, res) => {
+  const orderID = req.params.orderID;
+  const sql = "SELECT * FROM orders WHERE orderID = ?";
+  const [order] = await db.promise().query(sql, [orderID]);
+  res.json(order);
 });
 
 //=======POST EVENTS=========

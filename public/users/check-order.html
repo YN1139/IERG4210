@@ -19,22 +19,23 @@
     </header>
 
     <!--!handle the CSS later-->
-    <h2>Member Page</h2>
+    <h2>Check Order</h2>
 
-    <div class="member-container">
-      <div class="categoryMenu">
-        <a href="#">Orders</a>
-        <br />
-        <a href="/change-password">Change Password</a>
-        <br />
-        <a href="/logout">Logout</a>
-      </div>
-
-      <div class="member-content">
-        <div id="orders-container"></div>
-      </div>
+    <div class="check-order-container">
+      <form id="check-order-form">
+        <label for="order-id">Order ID:</label>
+        <input
+          type="text"
+          id="order-id"
+          name="order-id"
+          required
+          pattern="\d+"
+        />
+        <button type="submit">Check Order</button>
+      </form>
+      <div id="orders-container"></div>
     </div>
   </body>
   <script type="text/javascript" src="security.js"></script>
-  <script type="text/javascript" src="member.js"></script>
+  <script type="text/javascript" src="check-order.js"></script>
 </html>
