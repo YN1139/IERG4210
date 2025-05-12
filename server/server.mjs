@@ -372,12 +372,11 @@ app.get("/api/orders", requireAdmin, async (req, res) => {
 app.get("/api/user-orders", async (req, res) => {
   const sql = "SELECT * FROM orders WHERE user = ?";
   const [orders] = await db.promise().query(sql, [req.session.email]);
-  console.log(orders.map((order) => order.orderID));
+  const orderIDs = orders.map((order) => order.orderID);
   const customerOrder_sql = "SELECT * FROM customerOrder WHERE orderID IN (?)";
-  const [customerOrder] = await db.promise().query(
-    customerOrder_sql,
-    orders.map((order) => order.orderID) //map to an array of orderID
-  );
+  const [customerOrder] = await db
+    .promise()
+    .query(customerOrder_sql, [orderIDs]);
   console.log(customerOrder);
   res.json({ orders, customerOrder });
 });
