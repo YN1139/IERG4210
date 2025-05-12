@@ -390,6 +390,10 @@ app.get("/api/orders/:orderID", validateCSRF, async (req, res) => {
   const sql = "SELECT * FROM customerOrder WHERE customerOrderID = ?";
   const [customerOrder] = await db.promise().query(sql, [orderID]);
   console.log(customerOrder);
+  if (customerOrder.length === 0) {
+    res.json({ order: [], customerOrder: [] });
+    return;
+  }
   const order_sql = "SELECT * FROM orders WHERE orderID = ?";
   const [order] = await db
     .promise()
