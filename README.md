@@ -90,3 +90,18 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 ## Phase 5:
 
 - ref: https://coreui.io/blog/how-to-convert-a-map-to-an-array-in-javascript/
+  Stripe and webhook implementation:
+- https://docs.stripe.com/webhooks/quickstart?lang=node
+- https://docs.stripe.com/webhooks?lang=node#verify-official-libraries
+- https://medium.com/@Bigscal-Technologies/how-to-integrate-stripe-payment-apis-using-node-js-566bfdad5850
+- https://bhupeshpadiyar.medium.com/stripe-payment-gateway-integration-in-nodejs-c58b012e4bc2
+- https://youtu.be/3OOHC_UzrKA
+
+## Phase 6:
+
+- nodemailer for sending emails to clients
+- separate orderID, int for admin and encoded random string for client
+- ref:
+  - https://dev.to/berviantoleo/email-testing-using-ethereal-inb
+  - https://mailtrap.io/blog/sending-emails-with-nodemailer/
+  - https://israynotarray.com/nodejs/20230722/1626712457/#%E5%89%8D%E8%A8%80
