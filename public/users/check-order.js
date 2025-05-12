@@ -17,25 +17,25 @@ async function fetchOrders() {
     alert("Failed to fetch order. Please try again.");
     return;
   }
-  const orders = await response.json();
+  const data = await response.json();
 
   const ordersList = document.getElementById("orders-container");
   ordersList.innerHTML = "";
 
-  orders.forEach((order) => {
-    console.log(order);
+  data.order.forEach((o) => {
+    console.log(o);
     const box = document.createElement("div");
     box.className = "order-box";
     const idDiv = document.createElement("div");
-    idDiv.textContent = `Order #${order.orderID}`;
+    idDiv.textContent = `Order #${data.customerOrderId.customerOrderID}`;
     box.appendChild(idDiv);
     const userDiv = document.createElement("div");
-    userDiv.textContent = `User: ${order.user}`;
+    userDiv.textContent = `User: ${o.user}`;
     box.appendChild(userDiv);
 
     const productsDiv = document.createElement("div");
 
-    order.products.forEach((products) => {
+    o.products.forEach((products) => {
       fetch("/api/product/" + products.pid)
         .then((response) => response.json())
         .then((product) => {
@@ -55,12 +55,12 @@ async function fetchOrders() {
 
     const totalDiv = document.createElement("div");
     totalDiv.className = "order-total";
-    totalDiv.innerHTML = `<b>Total:</b><br>HKD $${order.total}`;
+    totalDiv.innerHTML = `<b>Total:</b><br>HKD $${o.total}`;
     box.appendChild(totalDiv);
 
     const statusDiv = document.createElement("div");
     statusDiv.className = "order-status";
-    statusDiv.innerHTML = `<b>Status:</b><br>${order.status}`;
+    statusDiv.innerHTML = `<b>Status:</b><br>${o.status}`;
     box.appendChild(statusDiv);
 
     ordersList.appendChild(box);

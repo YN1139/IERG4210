@@ -372,22 +372,25 @@ app.get("/api/orders", requireAdmin, async (req, res) => {
 app.get("/api/user-orders", async (req, res) => {
   const sql = "SELECT * FROM orders WHERE user = ?";
   const [orders] = await db.promise().query(sql, [req.session.email]);
+  console.log(orders);
   const customerOrder_sql = "SELECT * FROM customerOrder WHERE orderID IN (?)";
-  const [customerOrder] = await db
-    .promise()
-    .query(customerOrder_sql, [orders.map((order) => order.orderID)]);
+  const [customerOrder] = await db.promise().query(
+    customerOrder_sql,
+    orders.map((order) => order.orderID) //map to an array of orderID
+  );
   res.json({ orders, customerOrder });
 });
 
 app.get("/api/orders/:orderID", async (req, res) => {
   const orderID = req.params.orderID;
   const sql = "SELECT * FROM customerOrder WHERE customerOrderID = ?";
-  const [order] = await db.promise().query(sql, [orderID]);
-  const fullOrder_sql = "SELECT * FROM orders WHERE orderID = ?";
-  const [fullOrder] = await db
+  const [customerOrderId] = await db.promise().query(sql, [orderID]);
+  console.log(customerOrderId);
+  const order_sql = "SELECT * FROM orders WHERE orderID = ?";
+  const [order] = await db
     .promise()
-    .query(fullOrder_sql, [order[0].orderID]);
-  res.json({ fullOrder });
+    .query(order_sql, [customerOrderId[0].orderID]);
+  res.json({ order, customerOrderId });
 });
 
 //=======POST EVENTS=========
