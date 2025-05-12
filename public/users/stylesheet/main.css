@@ -89,7 +89,7 @@ Reference from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav */
 
 .admin-form {
   display: flex;
-  width: 100%;
+  width: auto;
   flex-direction: column;
 }
 
