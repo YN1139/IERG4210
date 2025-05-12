@@ -18,6 +18,7 @@ async function fetchOrders() {
     return;
   }
   const data = await response.json();
+  console.log(data);
 
   const ordersList = document.getElementById("orders-container");
   ordersList.innerHTML = "";
@@ -26,8 +27,9 @@ async function fetchOrders() {
     console.log(o);
     const box = document.createElement("div");
     box.className = "order-box";
+
     const idDiv = document.createElement("div");
-    idDiv.textContent = `Order #${data.customerOrderId.customerOrderID}`;
+    idDiv.textContent = `Order #${data.customerOrder.customerOrderID}`;
     box.appendChild(idDiv);
     const userDiv = document.createElement("div");
     userDiv.textContent = `User: ${o.user}`;
