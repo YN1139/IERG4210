@@ -31,8 +31,11 @@ function fetchOrders() {
         console.log(order);
         const box = document.createElement("div");
         box.className = "order-box";
+
         const idDiv = document.createElement("div");
-        idDiv.textContent = `Order #` + data.customerOrder[0].customerOrderID;
+        idDiv.textContent =
+          `Order #` +
+          data.customerOrder.forEach((order) => order.customerOrderID);
         box.appendChild(idDiv);
 
         const productsDiv = document.createElement("div");
