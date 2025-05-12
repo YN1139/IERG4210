@@ -27,12 +27,12 @@ function fetchOrders() {
         return;
       }
 
-      data.forEach((order) => {
+      data.orders.forEach((order) => {
         console.log(order);
         const box = document.createElement("div");
         box.className = "order-box";
         const idDiv = document.createElement("div");
-        idDiv.textContent = `Order #${order.orderID}`;
+        idDiv.textContent = `Order #${data.customerOrder.customerOrderID}`;
         box.appendChild(idDiv);
 
         const productsDiv = document.createElement("div");
