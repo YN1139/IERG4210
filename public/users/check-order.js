@@ -23,16 +23,18 @@ async function fetchOrders() {
   const ordersList = document.getElementById("orders-container");
   ordersList.innerHTML = "";
 
+  const customerOrderID = data.customerOrder.customerOrderID;
+
   data.order.forEach((o) => {
     console.log(o);
     const box = document.createElement("div");
     box.className = "order-box";
 
     const idDiv = document.createElement("div");
-    idDiv.textContent = `Order #${data.customerOrder.customerOrderID}`;
+    idDiv.textContent = `Order #` + customerOrderID;
     box.appendChild(idDiv);
     const userDiv = document.createElement("div");
-    userDiv.textContent = `User: ${o.user}`;
+    userDiv.textContent = `User: ` + o.user;
     box.appendChild(userDiv);
 
     const productsDiv = document.createElement("div");
