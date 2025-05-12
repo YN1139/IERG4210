@@ -23,7 +23,7 @@ async function fetchOrders() {
   const ordersList = document.getElementById("orders-container");
   ordersList.innerHTML = "";
 
-  const customerOrderID = data.customerOrder.customerOrderID;
+  const customerOrderID = data.customerOrder[0].customerOrderID;
 
   data.order.forEach((o) => {
     console.log(o);
