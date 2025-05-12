@@ -23,6 +23,13 @@ async function fetchOrders() {
   const ordersList = document.getElementById("orders-container");
   ordersList.innerHTML = "";
 
+  if (data.length === 0) {
+    const noOrders = document.createElement("p");
+    noOrders.textContent = "No orders found. Please check your order ID again.";
+    ordersList.appendChild(noOrders);
+    return;
+  }
+
   const customerOrderID = data.customerOrder[0].customerOrderID;
 
   data.order.forEach((o) => {
