@@ -32,7 +32,7 @@ function fetchOrders() {
         const box = document.createElement("div");
         box.className = "order-box";
         const idDiv = document.createElement("div");
-        idDiv.textContent = `Order #${data.customerOrder.customerOrderID}`;
+        idDiv.textContent = `Order #` + data.customerOrder[0].customerOrderID;
         box.appendChild(idDiv);
 
         const productsDiv = document.createElement("div");
