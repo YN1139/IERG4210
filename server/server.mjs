@@ -197,10 +197,8 @@ app.post(
         const update_sql = "UPDATE orders SET status = ? WHERE orderID = ?";
         await db.promise().query(update_sql, ["completed", order_id]);
 
-        const customerOrderID = crypto
-          .randomBytes(3)
-          .toString("hex")
-          .toUpperCase();
+        const customerOrderID =
+          "S27" + crypto.randomBytes(3).toString("hex").toUpperCase();
         const hash_sql =
           "INSERT INTO customerOrder (orderID, customerOrderID) VALUES (?, ?)";
         await db.promise().query(hash_sql, [order_id, customerOrderID]);
