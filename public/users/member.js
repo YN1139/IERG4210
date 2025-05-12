@@ -20,7 +20,7 @@ function fetchOrders() {
       const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";
 
-      if (data.length === 0) {
+      if (data.orders.length === 0 && data.customerOrder.length === 0) {
         const noOrders = document.createElement("p");
         noOrders.textContent = "No orders found";
         ordersList.appendChild(noOrders);
