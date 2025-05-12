@@ -162,7 +162,7 @@ app.post(
         const [order] = await db
           .promise()
           .query(order_sql, [order_id, "pending"]);
-        console.log(order);
+        console.log(order[0].products);
 
         if (order.length === 0) {
           throw new Error("Order not found or completed.");
@@ -173,10 +173,7 @@ app.post(
           "admin@s27.com",
           order[0].products
             .map(
-              (product) =>
-                `${product.pid}|${product.quantity}|${
-                  product.price * product.quantity
-                }`
+              (product) => `${product.pid}|${product.quantity}|${product.price}`
             )
             .join("|"),
           order[0].total,
