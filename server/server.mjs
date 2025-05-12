@@ -671,7 +671,7 @@ app.post("/pay", validateCSRF, async (req, res) => {
   try {
     const items = req.body; // Get line items from the request body
     console.log(items);
-    sortItems = items.sort((a, b) => a.pid - b.pid); //fix bug: sort the items by pid before processing
+    const sortItems = items.sort((a, b) => a.pid - b.pid); //fix bug: sort the items by pid before processing
     console.log(sortItems);
     const itemQuantity = sortItems.map((item) => item.quantity);
     for (let i = 0; i < sortItems.length; i++) {
