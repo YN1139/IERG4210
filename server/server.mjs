@@ -222,7 +222,7 @@ app.post(
           text: `Thank you for your order!`,
           html: `<h1>Thank you for your order in s27 shop!</h1>
                  <p>Your order ID is <b>${order_id}</b>.</p>
-                 <p>Please check your order status at our website.</p>`,
+                 <p>Please check your order status at our <a href="https://s27.ierg4210.ie.cuhk.edu.hk">website</a>.</p>`,
         });
 
         console.log("Invoice email sent: %s", info.messageId);
