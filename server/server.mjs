@@ -373,6 +373,10 @@ app.get("/api/user-orders", async (req, res) => {
   const sql = "SELECT * FROM orders WHERE user = ?";
   const [orders] = await db.promise().query(sql, [req.session.email]);
   const orderIDs = orders.map((order) => order.orderID);
+  if (orders.length === 0) {
+    res.json({ orders: [], customerOrder: [] });
+    return;
+  }
   const customerOrder_sql = "SELECT * FROM customerOrder WHERE orderID IN (?)";
   const [customerOrder] = await db
     .promise()
