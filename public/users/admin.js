@@ -137,6 +137,13 @@ async function fetchOrders() {
       const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";
 
+      if (data.length === 0) {
+        const noOrders = document.createElement("p");
+        noOrders.textContent = "No orders found";
+        ordersList.appendChild(noOrders);
+        return;
+      }
+
       data.orders.forEach((order) => {
         console.log(order);
         const box = document.createElement("div");
