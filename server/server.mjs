@@ -671,14 +671,16 @@ app.post("/pay", validateCSRF, async (req, res) => {
   try {
     const items = req.body; // Get line items from the request body
     console.log(items);
-    const itemQuantity = items.map((item) => item.quantity);
-    for (let i = 0; i < items.length; i++) {
+    sortItems = items.sort((a, b) => a.pid - b.pid); //fix bug: sort the items by pid before processing
+    console.log(sortItems);
+    const itemQuantity = sortItems.map((item) => item.quantity);
+    for (let i = 0; i < sortItems.length; i++) {
       console.log(itemQuantity[i]);
     }
     var sql = "SELECT * FROM products WHERE pid IN ( ? )";
     const [orderProducts] = await db
       .promise()
-      .query(sql, [items.map((item) => item.pid)]); // Fetch product details one by one into an array
+      .query(sql, [sortItems.map((item) => item.pid)]); // Fetch product details one by one into an array
 
     console.log(orderProducts);
 
