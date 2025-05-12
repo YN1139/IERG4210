@@ -13,6 +13,7 @@ import { dirname } from "path";
 import Stripe from "stripe";
 import nodemailer from "nodemailer";
 import sharp from "sharp";
+import "dotenv/config";
 
 const stripe = Stripe(
   "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
@@ -204,11 +205,13 @@ app.post(
         console.log(s27); */
 
         const transporter = nodemailer.createTransport({
-          host: "smtp.ethereal.email", //test account
-          port: 587,
+          service: "gmail",
+          host: "smtp.gmail.com", //test account
+          port: 465,
+          secure: true,
           auth: {
-            user: "keith.nader88@ethereal.email",
-            pass: "b6ZwkrmajASa6amR2S",
+            user: process.env.GMAIL,
+            pass: process.env.GMAIL_APP_PW,
           },
         });
 
