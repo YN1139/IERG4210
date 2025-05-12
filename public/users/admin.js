@@ -147,6 +147,9 @@ async function fetchOrders() {
         const userDiv = document.createElement("div");
         userDiv.textContent = `User: ${order.user}`;
         box.appendChild(userDiv);
+        const customerOrderIDDiv = document.createElement("div");
+        customerOrderIDDiv.textContent = `Customer Order ID: ${order.customerOrderID}`;
+        box.appendChild(customerOrderIDDiv);
 
         const productsDiv = document.createElement("div");
 

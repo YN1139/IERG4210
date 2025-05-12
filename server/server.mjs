@@ -196,6 +196,14 @@ app.post(
 
         const update_sql = "UPDATE orders SET status = ? WHERE orderID = ?";
         await db.promise().query(update_sql, ["completed", order_id]);
+
+        const customerOrderID = crypto
+          .randomBytes(3)
+          .toString("hex")
+          .toUpperCase();
+        const hash_sql =
+          "INSERT INTO customerOrder (orderID, customerOrderID) VALUES (?, ?)";
+        await db.promise().query(hash_sql, [order_id, customerOrderID]);
         console.log("Order completed.");
 
         const customerEmail = session.customer_details.email;
@@ -221,7 +229,7 @@ app.post(
           subject: "Your Order Invoice",
           text: `Thank you for your order!`,
           html: `<h1>Thank you for your order in s27 shop!</h1>
-                 <p>Your order ID is <b>${order_id}</b>.</p>
+                 <p>Your order ID is <b>${customerOrderID}</b>.</p>
                  <p>Please check your order status at our <a href="https://s27.ierg4210.ie.cuhk.edu.hk">website</a>.</p>`,
         });
 
@@ -358,20 +366,30 @@ app.get("/api/product/:pid", async (req, res) => {
 app.get("/api/orders", requireAdmin, async (req, res) => {
   const sql = "SELECT * FROM orders";
   const [orders] = await db.promise().query(sql);
-  res.json(orders);
+  const customerOrder_sql = "SELECT * FROM customerOrder";
+  const [customerOrder] = await db.promise().query(customerOrder_sql);
+  res.json({ orders, customerOrder });
 });
 
 app.get("/api/user-orders", async (req, res) => {
   const sql = "SELECT * FROM orders WHERE user = ?";
   const [orders] = await db.promise().query(sql, [req.session.email]);
-  res.json(orders);
+  const customerOrder_sql = "SELECT * FROM customerOrder WHERE orderID IN (?)";
+  const [customerOrder] = await db
+    .promise()
+    .query(customerOrder_sql, [orders.map((order) => order.orderID)]);
+  res.json({ orders, customerOrder });
 });
 
 app.get("/api/orders/:orderID", async (req, res) => {
   const orderID = req.params.orderID;
-  const sql = "SELECT * FROM orders WHERE orderID = ?";
+  const sql = "SELECT * FROM customerOrder WHERE customerOrderID = ?";
   const [order] = await db.promise().query(sql, [orderID]);
-  res.json(order);
+  const fullOrder_sql = "SELECT * FROM orders WHERE orderID = ?";
+  const [fullOrder] = await db
+    .promise()
+    .query(fullOrder_sql, [order[0].orderID]);
+  res.json({ fullOrder });
 });
 
 //=======POST EVENTS=========
