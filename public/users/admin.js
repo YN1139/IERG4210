@@ -154,9 +154,16 @@ async function fetchOrders() {
         const userDiv = document.createElement("div");
         userDiv.textContent = `User: ` + order.user;
         box.appendChild(userDiv);
+
+        const customerID = data.customerOrder.find(
+          (cID) => cID.orderID === order.orderID
+        );
+        console.log(customerID);
+
         const customerOrderIDDiv = document.createElement("div");
         customerOrderIDDiv.textContent =
-          `Customer Order ID: ` + data.customerOrder.customerOrderID;
+          `Customer Order ID: ` +
+          (customerID ? customerID.customerOrderID : customerID);
         box.appendChild(customerOrderIDDiv);
 
         const productsDiv = document.createElement("div");
