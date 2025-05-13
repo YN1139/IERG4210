@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadForm();
   });
   const switchTo = document.querySelectorAll(".categoryMenu a");
-  console.log(switchTo);
+  //console.log(switchTo);
   switchTo.forEach((a) => {
     a.addEventListener("click", function () {
       if (a.textContent === "Orders") {
@@ -38,10 +38,10 @@ function showForm() {
   const dropdown = document.getElementById("action");
   dropdown.style.display = "block";
   const forms = document.querySelectorAll("form");
-  console.log(forms);
+  //console.log(forms);
   const selctedValue = document.getElementById("action").value;
 
-  console.log(selctedValue);
+  //console.log(selctedValue);
 
   forms.forEach((form) => {
     form.style.display = "none";
@@ -58,7 +58,7 @@ async function loadForm() {
     await fetch("/api/prod")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         const productsList = document.getElementById("products-list");
         productsList.innerHTML = "";
 
@@ -85,7 +85,7 @@ async function loadForm() {
     await fetch("/api/prod")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         const selectProduct = document.getElementById("edit-dropdown");
         selectProduct.name = "pid";
         selectProduct.id = "edit-dropdown";
@@ -158,7 +158,7 @@ async function fetchOrders() {
         const customerID = data.customerOrder.find(
           (cID) => cID.orderID === order.orderID
         );
-        console.log(customerID);
+        //console.log(customerID);
 
         const customerOrderIDDiv = document.createElement("div");
         customerOrderIDDiv.textContent =
@@ -172,7 +172,7 @@ async function fetchOrders() {
           fetch("/api/product/" + products.pid)
             .then((response) => response.json())
             .then((product) => {
-              console.log(product);
+              //console.log(product);
               const productDiv = document.createElement("div");
               productDiv.textContent = product[0].name;
               productsDiv.appendChild(productDiv);
@@ -205,7 +205,7 @@ async function fetchCategories() {
   await fetch("/api/cat")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       const addCategoriesList = document.getElementById("add-category");
       const editCategoriesList = document.getElementById("edit-category");
       const deleteCategoriesList = document.getElementById("delete-category");

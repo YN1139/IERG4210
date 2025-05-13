@@ -15,7 +15,7 @@ async function fetchBreadcrumb(catid = null) {
   fetch("/api/category/" + catid)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       const breadcrumb = document.querySelector(".breadcrumb ol");
       const crumb = breadcrumb.querySelectorAll("li:not(:first-child)"); //selecr all li except the first one
       crumb.forEach((li) => li.remove()); //remove them
@@ -35,7 +35,7 @@ async function fetchCategories() {
   fetch("/api/cat")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       const categoryList = document.querySelector(".categoryMenu ul");
       data.forEach((category) => {
         const li = document.createElement("li");
@@ -55,7 +55,7 @@ async function fetchAllProducts() {
   fetch("/api/prod/")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       const productList = document.querySelector(".productList");
       productList.innerHTML = "";
       data.forEach((product) => {
@@ -97,7 +97,7 @@ async function fetchProducts(catid = null) {
   fetch("/api/products/" + catid)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       const productList = document.querySelector(".productList");
       productList.innerHTML = "";
       data.forEach((product) => {

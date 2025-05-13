@@ -18,7 +18,7 @@ async function fetchOrders() {
     return;
   }
   const data = await response.json();
-  console.log(data);
+  //console.log(data);
 
   const ordersList = document.getElementById("orders-container");
   ordersList.innerHTML = "";
@@ -50,7 +50,7 @@ async function fetchOrders() {
       fetch("/api/product/" + products.pid)
         .then((response) => response.json())
         .then((product) => {
-          console.log(product);
+          //console.log(product);
           const productDiv = document.createElement("div");
           productDiv.textContent = product[0].name;
           productsDiv.appendChild(productDiv);
