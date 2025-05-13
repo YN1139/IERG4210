@@ -15,7 +15,7 @@ function fetchOrders() {
   fetch("/api/user-orders")
     .then((response) => response.json())
     .then(async (data) => {
-      console.log(data);
+      //console.log(data);
 
       const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";

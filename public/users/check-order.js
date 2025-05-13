@@ -33,7 +33,7 @@ async function fetchOrders() {
   const customerOrderID = data.customerOrder[0].customerOrderID;
 
   data.order.forEach((o) => {
-    console.log(o);
+    //console.log(o);
     const box = document.createElement("div");
     box.className = "order-box";
 

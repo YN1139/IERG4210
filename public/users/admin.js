@@ -133,7 +133,7 @@ async function fetchOrders() {
   fetch("/api/orders")
     .then((response) => response.json())
     .then(async (data) => {
-      console.log(data);
+      //console.log(data);
       const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";
 
@@ -145,7 +145,7 @@ async function fetchOrders() {
       }
 
       data.orders.forEach((order) => {
-        console.log(order);
+        //console.log(order);
         const box = document.createElement("div");
         box.className = "order-box";
         const idDiv = document.createElement("div");
