@@ -105,3 +105,9 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
   - https://dev.to/berviantoleo/email-testing-using-ethereal-inb
   - https://mailtrap.io/blog/sending-emails-with-nodemailer/
   - https://israynotarray.com/nodejs/20230722/1626712457/#%E5%89%8D%E8%A8%80
+
+## Update after DDL:
+
+### 13/5
+
+1. Clean up some redundent console.log that will leak information
