@@ -110,4 +110,5 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 
 ### 13/5
 
-1. Clean up some redundent console.log that will leak information
+1. Removed some redundent `console.log` that will leak information on the client side
+2. Added new SQL statement for fetching the most recent 5 products
