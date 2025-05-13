@@ -367,9 +367,9 @@ app.get("/api/orders", requireAdmin, async (req, res) => {
 });
 
 app.get("/api/user-orders", checkLogin, async (req, res) => {
-  const sql =
-    "SELECT * FROM orders WHERE user = ? ORDER BY orderID DESC LIMIT 5";
-  //const sql = "SELECT * FROM orders WHERE user = ?";
+  /* const sql =
+    "SELECT * FROM orders WHERE user = ? ORDER BY orderID DESC LIMIT 5"; */
+  const sql = "SELECT * FROM orders WHERE user = ?";
   const [orders] = await db.promise().query(sql, [req.session.email]);
   const orderIDs = orders.map((order) => order.orderID);
   if (orders.length === 0) {

@@ -24,9 +24,6 @@ function fetchOrders() {
         ordersList.appendChild(noOrders);
         return;
       }
-      const header = document.createElement("h2");
-      header.textContent = "Recent Orders";
-      ordersList.appendChild(header);
 
       data.orders.forEach((order) => {
         const box = document.createElement("div");

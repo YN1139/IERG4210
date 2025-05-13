@@ -9,19 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     fetchAllProducts();
   }
-
-  updatePopUpBox();
 });
-
-async function updatePopUpBox() {
-  window.alert(
-    "Here are some minor features updates after the project submission: \n" +
-      "13/5 Update:\n" +
-      "Removed some console.log on client side\n" +
-      "Updated sql query (added ORDER BY orderID DESC LIMIT 5) for fetching the most recent 5 orders for users\n" +
-      "Added a pop up box for the updates"
-  );
-}
 
 async function fetchBreadcrumb(catid = null) {
   fetch("/api/category/" + catid)
