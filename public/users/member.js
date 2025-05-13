@@ -43,7 +43,6 @@ function fetchOrders() {
           fetch("/api/product/" + products.pid)
             .then((response) => response.json())
             .then((product) => {
-              console.log(product);
               const productDiv = document.createElement("div");
               productDiv.textContent = product[0].name;
               productsDiv.appendChild(productDiv);
