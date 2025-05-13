@@ -58,7 +58,6 @@ async function loadForm() {
     await fetch("/api/prod")
       .then((response) => response.json())
       .then((data) => {
-        //console.log(data);
         const productsList = document.getElementById("products-list");
         productsList.innerHTML = "";
 
@@ -85,7 +84,6 @@ async function loadForm() {
     await fetch("/api/prod")
       .then((response) => response.json())
       .then((data) => {
-        //console.log(data);
         const selectProduct = document.getElementById("edit-dropdown");
         selectProduct.name = "pid";
         selectProduct.id = "edit-dropdown";
@@ -145,7 +143,6 @@ async function fetchOrders() {
       }
 
       data.orders.forEach((order) => {
-        //console.log(order);
         const box = document.createElement("div");
         box.className = "order-box";
         const idDiv = document.createElement("div");
@@ -158,7 +155,6 @@ async function fetchOrders() {
         const customerID = data.customerOrder.find(
           (cID) => cID.orderID === order.orderID
         );
-        //console.log(customerID);
 
         const customerOrderIDDiv = document.createElement("div");
         customerOrderIDDiv.textContent =
@@ -172,7 +168,6 @@ async function fetchOrders() {
           fetch("/api/product/" + products.pid)
             .then((response) => response.json())
             .then((product) => {
-              //console.log(product);
               const productDiv = document.createElement("div");
               productDiv.textContent = product[0].name;
               productsDiv.appendChild(productDiv);
@@ -205,7 +200,6 @@ async function fetchCategories() {
   await fetch("/api/cat")
     .then((response) => response.json())
     .then((data) => {
-      //console.log(data);
       const addCategoriesList = document.getElementById("add-category");
       const editCategoriesList = document.getElementById("edit-category");
       const deleteCategoriesList = document.getElementById("delete-category");

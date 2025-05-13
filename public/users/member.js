@@ -15,8 +15,6 @@ function fetchOrders() {
   fetch("/api/user-orders")
     .then((response) => response.json())
     .then(async (data) => {
-      //console.log(data);
-
       const ordersList = document.getElementById("orders-container");
       ordersList.innerHTML = "";
 
@@ -28,15 +26,12 @@ function fetchOrders() {
       }
 
       data.orders.forEach((order) => {
-        //console.log(order);
         const box = document.createElement("div");
         box.className = "order-box";
 
         const customerID = data.customerOrder.find(
           (cID) => cID.orderID === order.orderID
         );
-        //console.log(customerID);
-
         const idDiv = document.createElement("div");
         idDiv.textContent =
           `Order #` + (customerID ? customerID.customerOrderID : customerID);
