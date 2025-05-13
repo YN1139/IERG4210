@@ -1,4 +1,4 @@
-const API = "";
+//const API = "";
 
 document.addEventListener("DOMContentLoaded", function () {
   fetchCategories();
@@ -9,6 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     fetchAllProducts();
   }
+  window.alert(
+    "Here are some minor features updates after the submission: \n" +
+      "13/5 Update:\n" +
+      "Removed some console.log on client side\n" +
+      "Updated sql query for fetching the most recent 5 orders for users\n" +
+      "Added a pop up box for the updates"
+  );
 });
 
 async function fetchBreadcrumb(catid = null) {
