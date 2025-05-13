@@ -10,10 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchAllProducts();
   }
   window.alert(
-    "Here are some minor features updates after the submission: \n" +
+    "Here are some minor features updates after the project submission: \n" +
       "13/5 Update:\n" +
       "Removed some console.log on client side\n" +
-      "Updated sql query for fetching the most recent 5 orders for users\n" +
+      "Updated sql query (added ORDER BY orderID DESC LIMIT 5) for fetching the most recent 5 orders for users\n" +
       "Added a pop up box for the updates"
   );
 });
