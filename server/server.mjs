@@ -367,7 +367,8 @@ app.get("/api/orders", requireAdmin, async (req, res) => {
 });
 
 app.get("/api/user-orders", checkLogin, async (req, res) => {
-  const sql = "SELECT * FROM orders WHERE user = ?";
+  const sql =
+    "SELECT * FROM orders WHERE user = ? ORDER BY orderID DESC LIMIT 5";
   const [orders] = await db.promise().query(sql, [req.session.email]);
   const orderIDs = orders.map((order) => order.orderID);
   if (orders.length === 0) {
@@ -384,7 +385,8 @@ app.get("/api/user-orders", checkLogin, async (req, res) => {
 
 app.get("/api/orders/:orderID", validateCSRF, async (req, res) => {
   const orderID = req.params.orderID;
-  const sql = "SELECT * FROM customerOrder WHERE customerOrderID = ?";
+  const sql =
+    "SELECT * FROM customerOrder WHERE customerOrderID = ? ORDER BY orderID DESC LIMIT 5";
   const [customerOrder] = await db.promise().query(sql, [orderID]);
   console.log(customerOrder);
   if (customerOrder.length === 0) {

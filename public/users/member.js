@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   fetchOrders();
   const switchTo = document.querySelectorAll(".categoryMenu a");
-  console.log(switchTo);
+  //console.log(switchTo);
   switchTo.forEach((a) => {
     a.addEventListener("click", function () {
       if (a.textContent === "Orders") {
@@ -28,14 +28,14 @@ function fetchOrders() {
       }
 
       data.orders.forEach((order) => {
-        console.log(order);
+        //console.log(order);
         const box = document.createElement("div");
         box.className = "order-box";
 
         const customerID = data.customerOrder.find(
           (cID) => cID.orderID === order.orderID
         );
-        console.log(customerID);
+        //console.log(customerID);
 
         const idDiv = document.createElement("div");
         idDiv.textContent =
