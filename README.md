@@ -55,7 +55,10 @@ Album cover art source: https://covers.musichoarders.xyz/
 ## Phase 2B:
 
 Implemented add-product admin pannel, auto-resize also implemented through frontend (CSS) \
-TODO: [Update, delect]-product
+10-11/5:
+
+- Finished and debuged for Delete, Edit products form
+- Just realized need forms for add and delete categories, so there you are =]
 
 ## Phase 3:
 
@@ -79,18 +82,28 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 - Implemented CORS and Helmet for CSP
   - can further customize for Helmet
 - CSRF package and express-session applying
+
   - not yet applied the middleware and validation
-- Login panel building, currently done for checking the users
+  - Update (forgot when finished): CSRF and its validation was completed.
+
+- Login panel building, currently done for checking the users and admin role
   - Hashed password with scypt
-    - ref: https://nodejs.org/api/crypto.html#crypto_crypto_scrypt_password_salt_keylen_options_callback, https://www.reddit.com/r/node/comments/fcgkvg/bcrypt_vs_crypto/
-  - not yet done the redirect part, as not yet set the session
+    - ref: https://nodejs.org/api/crypto.html#crypto_crypto_scrypt_password_salt_keylen_options_callback, https://www.reddit.com/r/node/comments/fcgkvg/bcrypt_vs_crypto
+  - ~~ not yet done the redirect part, as not yet set the session ~~
+  - Update:
+    - Session and cookies are set
+    - added trust proxy for trusting the reverse proxy
 - Updated to HTTPS
   - reference to IERG3800 settings and certbot
 
 ## Phase 5:
 
+User now can checkout with stripe
+
 - ref: https://coreui.io/blog/how-to-convert-a-map-to-an-array-in-javascript/
-  Stripe and webhook implementation:
+
+Stripe and webhook implementation:
+
 - https://docs.stripe.com/webhooks/quickstart?lang=node
 - https://docs.stripe.com/webhooks?lang=node#verify-official-libraries
 - https://medium.com/@Bigscal-Technologies/how-to-integrate-stripe-payment-apis-using-node-js-566bfdad5850
