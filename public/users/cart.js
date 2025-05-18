@@ -1,3 +1,5 @@
+const API="";
+
 let stripe;
 
 document.addEventListener("DOMContentLoaded", function () {
