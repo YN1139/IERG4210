@@ -1,4 +1,4 @@
-const API="";
+const API = "";
 
 let stripe;
 
