@@ -1,8 +1,8 @@
 # IERG4210
 
-**Static webpage: https://yn1139.github.io/IERG4210/** \
 This is for storing the files of the project for IERG4210.  
 The project, at the end, is aimed to build up a secure e-commerce website.
+The website is no longer working due to the discontinuity of the assigned domain name.
 
 ## Phase 1: Layout
 
