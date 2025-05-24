@@ -2,6 +2,7 @@
 
 This is for storing the files of the project for IERG4210.  
 The project, at the end, is aimed to build up a secure e-commerce website.
+
 The website is no longer working due to the discontinuity of the assigned domain name.
 
 ## Phase 1: Layout
@@ -89,7 +90,6 @@ Shopping cart function implemented all over the web (updated at 0158 10/3 for fi
 - Login panel building, currently done for checking the users and admin role
   - Hashed password with scypt
     - ref: https://nodejs.org/api/crypto.html#crypto_crypto_scrypt_password_salt_keylen_options_callback, https://www.reddit.com/r/node/comments/fcgkvg/bcrypt_vs_crypto
-  - ~~ not yet done the redirect part, as not yet set the session ~~
   - Update:
     - Session and cookies are set
     - added trust proxy for trusting the reverse proxy
