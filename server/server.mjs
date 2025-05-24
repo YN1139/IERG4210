@@ -15,9 +15,8 @@ import nodemailer from "nodemailer";
 import sharp from "sharp";
 import "dotenv/config";
 
-const stripe = Stripe(
-  "sk_test_51RHU04CXaNkR4rcTkq5yct9lZcQg6V7MblQJH5itCZ2ExzhjhgrBgxseEH1NfwhMDuNWCjiJQyzmelmxaIWacAgz00jntz3uZY"
-);
+const stripe = Stripe(process.env.STRIPE_SERVER_KEY);
+const endpointSecret = process.env.STRIPE_ENDPOINT_KEY;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,18 +30,18 @@ const corsOptions = {
 
 //loading the database
 const dbConst = {
-  host: "database-1.cdoqes4camss.ap-southeast-2.rds.amazonaws.com",
-  port: "3306",
-  user: "shop27-admin",
-  password: "mypass",
+  host: process.env.SQL_HOST,
+  port: process.env.SQL_PORT,
+  user: process.env.SQL_USER,
+  password: process.env.SQL_PW,
 };
 const db = mysql.createConnection({
   ...dbConst,
-  database: "shop27",
+  database: process.env.SQL_DB_GENERAL,
 });
 const userDb = mysql.createConnection({
   ...dbConst,
-  database: "shop27account",
+  database: process.env.SQL_DB_USER,
 });
 
 //loading the configuration for multer
@@ -274,8 +273,7 @@ app.get("/panel", (req, res) => {
 });
 //==========API============
 app.get("/api/stripe", (req, res) => {
-  const stripe_cart =
-    "pk_test_51RHU04CXaNkR4rcTbqBCkVLKSJJj5OGrQZXemNNDaPrSnpQ9xj1ZCOWDoXb6h3niWuRWId5uwmbOOvrM9cLZLu7p00XlGCPg8u";
+  const stripe_cart = process.env.STRIPE_CLIENT_KEY;
   res.json({ stripe_cart });
 });
 app.get("/api/csrf-token", (req, res) => {
@@ -769,8 +767,6 @@ app.post("/pay", validateCSRF, async (req, res) => {
     res.status(500).send({ error: "Payment failed" });
   }
 });
-
-const endpointSecret = "whsec_sCR0K7Ua3QVMJM3CUpzxHzdNRR47hn4z";
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
